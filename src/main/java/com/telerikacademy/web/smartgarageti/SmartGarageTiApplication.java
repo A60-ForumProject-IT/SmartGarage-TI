@@ -8,7 +8,6 @@ public class SmartGarageTiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SmartGarageTiApplication.class, args);
-        System.out.println("Toshko");
     }
 
 }
