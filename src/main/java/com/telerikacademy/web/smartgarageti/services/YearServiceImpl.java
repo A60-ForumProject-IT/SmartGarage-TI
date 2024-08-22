@@ -25,14 +25,17 @@ public class YearServiceImpl implements YearService {
                 .orElseThrow(() -> new EntityNotFoundException("Year"));
     }
 
+    @Override
     public List<Year> findAllYears() {
         return yearRepository.findAll();
     }
 
+    @Override
     public Year findYearById(int id) {
         return yearRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Year", id));
     }
 
+    @Override
     public Year createYear(int yearValue) {
         yearRepository.findByYear(yearValue).ifPresent(year -> {
             throw new DuplicateEntityException("Year", yearValue);
@@ -43,6 +46,7 @@ public class YearServiceImpl implements YearService {
         return yearRepository.save(newYear);
     }
 
+    @Override
     public void deleteYear(int id) {
         Year year = yearRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Year", id));

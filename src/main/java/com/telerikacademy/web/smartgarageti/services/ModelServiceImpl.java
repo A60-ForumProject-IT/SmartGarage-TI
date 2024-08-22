@@ -25,15 +25,18 @@ public class ModelServiceImpl implements ModelService {
                 .orElseThrow(() -> new EntityNotFoundException("Model", "name", name));
     }
 
+    @Override
     public List<Model> findAllModels() {
         return modelRepository.findAll();
     }
 
+    @Override
     public Model findModelById(int id) {
         return modelRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Model", id));
     }
 
+    @Override
     public Model createModel(String modelName) {
         modelRepository.findByName(modelName).ifPresent(year -> {
             throw new DuplicateEntityException("Model", modelName);
@@ -44,6 +47,7 @@ public class ModelServiceImpl implements ModelService {
         return modelRepository.save(newModel);
     }
 
+    @Override
     public void deleteModel(int id) {
         Model model = modelRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Model", id));

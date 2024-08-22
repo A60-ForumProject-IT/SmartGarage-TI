@@ -7,4 +7,12 @@ import java.util.Optional;
 
 public interface YearService {
     Year findByYear(int year);
+
+    List<Year> findAllYears();
+
+    Year findYearById(int id);
+
+    Year createYear(int yearValue);
+
+    void deleteYear(int id);
 }

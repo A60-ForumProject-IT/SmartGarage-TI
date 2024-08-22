@@ -25,15 +25,18 @@ public class BrandServiceImpl implements BrandService {
                 .orElseThrow(() -> new EntityNotFoundException("Brand", "name", name));
     }
 
+    @Override
     public List<Brand> findAllBrands() {
         return brandRepository.findAll();
     }
 
+    @Override
     public Brand findBrandById(int id) {
         return brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Brand", id));
     }
 
+    @Override
     public Brand createBrand(String brandName) {
         brandRepository.findByName(brandName).ifPresent(year -> {
             throw new DuplicateEntityException("Brand", brandName);
@@ -44,6 +47,7 @@ public class BrandServiceImpl implements BrandService {
         return brandRepository.save(newBrand);
     }
 
+    @Override
     public void deleteBrand(int id) {
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Brand", id));
