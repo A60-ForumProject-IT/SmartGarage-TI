@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         emailService.sendEmail(
                 userCreationDto.getSmtpEmail(),
                 userCreationDto.getSmtpPassword(),
-                userCreationDto.getEmail(),
+                user.getEmail(),
                 "Welcome to Smart Garage",
                 "Your username is: " + user.getEmail() + "\nYour password is: " + randomPassword
         );
