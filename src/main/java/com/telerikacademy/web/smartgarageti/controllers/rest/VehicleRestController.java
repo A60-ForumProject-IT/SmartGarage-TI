@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.controllers.rest;
 
+import com.telerikacademy.web.smartgarageti.exceptions.DeletedVehicleException;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
@@ -48,6 +49,8 @@ public class VehicleRestController {
                     vehicleDto.getEngineType());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (DeletedVehicleException e) {
+            throw new ResponseStatusException(HttpStatus.LOCKED, e.getMessage());
         }
     }
 

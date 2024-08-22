@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.services;
 
+import com.telerikacademy.web.smartgarageti.exceptions.DeletedVehicleException;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.models.*;
@@ -32,7 +33,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public List<Vehicle> getAllVehicles() {
-        return vehicleRepository.findAll();
+        return vehicleRepository.findAllByIsDeletedFalse();
     }
 
     @Override
@@ -45,8 +46,8 @@ public class VehicleServiceImpl implements VehicleService {
     public void deleteVehicleById(int id) {
         Vehicle vehicle = vehicleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle", id));
-
-        vehicleRepository.delete(vehicle);
+        vehicle.setDeleted(true);
+        vehicleRepository.save(vehicle);
     }
 
     @Override
@@ -58,6 +59,9 @@ public class VehicleServiceImpl implements VehicleService {
 
 
         Optional<Vehicle> existingVehicle = vehicleRepository.findByBrandAndModelAndYearAndEngineType(brand, model, year, engine);
+        if (existingVehicle.isPresent() && existingVehicle.get().isDeleted()) {
+            throw new DeletedVehicleException("We don't service this vehicle anymore!");
+        }
         if (existingVehicle.isPresent()) {
             throw new DuplicateEntityException("Vehicle", brandName, modelName, yearValue, engineType);
         } else {
