@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class ClientCar {
     @Column(name = "plate", nullable = false, unique = true)
     private String licensePlate;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "owner", nullable = false)
     private User owner;
@@ -32,7 +34,7 @@ public class ClientCar {
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
-    @OneToMany(mappedBy = "clientCar", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "clientCar", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<CarService> carServices;
 
     @Override

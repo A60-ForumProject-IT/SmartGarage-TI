@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +25,8 @@ public class Role {
     @Column(name = "role_name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "role")
+    @JsonIgnore
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     private Set<User> users;
 
     @Override

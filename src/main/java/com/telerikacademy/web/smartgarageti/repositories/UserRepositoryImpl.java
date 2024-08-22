@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.repositories;
 
+import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.UserRepository;
 import org.hibernate.Session;
@@ -27,6 +28,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserById(int id) {
-        return null;
+        try(Session session = sessionFactory.openSession()){
+          User user = session.get(User.class, id);
+            if(user == null){
+                throw new EntityNotFoundException("User", id);
+            }
+            return user;
+        }
     }
 }
