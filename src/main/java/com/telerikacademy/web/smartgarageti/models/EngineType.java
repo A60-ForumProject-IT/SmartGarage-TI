@@ -7,31 +7,31 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-@Getter
 @Setter
+@Getter
 @Entity
-@Table(name = "models")
+@Table(name = "engines")
 @NoArgsConstructor
-public class Model {
+public class EngineType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "model_name")
+    @Column(name = "engine_type")
     private String name;
 
-    public Model(String name) {
-        this.name = name;
+    public EngineType(String engineType) {
+        this.name = engineType;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Model model = (Model) o;
-        return Objects.equals(id, model.id);
+        EngineType that = (EngineType) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.controllers.rest;
 
+import com.telerikacademy.web.smartgarageti.exceptions.DeletedVehicleException;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
@@ -19,14 +20,10 @@ import java.util.List;
 @RequestMapping("/api/vehicles")
 public class VehicleRestController {
     private final VehicleService vehicleService;
-    private final AuthenticationHelper authenticationHelper;
-    private final MapperHelper mapperHelper;
 
     @Autowired
-    public VehicleRestController(VehicleService vehicleService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper) {
+    public VehicleRestController(VehicleService vehicleService) {
         this.vehicleService = vehicleService;
-        this.authenticationHelper = authenticationHelper;
-        this.mapperHelper = mapperHelper;
     }
 
     @GetMapping
@@ -48,14 +45,21 @@ public class VehicleRestController {
         try {
             return vehicleService.createVehicle(vehicleDto.getBrandName(),
                     vehicleDto.getModelName(),
-                    vehicleDto.getYear());
+                    vehicleDto.getYear(),
+                    vehicleDto.getEngineType());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (DeletedVehicleException e) {
+            throw new ResponseStatusException(HttpStatus.LOCKED, e.getMessage());
         }
     }
 
     @DeleteMapping("/{vehicleId}")
     public void deleteVehicleById(@PathVariable int vehicleId) {
-
+        try {
+            vehicleService.deleteVehicleById(vehicleId);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 }

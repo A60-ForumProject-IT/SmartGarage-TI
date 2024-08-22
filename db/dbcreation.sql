@@ -121,6 +121,8 @@ create table cars_services
         foreign key (service_id) references services (id)
 );
 
+ALTER TABLE vehicles ADD COLUMN is_deleted BOOLEAN DEFAULT FALSE;
+
 create index clients_cars_id
     on cars_services (clients_cars_id);
 

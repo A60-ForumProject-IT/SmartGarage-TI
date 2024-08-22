@@ -30,10 +30,18 @@ public class Vehicle {
     @JoinColumn(name = "year_id", nullable = false)
     private Year year;
 
-    public Vehicle(Brand brand, Model model, Year year) {
+    @ManyToOne
+    @JoinColumn(name = "engine_type_id", nullable = false)
+    private EngineType engineType;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
+    public Vehicle(Brand brand, Model model, Year year, EngineType engineType) {
         this.brand = brand;
         this.model = model;
         this.year = year;
+        this.engineType = engineType;
     }
 
     @Override

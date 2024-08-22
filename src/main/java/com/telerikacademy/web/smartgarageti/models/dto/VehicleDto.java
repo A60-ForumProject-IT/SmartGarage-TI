@@ -24,4 +24,8 @@ public class VehicleDto {
 
     @ValidYear
     private int year;
+
+    @NotEmpty
+    @Size(min = 2, max = 50, message = "Engine type should be between 2 and 50 symbols.")
+    private String engineType;
 }
