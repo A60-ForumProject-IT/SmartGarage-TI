@@ -3,6 +3,7 @@ package com.telerikacademy.web.smartgarageti.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "clients_cars")
+@NoArgsConstructor
 public class ClientCar {
 
     @Id
@@ -34,8 +36,16 @@ public class ClientCar {
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "clientCar", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<CarService> carServices;
+
+    public ClientCar(String vin, String licensePlate, User owner, Vehicle vehicle) {
+        this.vin = vin;
+        this.licensePlate = licensePlate;
+        this.owner = owner;
+        this.vehicle = vehicle;
+    }
 
     @Override
     public boolean equals(Object o) {

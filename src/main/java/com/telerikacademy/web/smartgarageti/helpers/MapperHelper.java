@@ -1,13 +1,7 @@
 package com.telerikacademy.web.smartgarageti.helpers;
 
-import com.telerikacademy.web.smartgarageti.models.Model;
-import com.telerikacademy.web.smartgarageti.models.Role;
-import com.telerikacademy.web.smartgarageti.models.User;
-import com.telerikacademy.web.smartgarageti.models.Vehicle;
-import com.telerikacademy.web.smartgarageti.models.dto.ModelDto;
-import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
-import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
-import com.telerikacademy.web.smartgarageti.models.dto.VehicleDto;
+import com.telerikacademy.web.smartgarageti.models.*;
+import com.telerikacademy.web.smartgarageti.models.dto.*;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.ModelService;
 import com.telerikacademy.web.smartgarageti.services.contracts.YearService;
@@ -49,5 +43,14 @@ public class MapperHelper {
         user.setPassword(randomPassword);
         user.setRole(role);
         return user;
+    }
+
+    public ClientCar createClientCarFromDto(ClientCarDto clientCarDto, User userToAddCar, Vehicle vehicleToBeAdded) {
+        ClientCar clientCar = new ClientCar();
+        clientCar.setVin(clientCarDto.getVin());
+        clientCar.setLicensePlate(clientCarDto.getLicense_plate());
+        clientCar.setOwner(userToAddCar);
+        clientCar.setVehicle(vehicleToBeAdded);
+        return clientCar;
     }
 }
