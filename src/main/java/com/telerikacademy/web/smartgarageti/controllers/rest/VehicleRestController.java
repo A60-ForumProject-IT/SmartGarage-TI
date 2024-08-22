@@ -27,18 +27,10 @@ import java.util.List;
 @RequestMapping("/api")
 public class VehicleRestController {
     private final VehicleService vehicleService;
-    private final AuthenticationHelper authenticationHelper;
-    private final UserService userService;
-    private final MapperHelper mapperHelper;
-    private final ClientCarService clientCarService;
 
     @Autowired
     public VehicleRestController(VehicleService vehicleService, AuthenticationHelper authenticationHelper, UserService userService, MapperHelper mapperHelper, ClientCarService clientCarService) {
         this.vehicleService = vehicleService;
-        this.authenticationHelper = authenticationHelper;
-        this.userService = userService;
-        this.mapperHelper = mapperHelper;
-        this.clientCarService = clientCarService;
     }
 
     @GetMapping("/vehicles")
@@ -76,30 +68,5 @@ public class VehicleRestController {
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-    }
-
-    @GetMapping("/client-cars")
-    public List<ClientCar> getAllClientCars() {
-        return clientCarService.getAllClientCars();
-    }
-
-    @PostMapping("/users/{userId}/client-cars/vehicles/{vehicleId}")
-    public ClientCar addClientCarToVehicle(@PathVariable int userId,
-                                         @Valid @RequestBody ClientCarDto clientCarDto,
-                                         @PathVariable int vehicleId, @RequestHeader HttpHeaders httpHeaders) {
-        try {
-            User loggedInUser = authenticationHelper.tryGetUser(httpHeaders);
-            User userToAddCar = userService.getUserById(loggedInUser, userId);
-            Vehicle vehicleToBeAdded = vehicleService.getVehicleById(vehicleId);
-            ClientCar clientCar = mapperHelper.createClientCarFromDto(clientCarDto, userToAddCar, vehicleToBeAdded);
-            return clientCarService.createClientCar(clientCar);
-        } catch (AuthenticationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (DuplicateEntityException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        }
-
     }
 }

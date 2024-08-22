@@ -3,20 +3,18 @@ package com.telerikacademy.web.smartgarageti.helpers;
 import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.*;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
+import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.ModelService;
 import com.telerikacademy.web.smartgarageti.services.contracts.YearService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MapperHelper {
-    private final BrandService brandService;
-    private final ModelService modelService;
-    private final YearService yearService;
+    private final ClientCarService clientCarService;
 
-    public MapperHelper(BrandService brandService, ModelService modelService, YearService yearService) {
-        this.brandService = brandService;
-        this.modelService = modelService;
-        this.yearService = yearService;
+
+    public MapperHelper(ClientCarService clientCarService) {
+        this.clientCarService = clientCarService;
     }
 
     public Model createModelFromModelDto(ModelDto modelDto) {
@@ -51,6 +49,13 @@ public class MapperHelper {
         clientCar.setLicensePlate(clientCarDto.getLicense_plate());
         clientCar.setOwner(userToAddCar);
         clientCar.setVehicle(vehicleToBeAdded);
+        return clientCar;
+    }
+
+    public ClientCar updateClientCarFromDto(ClientCarDto clientCarDto, int id) {
+        ClientCar clientCar = clientCarService.getClientCarById(id);
+        clientCar.setLicensePlate(clientCarDto.getLicense_plate());
+        clientCar.setVin(clientCarDto.getVin());
         return clientCar;
     }
 }
