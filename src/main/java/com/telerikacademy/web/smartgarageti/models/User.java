@@ -1,6 +1,10 @@
 package com.telerikacademy.web.smartgarageti.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +22,8 @@ public class User {
     @Column(name = "id")
     private int id;
 
+    @NotBlank(message = "Username is mandatory")
+    @Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters")
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
@@ -27,11 +33,26 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email should be valid")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "Password is mandatory")
+    @Pattern(
+            regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[+\\-*/^@#$%!&]).{8,}$",
+            message = "Password must contain at least 8 characters, including one uppercase letter, one digit, and one special symbol (+, -, *, ^, etc.)"
+    )
     @Column(name = "password", nullable = false)
     private String password;
+
+    @NotBlank(message = "Phone number is mandatory")
+    @Pattern(
+            regexp = "^\\d{10}$",
+            message = "Phone number must be exactly 10 digits"
+    )
+    @Column(name = "phone_number", nullable = false, unique = true)
+    private String phoneNumber;
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)

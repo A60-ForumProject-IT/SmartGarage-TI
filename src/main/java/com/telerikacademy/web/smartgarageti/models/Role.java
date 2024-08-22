@@ -13,7 +13,6 @@ import java.util.Set;
 @Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "roles")
 public class Role {
 
