@@ -5,10 +5,12 @@ import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.Model;
+import com.telerikacademy.web.smartgarageti.models.Vehicle;
 import com.telerikacademy.web.smartgarageti.models.Year;
 import com.telerikacademy.web.smartgarageti.models.dto.ModelDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.ModelService;
+import com.telerikacademy.web.smartgarageti.services.contracts.VehicleService;
 import com.telerikacademy.web.smartgarageti.services.contracts.YearService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +27,15 @@ public class BrandModelYearController {
     private final ModelService modelService;
     private final YearService yearService;
     private final MapperHelper mapperHelper;
+    private final VehicleService vehicleService;
 
     @Autowired
-    public BrandModelYearController(BrandService brandService, ModelService modelService, YearService yearService, MapperHelper mapperHelper) {
+    public BrandModelYearController(BrandService brandService, ModelService modelService, YearService yearService, MapperHelper mapperHelper, VehicleService vehicleService) {
         this.brandService = brandService;
         this.modelService = modelService;
         this.yearService = yearService;
         this.mapperHelper = mapperHelper;
+        this.vehicleService = vehicleService;
     }
 
     @GetMapping("/years")
@@ -67,4 +71,5 @@ public class BrandModelYearController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
 }

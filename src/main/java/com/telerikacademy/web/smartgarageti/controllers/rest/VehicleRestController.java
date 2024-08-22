@@ -1,0 +1,61 @@
+package com.telerikacademy.web.smartgarageti.controllers.rest;
+
+import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
+import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
+import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
+import com.telerikacademy.web.smartgarageti.models.Vehicle;
+import com.telerikacademy.web.smartgarageti.models.dto.VehicleDto;
+import com.telerikacademy.web.smartgarageti.services.contracts.VehicleService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/vehicles")
+public class VehicleRestController {
+    private final VehicleService vehicleService;
+    private final AuthenticationHelper authenticationHelper;
+    private final MapperHelper mapperHelper;
+
+    @Autowired
+    public VehicleRestController(VehicleService vehicleService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper) {
+        this.vehicleService = vehicleService;
+        this.authenticationHelper = authenticationHelper;
+        this.mapperHelper = mapperHelper;
+    }
+
+    @GetMapping
+    public List<Vehicle> findAllVehicles() {
+        return vehicleService.getAllVehicles();
+    }
+
+    @GetMapping("/{vehicleId}")
+    public Vehicle getVehicleById(@PathVariable int vehicleId) {
+        try {
+            return vehicleService.getVehicleById(vehicleId);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PostMapping
+    public Vehicle createVehicle(@Valid @RequestBody VehicleDto vehicleDto) {
+        try {
+            return vehicleService.createVehicle(vehicleDto.getBrandName(),
+                    vehicleDto.getModelName(),
+                    vehicleDto.getYear());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{vehicleId}")
+    public void deleteVehicleById(@PathVariable int vehicleId) {
+
+    }
+}
