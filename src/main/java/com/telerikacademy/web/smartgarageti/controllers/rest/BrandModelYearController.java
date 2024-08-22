@@ -27,15 +27,13 @@ public class BrandModelYearController {
     private final ModelService modelService;
     private final YearService yearService;
     private final MapperHelper mapperHelper;
-    private final VehicleService vehicleService;
 
     @Autowired
-    public BrandModelYearController(BrandService brandService, ModelService modelService, YearService yearService, MapperHelper mapperHelper, VehicleService vehicleService) {
+    public BrandModelYearController(BrandService brandService, ModelService modelService, YearService yearService, MapperHelper mapperHelper) {
         this.brandService = brandService;
         this.modelService = modelService;
         this.yearService = yearService;
         this.mapperHelper = mapperHelper;
-        this.vehicleService = vehicleService;
     }
 
     @GetMapping("/years")

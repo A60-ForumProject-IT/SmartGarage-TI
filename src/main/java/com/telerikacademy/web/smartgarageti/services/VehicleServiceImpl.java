@@ -2,15 +2,9 @@ package com.telerikacademy.web.smartgarageti.services;
 
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
-import com.telerikacademy.web.smartgarageti.models.Brand;
-import com.telerikacademy.web.smartgarageti.models.Model;
-import com.telerikacademy.web.smartgarageti.models.Vehicle;
-import com.telerikacademy.web.smartgarageti.models.Year;
+import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.VehicleRepository;
-import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
-import com.telerikacademy.web.smartgarageti.services.contracts.ModelService;
-import com.telerikacademy.web.smartgarageti.services.contracts.VehicleService;
-import com.telerikacademy.web.smartgarageti.services.contracts.YearService;
+import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +18,16 @@ public class VehicleServiceImpl implements VehicleService {
     private final ModelService modelService;
     private final YearService yearService;
     private final VehicleRepository vehicleRepository;
+    private final EngineTypeService engineTypeService;
 
     @Autowired
     public VehicleServiceImpl(BrandService brandService, ModelService modelService,
-                          YearService yearService, VehicleRepository vehicleRepository) {
+                              YearService yearService, VehicleRepository vehicleRepository, EngineTypeService engineTypeService) {
         this.brandService = brandService;
         this.modelService = modelService;
         this.yearService = yearService;
         this.vehicleRepository = vehicleRepository;
+        this.engineTypeService = engineTypeService;
     }
 
     @Override
@@ -54,16 +50,18 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Vehicle createVehicle(String brandName, String modelName, int yearValue) {
+    public Vehicle createVehicle(String brandName, String modelName, int yearValue, String engineType) {
         Brand brand = brandService.findOrCreateBrand(brandName);
         Model model = modelService.findOrCreateModel(modelName);
         Year year = yearService.findOrCreateYear(yearValue);
+        EngineType engine = engineTypeService.findOrCreateEngineType(engineType);
 
-        Optional<Vehicle> existingVehicle = vehicleRepository.findByBrandAndModelAndYear(brand, model, year);
+
+        Optional<Vehicle> existingVehicle = vehicleRepository.findByBrandAndModelAndYearAndEngineType(brand, model, year, engine);
         if (existingVehicle.isPresent()) {
-            throw new DuplicateEntityException("Vehicle", brandName, modelName, yearValue);
+            throw new DuplicateEntityException("Vehicle", brandName, modelName, yearValue, engineType);
         } else {
-            Vehicle newVehicle = new Vehicle(brand, model, year);
+            Vehicle newVehicle = new Vehicle(brand, model, year, engine);
             return vehicleRepository.save(newVehicle);
         }
     }
