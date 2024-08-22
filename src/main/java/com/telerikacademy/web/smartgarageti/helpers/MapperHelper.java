@@ -39,14 +39,14 @@ public class MapperHelper {
         );
     }
 
-    public static User toUserEntity(UserCreationDto dto, String hashedPassword, Role role) {
+    public static User toUserEntity(UserCreationDto dto, String randomPassword, Role role) {
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPhoneNumber(dto.getPhoneNumber());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
-        user.setPassword(hashedPassword);
+        user.setPassword(randomPassword);
         user.setRole(role);
         return user;
     }

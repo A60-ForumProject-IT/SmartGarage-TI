@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(User employee, int id) {
-        PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
+        //PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
         return userRepository.getUserById(id);
     }
 
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("Generated Password: " + randomPassword);
         String hashedPassword = PasswordHasher.hashPassword(randomPassword);
 
-        User user = MapperHelper.toUserEntity(userCreationDto, hashedPassword, role);
+        User user = MapperHelper.toUserEntity(userCreationDto, randomPassword, role);
         userRepository.create(user);
 
         // Изпращане на имейл с данните за вход, използвайки smtpEmail и smtpPassword
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
                 userCreationDto.getSmtpPassword(),
                 user.getEmail(),
                 "Welcome to Smart Garage",
-                "Your username is: " + user.getEmail() + "\nYour password is: " + randomPassword
+                "Your username is: " + user.getUsername() + "\nYour password is: " + randomPassword
         );
 
         return MapperHelper.toUserDto(user);

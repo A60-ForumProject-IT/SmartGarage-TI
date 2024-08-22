@@ -41,8 +41,6 @@ public class EmailService {
             mailSender.setPassword(smtpPassword);
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.socketFactory.port", "465");
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         } else if (from.endsWith("@gmail.com")) {
             mailSender.setHost("smtp.gmail.com");
             mailSender.setPort(587);
