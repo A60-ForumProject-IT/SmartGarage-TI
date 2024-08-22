@@ -24,4 +24,9 @@ public class UserRepositoryImpl implements UserRepository {
                     .uniqueResult();
         }
     }
+
+    @Override
+    public User getUserById(int id) {
+        return null;
+    }
 }
