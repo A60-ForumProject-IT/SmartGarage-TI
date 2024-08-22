@@ -7,4 +7,5 @@ public interface UserRepository {
 
     User getUserById(int id);
 
+    void create(User user);
 }
