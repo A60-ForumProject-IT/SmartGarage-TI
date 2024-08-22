@@ -3,7 +3,6 @@ package com.telerikacademy.web.smartgarageti.services;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.models.Brand;
-import com.telerikacademy.web.smartgarageti.models.Year;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.BrandRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class BrandServiceImpl implements BrandService {
                 .orElseThrow(() -> new EntityNotFoundException("Brand", "name", name));
     }
 
-    public List<Brand> findAllYears() {
+    public List<Brand> findAllBrands() {
         return brandRepository.findAll();
     }
 
