@@ -20,14 +20,14 @@ public class YearServiceImpl implements YearService {
         this.yearRepository = yearRepository;
     }
 
-    public List<Year> findAllYears() {
-        return yearRepository.findAll();
-    }
-
     @Override
     public Year findByYear(int year) {
         return yearRepository.findByYear(year)
                 .orElseThrow(() -> new EntityNotFoundException("Year"));
+    }
+
+    public List<Year> findAllYears() {
+        return yearRepository.findAll();
     }
 
     public Year findYearById(int id) {
