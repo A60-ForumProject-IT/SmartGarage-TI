@@ -2,6 +2,7 @@ package com.telerikacademy.web.smartgarageti.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "vehicles")
+@NoArgsConstructor
 public class Vehicle {
 
     @Id
@@ -27,6 +29,12 @@ public class Vehicle {
     @ManyToOne
     @JoinColumn(name = "year_id", nullable = false)
     private Year year;
+
+    public Vehicle(Brand brand, Model model, Year year) {
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+    }
 
     @Override
     public boolean equals(Object o) {

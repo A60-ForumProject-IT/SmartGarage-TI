@@ -54,4 +54,10 @@ public class BrandServiceImpl implements BrandService {
 
         brandRepository.delete(brand);
     }
+
+    @Override
+    public Brand findOrCreateBrand(String brandName) {
+        return brandRepository.findByName(brandName)
+                .orElseGet(() -> brandRepository.save(new Brand(brandName)));
+    }
 }

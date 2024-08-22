@@ -15,4 +15,6 @@ public interface BrandService {
     Brand createBrand(String brandName);
 
     void deleteBrand(int id);
+
+    Brand findOrCreateBrand(String brandName);
 }

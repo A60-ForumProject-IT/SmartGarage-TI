@@ -2,6 +2,7 @@ package com.telerikacademy.web.smartgarageti.services;
 
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.Model;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.ModelRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.ModelService;
@@ -53,5 +54,11 @@ public class ModelServiceImpl implements ModelService {
                 .orElseThrow(() -> new EntityNotFoundException("Model", id));
 
         modelRepository.delete(model);
+    }
+
+    @Override
+    public Model findOrCreateModel(String modelName) {
+        return modelRepository.findByName(modelName)
+                .orElseGet(() -> modelRepository.save(new Model(modelName)));
     }
 }

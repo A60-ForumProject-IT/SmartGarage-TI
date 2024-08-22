@@ -2,6 +2,7 @@ package com.telerikacademy.web.smartgarageti.services;
 
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.models.Model;
 import com.telerikacademy.web.smartgarageti.models.Year;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.YearRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.YearService;
@@ -52,5 +53,11 @@ public class YearServiceImpl implements YearService {
                 .orElseThrow(() -> new EntityNotFoundException("Year", id));
 
         yearRepository.delete(year);
+    }
+
+    @Override
+    public Year findOrCreateYear(int year) {
+        return yearRepository.findByYear(year)
+                .orElseGet(() -> yearRepository.save(new Year(year)));
     }
 }
