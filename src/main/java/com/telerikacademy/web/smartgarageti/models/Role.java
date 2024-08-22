@@ -22,7 +22,7 @@ public class Role {
     private int id;
 
     @Column(name = "role_name", nullable = false)
-    private String roleName;
+    private String name;
 
     @OneToMany(mappedBy = "role")
     private Set<User> users;
