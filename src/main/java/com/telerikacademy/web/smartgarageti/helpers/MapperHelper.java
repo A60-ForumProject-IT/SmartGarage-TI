@@ -8,15 +8,34 @@ import org.springframework.stereotype.Component;
 @Component
 public class MapperHelper {
     private final ClientCarService clientCarService;
+    private final BrandService brandService;
+    private final ModelService modelService;
+    private final YearService yearService;
+    private final EngineTypeService engineTypeService;
+    private final VehicleService vehicleService;
 
-    public MapperHelper(ClientCarService clientCarService) {
+    public MapperHelper(ClientCarService clientCarService, BrandService brandService, ModelService modelService, YearService yearService, EngineTypeService engineTypeService, VehicleService vehicleService) {
         this.clientCarService = clientCarService;
+        this.brandService = brandService;
+        this.modelService = modelService;
+        this.yearService = yearService;
+        this.engineTypeService = engineTypeService;
+        this.vehicleService = vehicleService;
     }
 
     public Model createModelFromModelDto(ModelDto modelDto) {
         Model model = new Model();
         model.setName(modelDto.getModelName());
         return model;
+    }
+
+    public Vehicle updateVehicleFromVehicleDto(VehicleDto vehicleDto, int id) {
+        Vehicle vehicle = vehicleService.getVehicleById(id);
+        vehicle.setBrand(brandService.findOrCreateBrand(vehicleDto.getBrandName()));
+        vehicle.setModel(modelService.findOrCreateModel(vehicleDto.getModelName()));
+        vehicle.setYear(yearService.findOrCreateYear(vehicleDto.getYear()));
+        vehicle.setEngineType(engineTypeService.findOrCreateEngineType(vehicleDto.getEngineType()));
+        return vehicle;
     }
 
     public static UserDto toUserDto(User user) {

@@ -46,7 +46,7 @@ public class CarServiceLog {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CarServiceLog that = (CarServiceLog) o;
-        return id == that.id;
+        return Objects.equals(id, that.id);
     }
 
     @Override

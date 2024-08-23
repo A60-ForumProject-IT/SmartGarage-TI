@@ -12,4 +12,6 @@ public interface VehicleService {
     Vehicle getVehicleById(int id);
 
     void deleteVehicleById(int id);
+
+    void updateVehicle(Vehicle vehicle);
 }

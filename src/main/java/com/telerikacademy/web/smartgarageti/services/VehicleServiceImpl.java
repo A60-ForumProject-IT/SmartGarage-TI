@@ -51,6 +51,16 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public void updateVehicle(Vehicle vehicle) {
+        if(vehicle.isDeleted()) {
+            throw new DeletedVehicleException("Cannot update a deleted vehicle.");
+        }
+
+        vehicleRepository.save(vehicle);
+    }
+
+
+    @Override
     public Vehicle createVehicle(String brandName, String modelName, int yearValue, String engineType) {
         Brand brand = brandService.findOrCreateBrand(brandName);
         Model model = modelService.findOrCreateModel(modelName);
