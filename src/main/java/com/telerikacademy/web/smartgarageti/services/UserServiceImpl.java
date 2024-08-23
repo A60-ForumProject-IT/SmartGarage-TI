@@ -79,14 +79,14 @@ public class UserServiceImpl implements UserService {
 
         String newPassword = PasswordGenerator.generateRandomPassword();
         user.setPassword(newPassword);
-        userRepository.update(user); // Update the user with the new password
+        userRepository.update(user);
 
         emailService.sendEmail(
-                smtpEmail,  // from - имейлът, от който ще се изпраща
-                smtpPasswordFromConfig,// smtpPassword - паролата за SMTP сървъра
-                forgottenPasswordDto.getEmail(),  // to - имейлът, до който ще се изпраща
-                "Your new password for Smart Garage TI App",// subject - тема на имейла
-                "Your new password is: " + newPassword // text - текстът на имейла
+                smtpEmail,
+                smtpPasswordFromConfig,
+                forgottenPasswordDto.getEmail(),
+                "Your new password for Smart Garage TI App",
+                "Your new password is: " + newPassword
         );
     }
 }
