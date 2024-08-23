@@ -2,42 +2,42 @@ package com.telerikacademy.web.smartgarageti.services;
 
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
-import com.telerikacademy.web.smartgarageti.models.Service;
-import com.telerikacademy.web.smartgarageti.repositories.contracts.ServiceRepository;
-import com.telerikacademy.web.smartgarageti.services.contracts.ServiceService;
+import com.telerikacademy.web.smartgarageti.models.RepairService;
+import com.telerikacademy.web.smartgarageti.repositories.contracts.RepairServiceRepository;
+import com.telerikacademy.web.smartgarageti.services.contracts.RepairServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
-public class ServiceServiceImpl implements ServiceService {
-    private final ServiceRepository serviceRepository;
+@Service
+public class RepairServiceServiceImpl implements RepairServiceService {
+    private final RepairServiceRepository serviceRepository;
 
     @Autowired
-    public ServiceServiceImpl(ServiceRepository serviceRepository) {
+    public RepairServiceServiceImpl(RepairServiceRepository serviceRepository) {
         this.serviceRepository = serviceRepository;
     }
 
     @Override
-    public Service findServiceByName(String serviceName) {
+    public RepairService findServiceByName(String serviceName) {
         return serviceRepository.findByName(serviceName)
                 .orElseThrow(() -> new EntityNotFoundException("Service", "name", serviceName));
     }
 
     @Override
-    public List<Service> findAllServices() {
+    public List<RepairService> findAllServices() {
         return serviceRepository.findAll();
     }
 
     @Override
-    public Service findServiceById(int id) {
+    public RepairService findServiceById(int id) {
         return serviceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service", id));
     }
 
     @Override
-    public Service createService(Service service) {
+    public RepairService createService(RepairService service) {
         serviceRepository.findByName(service.getName()).ifPresent(year -> {
             throw new DuplicateEntityException("Service", service.getName());
         });
@@ -47,7 +47,7 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void deleteService(int id) {
-        Service service = serviceRepository.findById(id)
+        RepairService service = serviceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service", id));
 
         serviceRepository.delete(service);

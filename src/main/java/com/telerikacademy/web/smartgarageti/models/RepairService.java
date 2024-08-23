@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "services")
 @NoArgsConstructor
-public class Service {
+public class RepairService {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +27,11 @@ public class Service {
     @Column(name = "price", nullable = false)
     private double price;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CarService> carServices;
 
-    public Service(String name, double price) {
+    public RepairService(String name, double price) {
         this.name = name;
         this.price = price;
     }
@@ -54,7 +56,7 @@ public class Service {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Service service = (Service) o;
+        RepairService service = (RepairService) o;
         return id == service.id;
     }
 

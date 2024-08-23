@@ -1,6 +1,5 @@
 package com.telerikacademy.web.smartgarageti.repositories.contracts;
 
-import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.Model;
 import org.springframework.data.jpa.repository.JpaRepository;
 

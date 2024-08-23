@@ -17,7 +17,8 @@ public class CarService {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "id")
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "clients_cars_id", nullable = false)
@@ -25,7 +26,7 @@ public class CarService {
 
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false)
-    private Service service;
+    private RepairService service;
 
     @Column(name = "service_date", nullable = false)
     private LocalDate serviceDate;
@@ -33,7 +34,7 @@ public class CarService {
     @Column(name = "calculated_price")
     private double calculatedPrice;
 
-    public CarService(Service service, ClientCar clientCar) {
+    public CarService(RepairService service, ClientCar clientCar) {
         this.service = service;
         this.clientCar = clientCar;
         this.serviceDate = LocalDate.now();

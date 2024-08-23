@@ -5,17 +5,17 @@ import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
+import com.telerikacademy.web.smartgarageti.models.CarService;
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.Vehicle;
 import com.telerikacademy.web.smartgarageti.models.dto.ClientCarDto;
-import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
-import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
-import com.telerikacademy.web.smartgarageti.services.contracts.VehicleService;
+import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,18 +29,21 @@ public class ClientCarRestController {
     private final UserService userService;
     private final VehicleService vehicleService;
     private final MapperHelper mapperHelper;
+    private final CarServiceService carServiceService;
 
     @Autowired
     public ClientCarRestController(ClientCarService clientCarService,
                                    AuthenticationHelper authenticationHelper,
                                    UserService userService,
                                    VehicleService vehicleService,
-                                   MapperHelper mapperHelper) {
+                                   MapperHelper mapperHelper,
+                                   CarServiceService carServiceService) {
         this.clientCarService = clientCarService;
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.vehicleService = vehicleService;
         this.mapperHelper = mapperHelper;
+        this.carServiceService = carServiceService;
     }
 
 
@@ -78,5 +81,25 @@ public class ClientCarRestController {
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
+    }
+
+    @PostMapping("/client-cars/{clientCarId}/services/{serviceId}")
+    public ResponseEntity<Void> addServiceToClientCar(@PathVariable int clientCarId, @PathVariable int serviceId) {
+        try {
+            carServiceService.addServiceToClientCar(clientCarId, serviceId);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/client-cars/services")
+    public List<CarService> getAllClientCarServices() {
+        return carServiceService.findAllCarServices();
+    }
+
+    @GetMapping("/client-cars/{clientCarId}/services")
+    public List<CarService> getClientCarServicesByClientCarId(@PathVariable int clientCarId) {
+        return carServiceService.findCarServicesByClientCarId(clientCarId);
     }
 }
