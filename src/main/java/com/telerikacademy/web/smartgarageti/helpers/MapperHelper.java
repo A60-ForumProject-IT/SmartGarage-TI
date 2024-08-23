@@ -2,16 +2,12 @@ package com.telerikacademy.web.smartgarageti.helpers;
 
 import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.*;
-import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
-import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
-import com.telerikacademy.web.smartgarageti.services.contracts.ModelService;
-import com.telerikacademy.web.smartgarageti.services.contracts.YearService;
+import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MapperHelper {
     private final ClientCarService clientCarService;
-
 
     public MapperHelper(ClientCarService clientCarService) {
         this.clientCarService = clientCarService;
