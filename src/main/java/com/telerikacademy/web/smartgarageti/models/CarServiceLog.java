@@ -13,7 +13,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "cars_services")
 @NoArgsConstructor
-public class CarService {
+public class CarServiceLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class CarService {
     @Column(name = "calculated_price")
     private double calculatedPrice;
 
-    public CarService(RepairService service, ClientCar clientCar) {
+    public CarServiceLog(RepairService service, ClientCar clientCar) {
         this.service = service;
         this.clientCar = clientCar;
         this.serviceDate = LocalDate.now();
@@ -45,7 +45,7 @@ public class CarService {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CarService that = (CarService) o;
+        CarServiceLog that = (CarServiceLog) o;
         return id == that.id;
     }
 

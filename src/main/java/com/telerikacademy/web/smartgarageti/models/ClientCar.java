@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,7 +19,7 @@ public class ClientCar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "vin", nullable = false, unique = true)
     private String vin;
@@ -39,7 +38,7 @@ public class ClientCar {
 
     @JsonIgnore
     @OneToMany(mappedBy = "clientCar", fetch = FetchType.EAGER)
-    private List<CarService> carServices;
+    private List<CarServiceLog> carServices;
 
     public ClientCar(String vin, String licensePlate, User owner, Vehicle vehicle) {
         this.vin = vin;
@@ -53,7 +52,7 @@ public class ClientCar {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClientCar clientCar = (ClientCar) o;
-        return id == clientCar.id;
+        return Objects.equals(id, clientCar.id);
     }
 
     @Override

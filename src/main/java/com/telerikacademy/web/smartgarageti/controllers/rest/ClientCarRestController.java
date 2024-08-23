@@ -5,7 +5,7 @@ import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
-import com.telerikacademy.web.smartgarageti.models.CarService;
+import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.Vehicle;
@@ -29,7 +29,7 @@ public class ClientCarRestController {
     private final UserService userService;
     private final VehicleService vehicleService;
     private final MapperHelper mapperHelper;
-    private final CarServiceService carServiceService;
+    private final CarServiceLogService carServiceService;
 
     @Autowired
     public ClientCarRestController(ClientCarService clientCarService,
@@ -37,7 +37,7 @@ public class ClientCarRestController {
                                    UserService userService,
                                    VehicleService vehicleService,
                                    MapperHelper mapperHelper,
-                                   CarServiceService carServiceService) {
+                                   CarServiceLogService carServiceService) {
         this.clientCarService = clientCarService;
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
@@ -94,12 +94,12 @@ public class ClientCarRestController {
     }
 
     @GetMapping("/client-cars/services")
-    public List<CarService> getAllClientCarServices() {
+    public List<CarServiceLog> getAllClientCarServices() {
         return carServiceService.findAllCarServices();
     }
 
     @GetMapping("/client-cars/{clientCarId}/services")
-    public List<CarService> getClientCarServicesByClientCarId(@PathVariable int clientCarId) {
+    public List<CarServiceLog> getClientCarServicesByClientCarId(@PathVariable int clientCarId) {
         return carServiceService.findCarServicesByClientCarId(clientCarId);
     }
 }

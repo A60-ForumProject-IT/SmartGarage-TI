@@ -57,7 +57,6 @@ public class VehicleServiceImpl implements VehicleService {
         Year year = yearService.findOrCreateYear(yearValue);
         EngineType engine = engineTypeService.findOrCreateEngineType(engineType);
 
-
         Optional<Vehicle> existingVehicle = vehicleRepository.findByBrandAndModelAndYearAndEngineType(brand, model, year, engine);
         if (existingVehicle.isPresent() && existingVehicle.get().isDeleted()) {
             throw new DeletedVehicleException("We don't service this vehicle anymore!");

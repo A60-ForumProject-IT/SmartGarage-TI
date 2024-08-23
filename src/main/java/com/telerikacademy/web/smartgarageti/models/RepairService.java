@@ -19,7 +19,7 @@ public class RepairService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -28,8 +28,8 @@ public class RepairService {
     private double price;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CarService> carServices;
+    @OneToMany(mappedBy = "service")
+    private Set<CarServiceLog> carServices;
 
     public RepairService(String name, double price) {
         this.name = name;
@@ -39,7 +39,7 @@ public class RepairService {
     public double getPriceBasedOnYear(Vehicle vehicle) {
         int year = vehicle.getYear().getYear();
 
-        if (year >= 1990 && year < 2000) {
+        if (year >= 1886 && year < 2000) {
             return this.price;
         } else if (year >= 2000 && year < 2010) {
             return this.price * 1.3;
@@ -57,7 +57,7 @@ public class RepairService {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RepairService service = (RepairService) o;
-        return id == service.id;
+        return Objects.equals(id, service.id);
     }
 
     @Override
