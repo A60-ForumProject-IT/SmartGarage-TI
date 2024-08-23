@@ -31,7 +31,11 @@ public class ClientCarRestController {
     private final MapperHelper mapperHelper;
 
     @Autowired
-    public ClientCarRestController(ClientCarService clientCarService, AuthenticationHelper authenticationHelper, UserService userService, VehicleService vehicleService, MapperHelper mapperHelper) {
+    public ClientCarRestController(ClientCarService clientCarService,
+                                   AuthenticationHelper authenticationHelper,
+                                   UserService userService,
+                                   VehicleService vehicleService,
+                                   MapperHelper mapperHelper) {
         this.clientCarService = clientCarService;
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;

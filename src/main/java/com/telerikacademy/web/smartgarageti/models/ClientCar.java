@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -37,8 +38,8 @@ public class ClientCar {
     private Vehicle vehicle;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "clientCar", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<CarService> carServices;
+    @OneToMany(mappedBy = "clientCar", fetch = FetchType.EAGER)
+    private List<CarService> carServices;
 
     public ClientCar(String vin, String licensePlate, User owner, Vehicle vehicle) {
         this.vin = vin;

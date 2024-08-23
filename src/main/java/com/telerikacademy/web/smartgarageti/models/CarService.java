@@ -2,6 +2,7 @@ package com.telerikacademy.web.smartgarageti.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.Objects;
 @Getter
 @Entity
 @Table(name = "cars_services")
+@NoArgsConstructor
 public class CarService {
 
     @Id
@@ -27,6 +29,16 @@ public class CarService {
 
     @Column(name = "service_date", nullable = false)
     private LocalDate serviceDate;
+
+    @Column(name = "calculated_price")
+    private double calculatedPrice;
+
+    public CarService(Service service, ClientCar clientCar) {
+        this.service = service;
+        this.clientCar = clientCar;
+        this.serviceDate = LocalDate.now();
+        this.calculatedPrice = service.getPriceBasedOnYear(clientCar.getVehicle());
+    }
 
     @Override
     public boolean equals(Object o) {
