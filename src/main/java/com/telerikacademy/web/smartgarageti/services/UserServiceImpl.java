@@ -1,26 +1,34 @@
 package com.telerikacademy.web.smartgarageti.services;
 
+import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PasswordGenerator;
 import com.telerikacademy.web.smartgarageti.helpers.PasswordHasher;
 import com.telerikacademy.web.smartgarageti.models.Role;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.UserRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.RoleService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
     private static final String INVALID_PERMISSION = "You dont have permissions! Only employees can do this operation.";
+    @Value("${spring.mail.username}")
+    private String smtpEmail;
+
+    @Value("${spring.mail.password}")
+    private String smtpPasswordFromConfig;
 
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final EmailService emailService;
-    
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleService roleService, EmailService emailService) {
@@ -62,4 +70,23 @@ public class UserServiceImpl implements UserService {
         return MapperHelper.toUserDto(user);
     }
 
+    @Override
+    public void resetPassword(ForgottenPasswordDto forgottenPasswordDto) {
+        User user = userRepository.getUserByEmail(forgottenPasswordDto.getEmail());
+        if (user == null) {
+            throw new EntityNotFoundException("User with email " + forgottenPasswordDto.getEmail() + " not found.");
+        }
+
+        String newPassword = PasswordGenerator.generateRandomPassword();
+        user.setPassword(newPassword);
+        userRepository.update(user); // Update the user with the new password
+
+        emailService.sendEmail(
+                smtpEmail,  // from - имейлът, от който ще се изпраща
+                smtpPasswordFromConfig,// smtpPassword - паролата за SMTP сървъра
+                forgottenPasswordDto.getEmail(),  // to - имейлът, до който ще се изпраща
+                "Your new password for Smart Garage TI App",// subject - тема на имейла
+                "Your new password is: " + newPassword // text - текстът на имейла
+        );
+    }
 }

@@ -6,6 +6,7 @@ import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationExce
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
@@ -54,5 +55,9 @@ public class UserRestController {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
+    }
+    @PostMapping("/forgot-password")
+    public void forgotPassword(@RequestBody ForgottenPasswordDto forgottenPasswordDto) {
+        userService.resetPassword(forgottenPasswordDto);
     }
 }

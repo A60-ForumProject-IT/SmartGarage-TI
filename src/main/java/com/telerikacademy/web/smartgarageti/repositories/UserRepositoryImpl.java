@@ -27,6 +27,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getUserByEmail(String email) {
+        try(Session session = sessionFactory.openSession()){
+            return session.createQuery("from User where email = :email", User.class)
+                    .setParameter("email", email)
+                    .uniqueResult();
+        }
+    }
+
+    @Override
     public User getUserById(int id) {
         try(Session session = sessionFactory.openSession()){
           User user = session.get(User.class, id);
@@ -42,6 +51,15 @@ public class UserRepositoryImpl implements UserRepository {
         try(Session session = sessionFactory.openSession()){
             session.beginTransaction();
             session.persist(user);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void update(User user) {
+        try(Session session = sessionFactory.openSession()){
+            session.beginTransaction();
+            session.merge(user);
             session.getTransaction().commit();
         }
     }
