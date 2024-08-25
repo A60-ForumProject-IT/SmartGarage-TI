@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserRestController {
@@ -27,6 +29,18 @@ public class UserRestController {
     public UserRestController(UserService userService, AuthenticationHelper authenticationHelper) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
+    }
+
+    @GetMapping
+    public List<User> getAllUsers(@RequestHeader HttpHeaders headers) {
+        try {
+            User employee = authenticationHelper.tryGetUser(headers);
+            return userService.getAllUsers(employee);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
@@ -47,9 +61,8 @@ public class UserRestController {
     public UserDto createCustomer(@RequestHeader HttpHeaders headers, @RequestBody UserCreationDto userCreationDto) {
         try {
             User employee = authenticationHelper.tryGetUser(headers);
-            PermissionHelper.isEmployee(employee, "Only employees can create new customers.");
-
-            return userService.createCustomerProfile(userCreationDto);
+           // PermissionHelper.isEmployee(employee, "Only employees can create new customers.");
+            return userService.createCustomerProfile(employee,userCreationDto);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (AuthenticationException e) {

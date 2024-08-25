@@ -4,6 +4,7 @@ import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PasswordGenerator;
 import com.telerikacademy.web.smartgarageti.helpers.PasswordHasher;
+import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.Role;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
@@ -15,6 +16,8 @@ import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,13 +47,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(User employee, int id) {
-        //PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
+        PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
         return userRepository.getUserById(id);
     }
 
     @Override
-    public UserDto createCustomerProfile(UserCreationDto userCreationDto) {
+    public UserDto createCustomerProfile(User employee, UserCreationDto userCreationDto) {
         Role role = roleService.getRoleById(1);
+        PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
         String randomPassword = PasswordGenerator.generateRandomPassword();
         System.out.println("Generated Password: " + randomPassword);
         String hashedPassword = PasswordHasher.hashPassword(randomPassword);
@@ -64,7 +68,7 @@ public class UserServiceImpl implements UserService {
                 userCreationDto.getSmtpPassword(),
                 user.getEmail(),
                 "Welcome to Smart Garage",
-                "Your username is: " + user.getUsername() + "\nYour password is: " + randomPassword
+                "Your username is: " + user.getUsername() + " Your password is: " + randomPassword
         );
 
         return MapperHelper.toUserDto(user);
@@ -88,5 +92,11 @@ public class UserServiceImpl implements UserService {
                 "Your new password for Smart Garage TI App",
                 "Your new password is: " + newPassword
         );
+    }
+
+    @Override
+    public List<User> getAllUsers(User employee) {
+        PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
+        return userRepository.getAllUsers();
     }
 }

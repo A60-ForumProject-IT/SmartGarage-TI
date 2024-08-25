@@ -8,6 +8,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserRepositoryImpl implements UserRepository {
     private final SessionFactory sessionFactory;
@@ -61,6 +63,14 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
             session.merge(user);
             session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        try(Session session = sessionFactory.openSession()){
+            return session.createQuery("from User", User.class)
+                    .list();
         }
     }
 }
