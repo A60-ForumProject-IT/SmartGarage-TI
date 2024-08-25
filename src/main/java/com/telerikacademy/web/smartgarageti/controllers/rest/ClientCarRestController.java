@@ -8,6 +8,9 @@ import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.ClientCarDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@Api(value = "ClientCar Management System", description = "Operations pertaining to client cars in ClientCar Management System")
+
 public class ClientCarRestController {
     private final ClientCarService clientCarService;
     private final AuthenticationHelper authenticationHelper;
@@ -45,6 +50,10 @@ public class ClientCarRestController {
         this.repairServiceService = repairServiceService;
     }
 
+    @Operation(
+            summary = "Filter and sort client cars by owner",
+            description = "This filtration works with both username OR first name at once. Don't change 'owner'."
+    )
     @GetMapping("/client-cars/filter-sort")
     public List<ClientCar> filterAndSortClientCarsByOwner(@RequestParam(required = false) String searchTerm,
                                                           @RequestParam(required = false, defaultValue = "owner") String sortBy,
@@ -52,11 +61,17 @@ public class ClientCarRestController {
         return clientCarService.filterAndSortClientCarsByOwner(searchTerm, sortBy, sortDirection);
     }
 
+    @Operation(
+            summary = "This method retrieves all client cars in the app."
+    )
     @GetMapping("/client-cars")
     public List<ClientCar> getAllClientCars() {
         return clientCarService.getAllClientCars();
     }
 
+    @Operation(
+            summary = "Add a client car (VIN and license plate) to a vehicle that we've already got in our application."
+    )
     @PostMapping("/users/{userId}/client-cars/vehicles/{vehicleId}")
     public ClientCar addClientCarToVehicle(@PathVariable int userId,
                                            @Valid @RequestBody ClientCarDto clientCarDto,
@@ -76,6 +91,10 @@ public class ClientCarRestController {
         }
     }
 
+    @Operation(
+            summary = "Update client car information.",
+            description = "Works with ClientCarDto expecting VIN and license plate."
+    )
     @PutMapping("/client-cars/{clientCarId}")
     public void updateClientCar(@PathVariable int clientCarId, @Valid @RequestBody ClientCarDto clientCarDto) {
         try {
@@ -88,6 +107,9 @@ public class ClientCarRestController {
         }
     }
 
+    @Operation(
+            summary = "Add a service to a client car."
+    )
     @PostMapping("/client-cars/{clientCarId}/services/{serviceId}")
     public ResponseEntity<Void> addServiceToClientCar(@PathVariable int clientCarId, @PathVariable int serviceId) {
         try {
@@ -99,16 +121,25 @@ public class ClientCarRestController {
         }
     }
 
+    @Operation(
+            summary = "Finds all the services we've got in our application until this moment."
+    )
     @GetMapping("/client-cars/services")
     public List<CarServiceLog> getAllCarServices() {
         return carServiceService.findAllCarServices();
     }
 
+    @Operation(
+            summary = "Finds all services to a concrete client car."
+    )
     @GetMapping("/client-cars/{clientCarId}/services")
     public List<CarServiceLog> getClientCarServicesByClientCarId(@PathVariable int clientCarId) {
         return carServiceService.findCarServicesByClientCarId(clientCarId);
     }
 
+    @Operation(
+            summary = "Finds all services that have been done in the past for this user's cars."
+    )
     @GetMapping("/users/{userId}/service-history")
     public ResponseEntity<List<CarServiceLog>> getServiceHistory(@PathVariable int userId, @RequestHeader HttpHeaders httpHeaders) {
         try {
