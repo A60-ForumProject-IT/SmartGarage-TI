@@ -1,6 +1,7 @@
 package com.telerikacademy.web.smartgarageti.services.contracts;
 
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
+import com.telerikacademy.web.smartgarageti.models.Model;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ClientCarService {
     List<ClientCar> filterAndSortClientCarsByOwner(String searchTerm, String sortBy, String sortDirection);
 
     List<ClientCar> getClientCarsByClientId(int clientId);
+
+    void updateClientCar(ClientCar clientCar);
 }

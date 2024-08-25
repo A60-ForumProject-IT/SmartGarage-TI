@@ -66,7 +66,7 @@ public class ClientCarRestController {
     public void updateClientCar(@PathVariable int clientCarId, @Valid @RequestBody ClientCarUpdateDto clientCarUpdateDto) {
         try {
             ClientCar existingClientCar = mapperHelper.updateClientCarFromDto(clientCarUpdateDto, clientCarId);
-            clientCarService.createClientCar(existingClientCar);
+            clientCarService.updateClientCar(existingClientCar);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {

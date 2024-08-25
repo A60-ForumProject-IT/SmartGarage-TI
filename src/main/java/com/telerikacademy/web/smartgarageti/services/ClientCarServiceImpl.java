@@ -3,6 +3,7 @@ package com.telerikacademy.web.smartgarageti.services;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
+import com.telerikacademy.web.smartgarageti.models.Model;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.ClientCarRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,10 @@ public class ClientCarServiceImpl implements ClientCarService {
         });
 
         return clientCarRepository.save(clientCar);
+    }
+
+    @Override
+    public void updateClientCar(ClientCar clientCar) {
+        clientCarRepository.save(clientCar);
     }
 }

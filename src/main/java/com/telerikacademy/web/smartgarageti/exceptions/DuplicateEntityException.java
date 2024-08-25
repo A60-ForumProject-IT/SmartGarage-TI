@@ -18,4 +18,8 @@ public class DuplicateEntityException extends RuntimeException {
         super(String.format("%s with brand %s, model %s, year %d  and engine %s already exists!", type, attribute, secondAttribute, year, thirdAttribute));
     }
 
+    public DuplicateEntityException(String message) {
+        super(message);
+    }
+
 }

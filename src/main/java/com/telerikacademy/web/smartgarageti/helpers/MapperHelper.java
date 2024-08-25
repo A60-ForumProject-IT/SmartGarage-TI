@@ -1,11 +1,16 @@
 package com.telerikacademy.web.smartgarageti.helpers;
 
+import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
+import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.*;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.UserRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class MapperHelper {
@@ -84,10 +89,32 @@ public class MapperHelper {
     }
 
     public ClientCar updateClientCarFromDto(ClientCarUpdateDto clientCarUpdateDto, int id) {
-        ClientCar clientCar = clientCarService.getClientCarById(id);
-        clientCar.setLicensePlate(clientCarUpdateDto.getLicense_plate());
-        clientCar.setVin(clientCarUpdateDto.getVin());
-        return clientCar;
+        ClientCar existingClientCar = clientCarService.getClientCarById(id);
+
+
+        try {
+            if (!existingClientCar.getVin().equals(clientCarUpdateDto.getVin())) {
+                Optional<ClientCar> existingVin = Optional.ofNullable(clientCarService.findByVin(clientCarUpdateDto.getVin()));
+                if (existingVin.isPresent()) {
+                    throw new DuplicateEntityException("VIN already exists for another car");
+                }
+            }
+        } catch (EntityNotFoundException e) {
+            existingClientCar.setVin(clientCarUpdateDto.getVin());
+        }
+
+        try {
+            if (!existingClientCar.getLicensePlate().equals(clientCarUpdateDto.getLicense_plate())) {
+                Optional<ClientCar> existingLicensePlate = Optional.ofNullable(clientCarService.findByLicensePlate(clientCarUpdateDto.getLicense_plate()));
+                if (existingLicensePlate.isPresent()) {
+                    throw new DuplicateEntityException("License plate already exists for another car");
+                }
+            }
+        } catch (EntityNotFoundException e) {
+            existingClientCar.setLicensePlate(clientCarUpdateDto.getLicense_plate());
+        }
+
+        return existingClientCar;
     }
 
     public RepairService updateServiceFromDto(RepairServiceDto repairServiceDto, int serviceId) {
