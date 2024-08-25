@@ -88,6 +88,15 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public void delete(User userToBeDeleted) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.remove(userToBeDeleted);
+            session.getTransaction().commit();
+        }
+    }
+
     private List<User> filterUserOptions(FilteredUserOptions filteredUserOptions, Session session) {
         List<String> filters = new ArrayList<>();
         Map<String, Object> parameters = new HashMap<>();

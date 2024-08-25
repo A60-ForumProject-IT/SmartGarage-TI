@@ -26,6 +26,7 @@ import java.util.List;
 public class UserRestController {
 
     public static final String PASSWORD_CHANGED_SUCCESSFULLY = "Password changed successfully.";
+    public static final String IS_DELETED_SUCCESSFULLY = "User is deleted successfully.";
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
@@ -114,6 +115,22 @@ public class UserRestController {
             User userToChangePassword = userService.getUserById(id);
             userService.changePassword(user,userToChangePassword,changePasswordDto);
             return ResponseEntity.ok(PASSWORD_CHANGED_SUCCESSFULLY);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToBeDeleted = userService.getUserById(id);
+            userService.deleteUser(user, userToBeDeleted);
+            return ResponseEntity.ok(IS_DELETED_SUCCESSFULLY);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

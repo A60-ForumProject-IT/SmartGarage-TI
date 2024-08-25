@@ -24,4 +24,6 @@ public interface UserService {
     User updateUser(User user, User userToBeEdited);
 
     void changePassword(User user, User userToChangePassword, ChangePasswordDto changePasswordDto);
+
+    void deleteUser(User user, User userToBeDeleted);
 }

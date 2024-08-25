@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
     public static final String OLD_PASSWORD_IS_INCORRECT = "Old password is incorrect.";
     public static final String PASSWORD_CAN_T_BE_THE_SAME_AS_THE_OLD_PASSWORD = "New password can't be the same as the old password.";
     public static final String NEW_PASSWORD_AND_CONFIRM_PASSWORD_DO_NOT_MATCH = "New password and confirm password do not match.";
+    public static final String CAN_T_DELETE_OTHER_USERS = "You can't delete other users.";
     @Value("${spring.mail.username}")
     private String smtpEmail;
 
@@ -151,5 +152,11 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(changePasswordDto.getNewPassword());
         userRepository.update(user);
+    }
+
+    @Override
+    public void deleteUser(User user, User userToBeDeleted) {
+        PermissionHelper.isEmployeeOrSameUser(user, userToBeDeleted, CAN_T_DELETE_OTHER_USERS);
+        userRepository.delete(userToBeDeleted);
     }
 }

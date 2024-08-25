@@ -29,4 +29,10 @@ public class PermissionHelper {
             throw new UnauthorizedOperationException(message);
         }
     }
+
+    public static void isEmployeeOrSameUser(User user, User userToDelete, String message) {
+        if ( user.getId() != userToDelete.getId() && !user.getRole().getName().equals(ROLE_EMPLOYEE)) {
+            throw new UnauthorizedOperationException(message);
+        }
+    }
 }

@@ -18,4 +18,6 @@ public interface UserRepository {
 
     List<User> getAllUsers(FilteredUserOptions filteredUserOptions, int page, int size);
 
+    void delete(User userToBeDeleted);
+
 }
