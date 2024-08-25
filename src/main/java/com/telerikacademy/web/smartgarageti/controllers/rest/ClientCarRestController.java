@@ -105,7 +105,6 @@ public class ClientCarRestController {
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
-
     }
 
     @Operation(
