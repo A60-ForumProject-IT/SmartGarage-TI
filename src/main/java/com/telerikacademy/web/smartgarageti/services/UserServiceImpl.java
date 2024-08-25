@@ -23,6 +23,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     private static final String INVALID_PERMISSION = "You dont have permissions! Only employees can do this operation.";
+    public static final String CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS = "You can't edit information in other user accounts.";
     @Value("${spring.mail.username}")
     private String smtpEmail;
 
@@ -99,5 +100,27 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers(User employee, FilteredUserOptions filteredUserOptions, int page, int size) {
         PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
         return userRepository.getAllUsers(filteredUserOptions, page, size);
+    }
+
+    @Override
+    public User updateUser(User user, User userToBeEdited) {
+        PermissionHelper.isSameUser(user, userToBeEdited, CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS);
+        boolean duplicateExists = true;
+
+        try {
+            User existingUser = userRepository.getByUsername(userToBeEdited.getUsername());
+            if (existingUser.getId() == userToBeEdited.getId()) {
+                duplicateExists = false;
+            }
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new EntityNotFoundException("User with %s %s already exists.", "username", userToBeEdited.getUsername());
+        }
+
+        userRepository.update(userToBeEdited);
+        return userToBeEdited;
     }
 }

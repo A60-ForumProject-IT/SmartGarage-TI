@@ -17,4 +17,5 @@ public interface UserRepository {
     void update(User user);
 
     List<User> getAllUsers(FilteredUserOptions filteredUserOptions, int page, int size);
+
 }

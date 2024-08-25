@@ -4,13 +4,16 @@ import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
+import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.FilteredUserOptions;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
+import com.telerikacademy.web.smartgarageti.models.dto.UserEditInfoDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,11 +29,13 @@ public class UserRestController {
 
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
+    private final MapperHelper mapperHelper;
 
     @Autowired
-    public UserRestController(UserService userService, AuthenticationHelper authenticationHelper) {
+    public UserRestController(UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
+        this.mapperHelper = mapperHelper;
     }
 
     @GetMapping
@@ -71,7 +76,7 @@ public class UserRestController {
     }
 
     @PostMapping("/customers")
-    public UserDto createCustomer(@RequestHeader HttpHeaders headers, @RequestBody UserCreationDto userCreationDto) {
+    public UserDto createCustomer(@RequestHeader HttpHeaders headers, @Valid @RequestBody UserCreationDto userCreationDto) {
         try {
             User employee = authenticationHelper.tryGetUser(headers);
             // PermissionHelper.isEmployee(employee, "Only employees can create new customers.");
@@ -86,5 +91,20 @@ public class UserRestController {
     @PostMapping("/forgot-password")
     public void forgotPassword(@RequestBody ForgottenPasswordDto forgottenPasswordDto) {
         userService.resetPassword(forgottenPasswordDto);
+    }
+
+    @PutMapping("/{id}")
+    public User updateUser(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UserEditInfoDto userEditInfoDto) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToBeEdited = mapperHelper.editUserFromDto(userEditInfoDto, id);
+            return userService.updateUser(user, userToBeEdited);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 }

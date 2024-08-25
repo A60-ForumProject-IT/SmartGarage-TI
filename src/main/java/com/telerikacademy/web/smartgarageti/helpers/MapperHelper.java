@@ -2,7 +2,9 @@ package com.telerikacademy.web.smartgarageti.helpers;
 
 import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.*;
+import com.telerikacademy.web.smartgarageti.repositories.contracts.UserRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,8 +16,11 @@ public class MapperHelper {
     private final EngineTypeService engineTypeService;
     private final VehicleService vehicleService;
     private final RepairServiceService repairService;
+    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public MapperHelper(ClientCarService clientCarService, BrandService brandService, ModelService modelService, YearService yearService, EngineTypeService engineTypeService, VehicleService vehicleService, RepairServiceService repairService) {
+    @Autowired
+    public MapperHelper(ClientCarService clientCarService, BrandService brandService, ModelService modelService, YearService yearService, EngineTypeService engineTypeService, VehicleService vehicleService, RepairServiceService repairService, UserService userService, UserRepository userRepository) {
         this.clientCarService = clientCarService;
         this.brandService = brandService;
         this.modelService = modelService;
@@ -23,6 +28,8 @@ public class MapperHelper {
         this.engineTypeService = engineTypeService;
         this.vehicleService = vehicleService;
         this.repairService = repairService;
+        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     public Model createModelFromModelDto(ModelDto modelDto) {
@@ -88,5 +95,14 @@ public class MapperHelper {
         repairService.setName(repairServiceDto.getName());
         repairService.setPrice(repairServiceDto.getPrice());
         return repairService;
+    }
+
+    public User editUserFromDto(UserEditInfoDto userEditInfoDto, int id) {
+        User user = userRepository.getUserById(id);
+        user.setFirstName(userEditInfoDto.getFirstName());
+        user.setLastName(userEditInfoDto.getLastName());
+        user.setEmail(userEditInfoDto.getEmail());
+        user.setPhoneNumber(userEditInfoDto.getPhoneNumber());
+        return user;
     }
 }

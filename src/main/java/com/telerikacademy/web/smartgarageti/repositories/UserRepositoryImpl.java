@@ -27,18 +27,26 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getByUsername(String username) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from User where username = :username", User.class)
-                    .setParameter("username", username)
-                    .uniqueResult();
+            Query<User> query = session.createQuery("from User where username = :username", User.class);
+            query.setParameter("username", username);
+            List<User> users = query.list();
+            if (users.isEmpty()) {
+                throw new EntityNotFoundException("User", "username", username);
+            }
+            return users.get(0);
         }
     }
 
     @Override
     public User getUserByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from User where email = :email", User.class)
-                    .setParameter("email", email)
-                    .uniqueResult();
+            Query<User> query = session.createQuery("from User where email = :email", User.class);
+            query.setParameter("email", email);
+            List<User> users = query.list();
+            if (users.isEmpty()) {
+                throw new EntityNotFoundException("User", "email", email);
+            }
+            return users.get(0);
         }
     }
 
@@ -84,10 +92,10 @@ public class UserRepositoryImpl implements UserRepository {
         List<String> filters = new ArrayList<>();
         Map<String, Object> parameters = new HashMap<>();
         StringBuilder queryString = new StringBuilder("SELECT DISTINCT u FROM User u ");
-        queryString.append("JOIN u.clientCars cc ");
-        queryString.append("JOIN cc.carServices cs ");
-        queryString.append("JOIN cc.vehicle v ");
-        queryString.append("JOIN v.brand b ");
+        queryString.append("LEFT JOIN u.clientCars cc ");
+        queryString.append("LEFT JOIN cc.carServices cs ");
+        queryString.append("LEFT JOIN cc.vehicle v ");
+        queryString.append("LEFT JOIN v.brand b ");
 
         filteredUserOptions.getUsername().ifPresent(value -> {
             filters.add("u.username like :username");
@@ -126,7 +134,9 @@ public class UserRepositoryImpl implements UserRepository {
         queryString.append(generateOrderBy(filteredUserOptions));
         Query<User> query = session.createQuery(queryString.toString(), User.class);
         query.setProperties(parameters);
-        return query.list();
+        List<User> allUsers = query.list();
+        System.out.println("Total Users Found: " + allUsers.size());
+        return allUsers;
     }
 
     private String generateOrderBy(FilteredUserOptions filteredUserOptions) {

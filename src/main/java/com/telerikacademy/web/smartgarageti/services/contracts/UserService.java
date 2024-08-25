@@ -18,4 +18,7 @@ public interface UserService {
     void resetPassword(ForgottenPasswordDto forgottenPasswordDto);
 
     List<User> getAllUsers(User employee, FilteredUserOptions filteredUserOptions, int page, int size);
+
+    User updateUser(User user, User userToBeEdited);
+
 }
