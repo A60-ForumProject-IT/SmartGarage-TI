@@ -14,4 +14,7 @@ public interface ClientCarService {
     ClientCar findByVin(String vin);
 
     ClientCar findByLicensePlate(String licensePlate);
+
+    List<ClientCar> filterAndSortClientCarsByOwner(String searchTerm, String sortBy, String sortDirection);
+
 }

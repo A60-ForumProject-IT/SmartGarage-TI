@@ -6,6 +6,7 @@ import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.ClientCarRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +41,17 @@ public class ClientCarServiceImpl implements ClientCarService {
     public ClientCar findByLicensePlate(String licensePlate) {
         return clientCarRepository.findByLicensePlate(licensePlate)
                 .orElseThrow(() -> new EntityNotFoundException("Client car", "license plate", licensePlate));
+    }
+
+    @Override
+    public List<ClientCar> filterAndSortClientCarsByOwner(String searchTerm, String sortBy, String sortDirection) {
+        Sort sort = Sort.by(Sort.Direction.ASC, sortBy); // Default to ascending
+
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+            sort = Sort.by(Sort.Direction.DESC, sortBy);
+        }
+
+        return clientCarRepository.findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCase(searchTerm, searchTerm, sort);
     }
 
     @Override

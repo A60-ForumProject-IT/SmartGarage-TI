@@ -27,6 +27,9 @@ public class RepairService {
     @Column(name = "price", nullable = false)
     private double price;
 
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
+
     @JsonIgnore
     @OneToMany(mappedBy = "service")
     private Set<CarServiceLog> carServices;

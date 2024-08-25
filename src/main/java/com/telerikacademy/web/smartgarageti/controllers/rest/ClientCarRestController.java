@@ -46,6 +46,12 @@ public class ClientCarRestController {
         this.carServiceService = carServiceService;
     }
 
+    @GetMapping("/client-cars/filter-sort")
+    public List<ClientCar> filterAndSortClientCarsByOwner(@RequestParam(required = false) String searchTerm,
+                                                          @RequestParam(required = false, defaultValue = "username") String sortBy,
+                                                          @RequestParam(required = false, defaultValue = "asc") String sortDirection) {
+        return clientCarService.filterAndSortClientCarsByOwner(searchTerm, sortBy, sortDirection);
+    }
 
     @GetMapping("/client-cars")
     public List<ClientCar> getAllClientCars() {

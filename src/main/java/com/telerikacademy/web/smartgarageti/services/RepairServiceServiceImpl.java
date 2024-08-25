@@ -27,7 +27,7 @@ public class RepairServiceServiceImpl implements RepairServiceService {
 
     @Override
     public List<RepairService> findAllServices() {
-        return serviceRepository.findAll();
+        return serviceRepository.findAllByIsDeletedFalse();
     }
 
     @Override
@@ -50,6 +50,7 @@ public class RepairServiceServiceImpl implements RepairServiceService {
         RepairService service = serviceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service", id));
 
-        serviceRepository.delete(service);
+        service.setDeleted(true);
+        serviceRepository.save(service);
     }
 }
