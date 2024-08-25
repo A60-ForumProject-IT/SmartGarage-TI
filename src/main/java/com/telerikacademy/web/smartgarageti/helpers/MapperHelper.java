@@ -83,10 +83,10 @@ public class MapperHelper {
         return clientCar;
     }
 
-    public ClientCar updateClientCarFromDto(ClientCarDto clientCarDto, int id) {
+    public ClientCar updateClientCarFromDto(ClientCarUpdateDto clientCarUpdateDto, int id) {
         ClientCar clientCar = clientCarService.getClientCarById(id);
-        clientCar.setLicensePlate(clientCarDto.getLicense_plate());
-        clientCar.setVin(clientCarDto.getVin());
+        clientCar.setLicensePlate(clientCarUpdateDto.getLicense_plate());
+        clientCar.setVin(clientCarUpdateDto.getVin());
         return clientCar;
     }
 

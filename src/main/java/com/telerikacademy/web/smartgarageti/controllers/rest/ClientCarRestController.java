@@ -7,6 +7,7 @@ import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.ClientCarDto;
+import com.telerikacademy.web.smartgarageti.models.dto.ClientCarUpdateDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -59,12 +60,12 @@ public class ClientCarRestController {
 
     @Operation(
             summary = "Update client car information.",
-            description = "Works with ClientCarDto expecting VIN and license plate."
+            description = "Works with ClientCarUpdateDto expecting VIN and license plate."
     )
     @PutMapping("/client-cars/{clientCarId}")
-    public void updateClientCar(@PathVariable int clientCarId, @Valid @RequestBody ClientCarDto clientCarDto) {
+    public void updateClientCar(@PathVariable int clientCarId, @Valid @RequestBody ClientCarUpdateDto clientCarUpdateDto) {
         try {
-            ClientCar existingClientCar = mapperHelper.updateClientCarFromDto(clientCarDto, clientCarId);
+            ClientCar existingClientCar = mapperHelper.updateClientCarFromDto(clientCarUpdateDto, clientCarId);
             clientCarService.createClientCar(existingClientCar);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -132,8 +133,9 @@ public class ClientCarRestController {
         try {
             User loggedInUser = authenticationHelper.tryGetUser(httpHeaders);
             User userToAddCar = userService.getUserById(loggedInUser, userId);
-            return clientCarService.createClientCar(
-                    mapperHelper.createClientCarFromDto(clientCarDto, userToAddCar));
+            ClientCar newClientCar = mapperHelper.createClientCarFromDto(clientCarDto, userToAddCar);
+
+            return clientCarService.createClientCar(newClientCar);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
