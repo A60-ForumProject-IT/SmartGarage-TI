@@ -34,9 +34,14 @@ public class CarServiceLog {
     @Column(name = "calculated_price")
     private double calculatedPrice;
 
-    public CarServiceLog(RepairService service, ClientCar clientCar) {
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    public CarServiceLog(RepairService service, ClientCar clientCar, Order order) {
         this.service = service;
         this.clientCar = clientCar;
+        this.order = order;
         this.serviceDate = LocalDate.now();
         this.calculatedPrice = service.getPriceBasedOnYear(clientCar.getVehicle());
     }

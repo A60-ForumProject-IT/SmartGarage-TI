@@ -55,6 +55,11 @@ public class ClientCarServiceImpl implements ClientCarService {
     }
 
     @Override
+    public List<ClientCar> getClientCarsByClientId(int clientId) {
+        return clientCarRepository.findAllByOwnerId(clientId);
+    }
+
+    @Override
     public ClientCar createClientCar(ClientCar clientCar) {
         clientCarRepository.findByVin(clientCar.getVin()).ifPresent(year -> {
             throw new DuplicateEntityException("VIN", clientCar.getVin());

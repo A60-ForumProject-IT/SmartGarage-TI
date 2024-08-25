@@ -2,9 +2,11 @@ package com.telerikacademy.web.smartgarageti.services;
 
 import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
+import com.telerikacademy.web.smartgarageti.models.Order;
 import com.telerikacademy.web.smartgarageti.models.RepairService;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.CarServiceLogRepository;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.ClientCarRepository;
+import com.telerikacademy.web.smartgarageti.repositories.contracts.OrderRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.CarServiceLogService;
 import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.RepairServiceService;
@@ -19,31 +21,33 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
     private final ClientCarService clientCarService;
     private final CarServiceLogRepository carServiceRepository;
     private final ClientCarRepository clientCarRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
     public CarServiceLogServiceImpl(RepairServiceService repairServiceService,
                                     ClientCarService clientCarService,
                                     CarServiceLogRepository carServiceRepository,
-                                    ClientCarRepository clientCarRepository) {
+                                    ClientCarRepository clientCarRepository, OrderRepository orderRepository) {
         this.repairServiceService = repairServiceService;
         this.clientCarService = clientCarService;
         this.carServiceRepository = carServiceRepository;
         this.clientCarRepository = clientCarRepository;
+        this.orderRepository = orderRepository;
     }
 
-    @Override
-    public void addServiceToClientCar(int clientCarId, int serviceId) {
-        ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
-        List<CarServiceLog> clientCarServices = clientCar.getCarServices();
-        RepairService repairService = repairServiceService.findServiceById(serviceId);
-
-        CarServiceLog carService = new CarServiceLog(repairService, clientCar);
-
-        clientCarServices.add(carService);
-
-        clientCarRepository.save(clientCar);
-        carServiceRepository.save(carService);
-    }
+//    @Override
+//    public void addServiceToClientCar(int clientCarId, int serviceId) {
+//        ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
+//        List<CarServiceLog> clientCarServices = clientCar.getCarServices();
+//        RepairService repairService = repairServiceService.findServiceById(serviceId);
+//
+//        CarServiceLog carService = new CarServiceLog(repairService, clientCar);
+//
+//        clientCarServices.add(carService);
+//
+//        clientCarRepository.save(clientCar);
+//        carServiceRepository.save(carService);
+//    }
 
     @Override
     public List<CarServiceLog> findAllCarServices() {
@@ -58,5 +62,34 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
     @Override
     public List<CarServiceLog> findAllServicesByOwnerId(int ownerId) {
         return carServiceRepository.findAllByClientCarOwnerId(ownerId);
+    }
+
+    @Override
+    public CarServiceLog addServiceToOrder(int clientCarId, RepairService repairService) {
+        Order activeOrder = orderRepository.findActiveOrderByClientCarId(clientCarId)
+                .orElseGet(() -> createNewOrder(clientCarId));
+
+        ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
+        List<CarServiceLog> clientCarServices = clientCar.getCarServices();
+
+        CarServiceLog carServiceLog = new CarServiceLog(repairService, clientCar, activeOrder);
+
+        clientCarServices.add(carServiceLog);
+
+        clientCarRepository.save(clientCar);
+        return carServiceRepository.save(carServiceLog);
+    }
+
+    @Override
+    public List<CarServiceLog> getServiceHistoryForClientCars(List<ClientCar> clientCars) {
+        return carServiceRepository.findAllByClientCarIn(clientCars);
+    }
+
+    private Order createNewOrder(int clientCarId) {
+        Order newOrder = new Order();
+        newOrder.setClientCar(clientCarService.getClientCarById(clientCarId));
+        newOrder.setStatus("NOT_STARTED");
+
+        return orderRepository.save(newOrder);
     }
 }

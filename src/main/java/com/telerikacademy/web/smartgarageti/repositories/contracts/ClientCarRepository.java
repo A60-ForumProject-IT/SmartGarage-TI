@@ -14,4 +14,5 @@ public interface ClientCarRepository extends JpaRepository<ClientCar, Integer> {
 
     List<ClientCar> findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCase(String username, String firstName, Sort sort);
 
+    List<ClientCar> findAllByOwnerId(int userId);
 }

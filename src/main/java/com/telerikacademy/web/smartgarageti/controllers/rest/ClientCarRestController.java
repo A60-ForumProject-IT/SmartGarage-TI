@@ -5,10 +5,7 @@ import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
-import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
-import com.telerikacademy.web.smartgarageti.models.ClientCar;
-import com.telerikacademy.web.smartgarageti.models.User;
-import com.telerikacademy.web.smartgarageti.models.Vehicle;
+import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.ClientCarDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import jakarta.validation.Valid;
@@ -30,6 +27,7 @@ public class ClientCarRestController {
     private final VehicleService vehicleService;
     private final MapperHelper mapperHelper;
     private final CarServiceLogService carServiceService;
+    private final RepairServiceService repairServiceService;
 
     @Autowired
     public ClientCarRestController(ClientCarService clientCarService,
@@ -37,13 +35,14 @@ public class ClientCarRestController {
                                    UserService userService,
                                    VehicleService vehicleService,
                                    MapperHelper mapperHelper,
-                                   CarServiceLogService carServiceService) {
+                                   CarServiceLogService carServiceService, RepairServiceService repairServiceService) {
         this.clientCarService = clientCarService;
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.vehicleService = vehicleService;
         this.mapperHelper = mapperHelper;
         this.carServiceService = carServiceService;
+        this.repairServiceService = repairServiceService;
     }
 
     @GetMapping("/client-cars/filter-sort")
@@ -92,7 +91,8 @@ public class ClientCarRestController {
     @PostMapping("/client-cars/{clientCarId}/services/{serviceId}")
     public ResponseEntity<Void> addServiceToClientCar(@PathVariable int clientCarId, @PathVariable int serviceId) {
         try {
-            carServiceService.addServiceToClientCar(clientCarId, serviceId);
+            RepairService repairService = repairServiceService.findServiceById(serviceId);
+            carServiceService.addServiceToOrder(clientCarId, repairService);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -100,12 +100,26 @@ public class ClientCarRestController {
     }
 
     @GetMapping("/client-cars/services")
-    public List<CarServiceLog> getAllClientCarServices() {
+    public List<CarServiceLog> getAllCarServices() {
         return carServiceService.findAllCarServices();
     }
 
     @GetMapping("/client-cars/{clientCarId}/services")
     public List<CarServiceLog> getClientCarServicesByClientCarId(@PathVariable int clientCarId) {
         return carServiceService.findCarServicesByClientCarId(clientCarId);
+    }
+
+    @GetMapping("/users/{userId}/service-history")
+    public ResponseEntity<List<CarServiceLog>> getServiceHistory(@PathVariable int userId, @RequestHeader HttpHeaders httpHeaders) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(httpHeaders);
+            User user = userService.getUserById(loggedInUser, userId);
+
+            List<ClientCar> clientCars = clientCarService.getClientCarsByClientId(userId);
+            List<CarServiceLog> serviceLogs = carServiceService.getServiceHistoryForClientCars(clientCars);
+            return ResponseEntity.ok(serviceLogs);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 }

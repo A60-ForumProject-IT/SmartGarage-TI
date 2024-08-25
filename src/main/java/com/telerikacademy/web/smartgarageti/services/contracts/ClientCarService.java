@@ -17,4 +17,5 @@ public interface ClientCarService {
 
     List<ClientCar> filterAndSortClientCarsByOwner(String searchTerm, String sortBy, String sortDirection);
 
+    List<ClientCar> getClientCarsByClientId(int clientId);
 }
