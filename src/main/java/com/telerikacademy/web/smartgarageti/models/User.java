@@ -44,6 +44,8 @@ public class User {
             regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[+\\-*/^@#$%!&]).{8,}$",
             message = "Password must contain at least 8 characters, including one uppercase letter, one digit, and one special symbol (+, -, *, ^, etc.)"
     )
+
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -55,6 +57,7 @@ public class User {
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

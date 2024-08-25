@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.services.contracts;
 
+import com.telerikacademy.web.smartgarageti.models.FilteredUserOptions;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
@@ -16,5 +17,5 @@ public interface UserService {
 
     void resetPassword(ForgottenPasswordDto forgottenPasswordDto);
 
-    List<User> getAllUsers(User employee);
+    List<User> getAllUsers(User employee, FilteredUserOptions filteredUserOptions, int page, int size);
 }

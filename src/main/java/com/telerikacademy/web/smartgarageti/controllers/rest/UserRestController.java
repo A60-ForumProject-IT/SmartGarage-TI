@@ -5,6 +5,7 @@ import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
+import com.telerikacademy.web.smartgarageti.models.FilteredUserOptions;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -32,10 +34,21 @@ public class UserRestController {
     }
 
     @GetMapping
-    public List<User> getAllUsers(@RequestHeader HttpHeaders headers) {
+    public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
+                                  @RequestParam(required = false) String username,
+                                  @RequestParam(required = false) String email,
+                                  @RequestParam(required = false) String phoneNumber,
+                                  @RequestParam(required = false) String vehicleBrand,
+                                  @RequestParam(required = false) LocalDate visitDateFrom,
+                                  @RequestParam(required = false) LocalDate visitDateTo,
+                                  @RequestParam(required = false) String sortBy,
+                                  @RequestParam(required = false) String sortOrder,
+                                  @RequestParam(defaultValue = "1") int page,
+                                  @RequestParam(defaultValue = "10") int size) {
         try {
             User employee = authenticationHelper.tryGetUser(headers);
-            return userService.getAllUsers(employee);
+            FilteredUserOptions filteredUserOptions = new FilteredUserOptions(username, email, phoneNumber, vehicleBrand, visitDateFrom, visitDateTo, sortBy, sortOrder);
+            return userService.getAllUsers(employee, filteredUserOptions, page, size);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (AuthenticationException e) {
@@ -61,14 +74,15 @@ public class UserRestController {
     public UserDto createCustomer(@RequestHeader HttpHeaders headers, @RequestBody UserCreationDto userCreationDto) {
         try {
             User employee = authenticationHelper.tryGetUser(headers);
-           // PermissionHelper.isEmployee(employee, "Only employees can create new customers.");
-            return userService.createCustomerProfile(employee,userCreationDto);
+            // PermissionHelper.isEmployee(employee, "Only employees can create new customers.");
+            return userService.createCustomerProfile(employee, userCreationDto);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     @PostMapping("/forgot-password")
     public void forgotPassword(@RequestBody ForgottenPasswordDto forgottenPasswordDto) {
         userService.resetPassword(forgottenPasswordDto);

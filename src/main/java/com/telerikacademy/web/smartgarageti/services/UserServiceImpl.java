@@ -5,6 +5,7 @@ import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PasswordGenerator;
 import com.telerikacademy.web.smartgarageti.helpers.PasswordHasher;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
+import com.telerikacademy.web.smartgarageti.models.FilteredUserOptions;
 import com.telerikacademy.web.smartgarageti.models.Role;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
@@ -95,8 +96,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers(User employee) {
+    public List<User> getAllUsers(User employee, FilteredUserOptions filteredUserOptions, int page, int size) {
         PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
-        return userRepository.getAllUsers();
+        return userRepository.getAllUsers(filteredUserOptions, page, size);
     }
 }

@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.repositories.contracts;
 
+import com.telerikacademy.web.smartgarageti.models.FilteredUserOptions;
 import com.telerikacademy.web.smartgarageti.models.User;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface UserRepository {
 
     void update(User user);
 
-    List<User> getAllUsers();
+    List<User> getAllUsers(FilteredUserOptions filteredUserOptions, int page, int size);
 }
