@@ -68,4 +68,15 @@ public class OrderRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    @GetMapping("/orders/{orderId}/total-price")
+    public ResponseEntity<Double> getOrderTotalPrice(@PathVariable int orderId, @RequestParam(required = false, defaultValue = "BGN") String currency) {
+        try {
+            Order order = orderService.getOrderById(orderId);
+            double totalPrice = orderService.calculateOrderTotalInCurrency(order, currency);
+            return ResponseEntity.ok(totalPrice);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 }

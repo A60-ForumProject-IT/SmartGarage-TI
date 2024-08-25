@@ -13,4 +13,6 @@ public interface OrderService {
     List<Order> getAllOrders();
 
     List<Order> getOrdersByUserId(int userId);
+
+    double calculateOrderTotalInCurrency(Order order, String currency);
 }
