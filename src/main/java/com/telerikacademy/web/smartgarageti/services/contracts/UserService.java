@@ -2,6 +2,7 @@ package com.telerikacademy.web.smartgarageti.services.contracts;
 
 import com.telerikacademy.web.smartgarageti.models.FilteredUserOptions;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.dto.ChangePasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
@@ -12,6 +13,7 @@ public interface UserService {
     User getByUsername(String username);
 
     User getUserById(User employee, int id);
+    User getUserById(int id);
 
     UserDto createCustomerProfile(User employee, UserCreationDto userCreationDto);
 
@@ -21,4 +23,5 @@ public interface UserService {
 
     User updateUser(User user, User userToBeEdited);
 
+    void changePassword(User user, User userToChangePassword, ChangePasswordDto changePasswordDto);
 }

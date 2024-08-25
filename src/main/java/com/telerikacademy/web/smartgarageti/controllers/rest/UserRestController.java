@@ -8,15 +8,13 @@ import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.FilteredUserOptions;
 import com.telerikacademy.web.smartgarageti.models.User;
-import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
-import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
-import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
-import com.telerikacademy.web.smartgarageti.models.dto.UserEditInfoDto;
+import com.telerikacademy.web.smartgarageti.models.dto.*;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,6 +25,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserRestController {
 
+    public static final String PASSWORD_CHANGED_SUCCESSFULLY = "Password changed successfully.";
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
@@ -99,6 +98,22 @@ public class UserRestController {
             User user = authenticationHelper.tryGetUser(headers);
             User userToBeEdited = mapperHelper.editUserFromDto(userEditInfoDto, id);
             return userService.updateUser(user, userToBeEdited);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/password-change")
+    public ResponseEntity<String> changePassword(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody ChangePasswordDto changePasswordDto) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToChangePassword = userService.getUserById(id);
+            userService.changePassword(user,userToChangePassword,changePasswordDto);
+            return ResponseEntity.ok(PASSWORD_CHANGED_SUCCESSFULLY);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

@@ -8,6 +8,7 @@ import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.FilteredUserOptions;
 import com.telerikacademy.web.smartgarageti.models.Role;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.dto.ChangePasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
@@ -24,6 +25,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final String INVALID_PERMISSION = "You dont have permissions! Only employees can do this operation.";
     public static final String CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS = "You can't edit information in other user accounts.";
+    public static final String OLD_PASSWORD_IS_INCORRECT = "Old password is incorrect.";
+    public static final String PASSWORD_CAN_T_BE_THE_SAME_AS_THE_OLD_PASSWORD = "New password can't be the same as the old password.";
+    public static final String NEW_PASSWORD_AND_CONFIRM_PASSWORD_DO_NOT_MATCH = "New password and confirm password do not match.";
     @Value("${spring.mail.username}")
     private String smtpEmail;
 
@@ -50,6 +54,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(User employee, int id) {
         PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
+        return userRepository.getUserById(id);
+    }
+
+    @Override
+    public User getUserById(int id) {
         return userRepository.getUserById(id);
     }
 
@@ -122,5 +131,25 @@ public class UserServiceImpl implements UserService {
 
         userRepository.update(userToBeEdited);
         return userToBeEdited;
+    }
+
+    @Override
+    public void changePassword(User user, User userToChangePassword, ChangePasswordDto changePasswordDto) {
+        PermissionHelper.isSameUser(user, userToChangePassword, CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS);
+
+        if (!user.getPassword().equals(changePasswordDto.getOldPassword())) {
+            throw new EntityNotFoundException(OLD_PASSWORD_IS_INCORRECT);
+        }
+
+        if (changePasswordDto.getNewPassword().equals(changePasswordDto.getOldPassword())) {
+            throw new EntityNotFoundException(PASSWORD_CAN_T_BE_THE_SAME_AS_THE_OLD_PASSWORD);
+        }
+
+        if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword())) {
+            throw new EntityNotFoundException(NEW_PASSWORD_AND_CONFIRM_PASSWORD_DO_NOT_MATCH);
+        }
+
+        user.setPassword(changePasswordDto.getNewPassword());
+        userRepository.update(user);
     }
 }
