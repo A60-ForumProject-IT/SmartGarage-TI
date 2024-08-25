@@ -13,14 +13,16 @@ public class MapperHelper {
     private final YearService yearService;
     private final EngineTypeService engineTypeService;
     private final VehicleService vehicleService;
+    private final RepairServiceService repairService;
 
-    public MapperHelper(ClientCarService clientCarService, BrandService brandService, ModelService modelService, YearService yearService, EngineTypeService engineTypeService, VehicleService vehicleService) {
+    public MapperHelper(ClientCarService clientCarService, BrandService brandService, ModelService modelService, YearService yearService, EngineTypeService engineTypeService, VehicleService vehicleService, RepairServiceService repairService) {
         this.clientCarService = clientCarService;
         this.brandService = brandService;
         this.modelService = modelService;
         this.yearService = yearService;
         this.engineTypeService = engineTypeService;
         this.vehicleService = vehicleService;
+        this.repairService = repairService;
     }
 
     public Model createModelFromModelDto(ModelDto modelDto) {
@@ -72,5 +74,19 @@ public class MapperHelper {
         clientCar.setLicensePlate(clientCarDto.getLicense_plate());
         clientCar.setVin(clientCarDto.getVin());
         return clientCar;
+    }
+
+    public RepairService updateServiceFromDto(RepairServiceDto repairServiceDto, int serviceId) {
+        RepairService service = repairService.findServiceById(serviceId);
+        service.setName(repairServiceDto.getName());
+        service.setPrice(repairServiceDto.getPrice());
+        return service;
+    }
+
+    public RepairService createRepairServiceFromDto(RepairServiceDto repairServiceDto) {
+        RepairService repairService = new RepairService();
+        repairService.setName(repairServiceDto.getName());
+        repairService.setPrice(repairServiceDto.getPrice());
+        return repairService;
     }
 }

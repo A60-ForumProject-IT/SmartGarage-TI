@@ -1,6 +1,7 @@
 package com.telerikacademy.web.smartgarageti.services.contracts;
 
 import com.telerikacademy.web.smartgarageti.models.RepairService;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -14,4 +15,7 @@ public interface RepairServiceService {
     RepairService createService(RepairService service);
 
     void deleteService(int id);
+
+    List<RepairService> filterServices(String name, Double price, Sort sort);
+
 }

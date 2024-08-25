@@ -6,6 +6,7 @@ import com.telerikacademy.web.smartgarageti.models.RepairService;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.RepairServiceRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.RepairServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,11 @@ public class RepairServiceServiceImpl implements RepairServiceService {
     public RepairService findServiceByName(String serviceName) {
         return serviceRepository.findByName(serviceName)
                 .orElseThrow(() -> new EntityNotFoundException("Service", "name", serviceName));
+    }
+
+    @Override
+    public List<RepairService> filterServices(String name, Double price, Sort sort) {
+        return serviceRepository.findAllByNameAndPrice(name, price, sort);
     }
 
     @Override

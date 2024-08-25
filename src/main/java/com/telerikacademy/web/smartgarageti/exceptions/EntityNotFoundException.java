@@ -14,4 +14,8 @@ public class EntityNotFoundException extends RuntimeException {
         super(String.format("This %s does not exist!", attribute));
     }
 
+
+    public EntityNotFoundException() {
+
+    }
 }
