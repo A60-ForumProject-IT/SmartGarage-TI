@@ -1,18 +1,28 @@
 package com.telerikacademy.web.smartgarageti.controllers.rest;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.properties.TextAlignment;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
+import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
 import com.telerikacademy.web.smartgarageti.models.Order;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.services.contracts.CurrencyConversionService;
 import com.telerikacademy.web.smartgarageti.services.contracts.OrderService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 import java.util.List;
 
 @RestController
@@ -21,12 +31,14 @@ public class OrderRestController {
     private final OrderService orderService;
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
+    private final CurrencyConversionService currencyConversionService;
 
     @Autowired
-    public OrderRestController(OrderService orderService, UserService userService, AuthenticationHelper authenticationHelper) {
+    public OrderRestController(OrderService orderService, UserService userService, AuthenticationHelper authenticationHelper, CurrencyConversionService currencyConversionService) {
         this.orderService = orderService;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
+        this.currencyConversionService = currencyConversionService;
     }
 
     @GetMapping("/orders")
@@ -79,4 +91,58 @@ public class OrderRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    @GetMapping("/orders/{orderId}/download-pdf")
+    @ResponseBody
+    public ResponseEntity<byte[]> downloadOrderAsPdf(@PathVariable int orderId, @RequestParam(defaultValue = "BGN") String currency) {
+        try {
+            Order order = orderService.getOrderById(orderId);
+            String clientFirstName = order.getClientCar().getOwner().getFirstName();
+            String clientLastName = order.getClientCar().getOwner().getLastName();
+            double totalPrice = orderService.calculateOrderTotalInCurrency(order, currency);
+
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            String formattedTotalPrice = decimalFormat.format(totalPrice);
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            PdfWriter writer = new PdfWriter(out);
+            PdfDocument pdfDocument = new PdfDocument(writer);
+            Document document = new Document(pdfDocument);
+
+            document.add(new Paragraph("Order Summary")
+                    .setFontSize(18)
+                    .setBold()
+                    .setTextAlignment(TextAlignment.CENTER));
+
+            document.add(new Paragraph("Order ID: " + orderId));
+            document.add(new Paragraph("Client Name: " + clientFirstName + " " + clientLastName));
+
+            for (CarServiceLog serviceLog : order.getClientCar().getCarServices()) {
+                double servicePrice = serviceLog.getCalculatedPrice();
+                if (!"BGN".equalsIgnoreCase(currency)) {
+                    servicePrice = currencyConversionService.convertCurrency(servicePrice, "BGN", currency);
+                }
+                String formattedServicePrice = decimalFormat.format(servicePrice);
+                document.add(new Paragraph("Service: " + serviceLog.getService().getName() +
+                        ", Price: " + formattedServicePrice + " " + currency));
+            }
+
+            document.add(new Paragraph("Total: " + formattedTotalPrice + " " + currency));
+            document.close();
+
+            byte[] pdfBytes = out.toByteArray();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "order_" + orderId + ".pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfBytes);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
 }
