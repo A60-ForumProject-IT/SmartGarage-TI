@@ -10,4 +10,11 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
     Optional<Vehicle> findByBrandAndModelAndYearAndEngineType(Brand brand, Model model, Year year, EngineType engineType);
 
     List<Vehicle> findAllByIsDeletedFalse();
+
+    Optional<Vehicle> findByBrand_NameAndModel_NameAndYear_YearAndEngineType_Name(
+            String brandName,
+            String modelName,
+            int year,
+            String engineTypeName
+    );
 }

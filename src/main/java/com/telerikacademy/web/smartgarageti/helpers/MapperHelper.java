@@ -67,12 +67,19 @@ public class MapperHelper {
         return user;
     }
 
-    public ClientCar createClientCarFromDto(ClientCarDto clientCarDto, User userToAddCar, Vehicle vehicleToBeAdded) {
+    public ClientCar createClientCarFromDto(ClientCarDto clientCarDto, User userToAddCar) {
+        Vehicle vehicle = vehicleService.getVehicleByDetails(clientCarDto.getBrandName(),
+                        clientCarDto.getModelName(),
+                        clientCarDto.getYear(),
+                        clientCarDto.getEngineType())
+                .orElseGet(() -> createNewVehicle(clientCarDto));
+
         ClientCar clientCar = new ClientCar();
         clientCar.setVin(clientCarDto.getVin());
         clientCar.setLicensePlate(clientCarDto.getLicense_plate());
         clientCar.setOwner(userToAddCar);
-        clientCar.setVehicle(vehicleToBeAdded);
+        clientCar.setVehicle(vehicle);
+
         return clientCar;
     }
 
@@ -104,5 +111,16 @@ public class MapperHelper {
         user.setEmail(userEditInfoDto.getEmail());
         user.setPhoneNumber(userEditInfoDto.getPhoneNumber());
         return user;
+    }
+
+    private Vehicle createNewVehicle(ClientCarDto clientCarDto) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setBrand(brandService.findOrCreateBrand(clientCarDto.getBrandName()));
+        vehicle.setModel(modelService.findOrCreateModel(clientCarDto.getModelName()));
+        vehicle.setYear(yearService.findOrCreateYear(clientCarDto.getYear()));
+        vehicle.setEngineType(engineTypeService.findOrCreateEngineType(clientCarDto.getEngineType()));
+
+        return vehicleService.createVehicle(clientCarDto.getBrandName(), clientCarDto.getModelName(),
+                clientCarDto.getYear(), clientCarDto.getEngineType());
     }
 }

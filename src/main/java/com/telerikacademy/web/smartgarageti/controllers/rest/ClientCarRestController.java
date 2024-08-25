@@ -8,8 +8,6 @@ import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.ClientCarDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +21,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@Api(value = "ClientCar Management System", description = "Operations pertaining to client cars in ClientCar Management System")
-
 public class ClientCarRestController {
     private final ClientCarService clientCarService;
     private final AuthenticationHelper authenticationHelper;
@@ -59,36 +55,6 @@ public class ClientCarRestController {
                                                           @RequestParam(required = false, defaultValue = "owner") String sortBy,
                                                           @RequestParam(required = false, defaultValue = "asc") String sortDirection) {
         return clientCarService.filterAndSortClientCarsByOwner(searchTerm, sortBy, sortDirection);
-    }
-
-    @Operation(
-            summary = "This method retrieves all client cars in the app."
-    )
-    @GetMapping("/client-cars")
-    public List<ClientCar> getAllClientCars() {
-        return clientCarService.getAllClientCars();
-    }
-
-    @Operation(
-            summary = "Add a client car (VIN and license plate) to a vehicle that we've already got in our application."
-    )
-    @PostMapping("/users/{userId}/client-cars/vehicles/{vehicleId}")
-    public ClientCar addClientCarToVehicle(@PathVariable int userId,
-                                           @Valid @RequestBody ClientCarDto clientCarDto,
-                                           @PathVariable int vehicleId, @RequestHeader HttpHeaders httpHeaders) {
-        try {
-            User loggedInUser = authenticationHelper.tryGetUser(httpHeaders);
-            User userToAddCar = userService.getUserById(loggedInUser, userId);
-            Vehicle vehicleToBeAdded = vehicleService.getVehicleById(vehicleId);
-            ClientCar clientCar = mapperHelper.createClientCarFromDto(clientCarDto, userToAddCar, vehicleToBeAdded);
-            return clientCarService.createClientCar(clientCar);
-        } catch (AuthenticationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (DuplicateEntityException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        }
     }
 
     @Operation(
@@ -151,6 +117,29 @@ public class ClientCarRestController {
             return ResponseEntity.ok(serviceLogs);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @Operation(
+            summary = "Create new Client Car. If the brand, model, year, engine exists, method uses the existing vehicle." +
+                    "If only 1 parameter is different it creates new Vehicle + Client Car.",
+            description = "Works with ClientCarDto. Expects VIN, license_plate, brandName, modelName, year, engineType."
+    )
+    @PostMapping("/users/{userId}/client-cars")
+    public ClientCar addClientCar(@PathVariable int userId,
+                                  @Valid @RequestBody ClientCarDto clientCarDto,
+                                  @RequestHeader HttpHeaders httpHeaders) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(httpHeaders);
+            User userToAddCar = userService.getUserById(loggedInUser, userId);
+            return clientCarService.createClientCar(
+                    mapperHelper.createClientCarFromDto(clientCarDto, userToAddCar));
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 }

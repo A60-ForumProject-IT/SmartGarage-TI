@@ -59,6 +59,11 @@ public class VehicleServiceImpl implements VehicleService {
         vehicleRepository.save(vehicle);
     }
 
+    @Override
+    public Optional<Vehicle> getVehicleByDetails(String brandName, String modelName, int year, String engineType) {
+        return vehicleRepository.findByBrand_NameAndModel_NameAndYear_YearAndEngineType_Name(brandName, modelName, year, engineType);
+    }
+
 
     @Override
     public Vehicle createVehicle(String brandName, String modelName, int yearValue, String engineType) {
