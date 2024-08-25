@@ -72,4 +72,13 @@ public class RepairServiceRestController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
+
+    @DeleteMapping("/{serviceId}")
+    public void deleteService(@PathVariable int serviceId) {
+        try {
+            repairServiceService.deleteService(serviceId);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 }
