@@ -26,7 +26,6 @@ public class ClientCarRestController {
     private final ClientCarService clientCarService;
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;
-    private final VehicleService vehicleService;
     private final MapperHelper mapperHelper;
     private final CarServiceLogService carServiceService;
     private final RepairServiceService repairServiceService;
@@ -35,13 +34,11 @@ public class ClientCarRestController {
     public ClientCarRestController(ClientCarService clientCarService,
                                    AuthenticationHelper authenticationHelper,
                                    UserService userService,
-                                   VehicleService vehicleService,
                                    MapperHelper mapperHelper,
                                    CarServiceLogService carServiceService, RepairServiceService repairServiceService) {
         this.clientCarService = clientCarService;
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
-        this.vehicleService = vehicleService;
         this.mapperHelper = mapperHelper;
         this.carServiceService = carServiceService;
         this.repairServiceService = repairServiceService;

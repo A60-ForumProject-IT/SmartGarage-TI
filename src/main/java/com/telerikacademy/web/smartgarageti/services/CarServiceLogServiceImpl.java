@@ -9,7 +9,6 @@ import com.telerikacademy.web.smartgarageti.repositories.contracts.ClientCarRepo
 import com.telerikacademy.web.smartgarageti.repositories.contracts.OrderRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.CarServiceLogService;
 import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
-import com.telerikacademy.web.smartgarageti.services.contracts.RepairServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,37 +16,19 @@ import java.util.List;
 
 @Service
 public class CarServiceLogServiceImpl implements CarServiceLogService {
-    private final RepairServiceService repairServiceService;
     private final ClientCarService clientCarService;
     private final CarServiceLogRepository carServiceRepository;
     private final ClientCarRepository clientCarRepository;
     private final OrderRepository orderRepository;
 
     @Autowired
-    public CarServiceLogServiceImpl(RepairServiceService repairServiceService,
-                                    ClientCarService clientCarService,
-                                    CarServiceLogRepository carServiceRepository,
+    public CarServiceLogServiceImpl(ClientCarService clientCarService, CarServiceLogRepository carServiceRepository,
                                     ClientCarRepository clientCarRepository, OrderRepository orderRepository) {
-        this.repairServiceService = repairServiceService;
         this.clientCarService = clientCarService;
         this.carServiceRepository = carServiceRepository;
         this.clientCarRepository = clientCarRepository;
         this.orderRepository = orderRepository;
     }
-
-//    @Override
-//    public void addServiceToClientCar(int clientCarId, int serviceId) {
-//        ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
-//        List<CarServiceLog> clientCarServices = clientCar.getCarServices();
-//        RepairService repairService = repairServiceService.findServiceById(serviceId);
-//
-//        CarServiceLog carService = new CarServiceLog(repairService, clientCar);
-//
-//        clientCarServices.add(carService);
-//
-//        clientCarRepository.save(clientCar);
-//        carServiceRepository.save(carService);
-//    }
 
     @Override
     public List<CarServiceLog> findAllCarServices() {

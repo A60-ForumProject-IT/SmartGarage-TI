@@ -9,7 +9,6 @@ import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -21,11 +20,13 @@ public class MapperHelper {
     private final EngineTypeService engineTypeService;
     private final VehicleService vehicleService;
     private final RepairServiceService repairService;
-    private final UserService userService;
     private final UserRepository userRepository;
 
     @Autowired
-    public MapperHelper(ClientCarService clientCarService, BrandService brandService, ModelService modelService, YearService yearService, EngineTypeService engineTypeService, VehicleService vehicleService, RepairServiceService repairService, UserService userService, UserRepository userRepository) {
+    public MapperHelper(ClientCarService clientCarService, BrandService brandService,
+                        ModelService modelService, YearService yearService,
+                        EngineTypeService engineTypeService, VehicleService vehicleService,
+                        RepairServiceService repairService, UserRepository userRepository) {
         this.clientCarService = clientCarService;
         this.brandService = brandService;
         this.modelService = modelService;
@@ -33,7 +34,6 @@ public class MapperHelper {
         this.engineTypeService = engineTypeService;
         this.vehicleService = vehicleService;
         this.repairService = repairService;
-        this.userService = userService;
         this.userRepository = userRepository;
     }
 
@@ -90,7 +90,6 @@ public class MapperHelper {
 
     public ClientCar updateClientCarFromDto(ClientCarUpdateDto clientCarUpdateDto, int id) {
         ClientCar existingClientCar = clientCarService.getClientCarById(id);
-
 
         try {
             if (!existingClientCar.getVin().equals(clientCarUpdateDto.getVin())) {

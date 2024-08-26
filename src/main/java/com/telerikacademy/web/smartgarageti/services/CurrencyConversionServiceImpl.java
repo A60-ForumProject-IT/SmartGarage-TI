@@ -15,6 +15,7 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
     private final String apiUrl;
     private final String apiKey;
 
+    @Autowired
     public CurrencyConversionServiceImpl(RestTemplate restTemplate,
                                          @Value("${exchangerate.api.url}") String apiUrl,
                                          @Value("${exchangerate.api.key}") String apiKey) {

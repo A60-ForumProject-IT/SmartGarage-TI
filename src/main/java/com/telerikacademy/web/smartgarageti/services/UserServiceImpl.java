@@ -74,7 +74,6 @@ public class UserServiceImpl implements UserService {
         User user = MapperHelper.toUserEntity(userCreationDto, randomPassword, role);
         userRepository.create(user);
 
-        // Изпращане на имейл с данните за вход, използвайки smtpEmail и smtpPassword
         emailService.sendEmail(
                 userCreationDto.getSmtpEmail(),
                 userCreationDto.getSmtpPassword(),

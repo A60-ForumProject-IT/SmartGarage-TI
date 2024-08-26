@@ -1,8 +1,6 @@
 package com.telerikacademy.web.smartgarageti.services.contracts;
 
-import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.Model;
-import com.telerikacademy.web.smartgarageti.models.Year;
 
 import java.util.List;
 
