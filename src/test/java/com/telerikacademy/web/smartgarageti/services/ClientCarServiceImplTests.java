@@ -6,6 +6,7 @@ import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.Vehicle;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.ClientCarRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.data.domain.Sort;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -198,7 +200,8 @@ public class ClientCarServiceImplTests {
 
     @Test
     void getAllClientCars_Should_Pass() {
-        List<ClientCar> clientCars = List.of(createMockClientCar());
+        List<ClientCar> clientCars = new ArrayList<>();
+        Vehicle vehicle = createMockVehicle();
 
         when(clientCarRepository.findAll()).thenReturn(clientCars);
 
