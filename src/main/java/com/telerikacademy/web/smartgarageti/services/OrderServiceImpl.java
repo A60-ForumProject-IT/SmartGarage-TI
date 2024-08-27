@@ -1,8 +1,11 @@
 package com.telerikacademy.web.smartgarageti.services;
 
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
+import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
 import com.telerikacademy.web.smartgarageti.models.Order;
+import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.OrderRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.CurrencyConversionService;
 import com.telerikacademy.web.smartgarageti.services.contracts.OrderService;
@@ -23,7 +26,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderStatus(int orderId, String newStatus) {
+    public void updateOrderStatus(int orderId, String newStatus, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't update order statuses!");
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order", orderId));
 
@@ -36,19 +40,33 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderById(int orderId) {
+    public Order getOrderById(int orderId, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee to see this order details!");
+
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order", orderId));
     }
 
     @Override
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public List<Order> getAllOrders(User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't see all orders");
+        List<Order> orders = orderRepository.findAll();
+
+        if (orders.isEmpty()) {
+            throw new NullPointerException("No orders found at the moment!");
+        }
+        return orders;
     }
 
     @Override
-    public List<Order> getOrdersByUserId(int userId) {
-        return orderRepository.findAllByClientCarOwnerId(userId);
+    public List<Order> getOrdersByUserId(User orderOwner, User loggedInUser) {
+        PermissionHelper.isEmployeeOrSameUser(loggedInUser, orderOwner, "You are not employee or this user to see its orders!");
+        List<Order> clientOrders = orderRepository.findAllByClientCarOwnerId(orderOwner.getId());
+
+        if (clientOrders.isEmpty()) {
+            throw new NoResultsFoundException("No orders found at the moment!");
+        }
+        return clientOrders;
     }
 
     @Override

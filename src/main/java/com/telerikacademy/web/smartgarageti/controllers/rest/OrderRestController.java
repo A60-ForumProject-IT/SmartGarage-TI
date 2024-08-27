@@ -5,7 +5,10 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.TextAlignment;
+import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
 import com.telerikacademy.web.smartgarageti.models.Order;
@@ -42,20 +45,35 @@ public class OrderRestController {
     }
 
     @GetMapping("/orders")
-    public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+    public ResponseEntity<List<Order>> getAllOrders(@RequestHeader HttpHeaders headers) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            List<Order> orders = orderService.getAllOrders(loggedInUser);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (NoResultsFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PutMapping("/orders/{orderId}/status")
-    public ResponseEntity<Void> updateOrderStatus(@PathVariable int orderId, @RequestParam String newStatus) {
+    public ResponseEntity<Void> updateOrderStatus(@PathVariable int orderId, @RequestParam String newStatus,
+                                                  @RequestHeader HttpHeaders headers) {
         try {
-            orderService.updateOrderStatus(orderId, newStatus);
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            orderService.updateOrderStatus(orderId, newStatus, loggedInUser);
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
@@ -63,40 +81,62 @@ public class OrderRestController {
     public ResponseEntity<List<Order>> getAllOrdersForUser(@PathVariable int userId, @RequestHeader HttpHeaders headers) {
         try {
             User loggedInUser = authenticationHelper.tryGetUser(headers);
-            User user = userService.getUserById(loggedInUser, userId);
-            List<Order> orders = orderService.getOrdersByUserId(userId);
+            User orderOwner = userService.getUserById(loggedInUser, userId);
+
+            List<Order> orders = orderService.getOrdersByUserId(orderOwner, loggedInUser);
             return ResponseEntity.ok(orders);
         } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (NoResultsFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @GetMapping("/orders/{orderId}")
-    public ResponseEntity<Order> getOrderDetails(@PathVariable int orderId) {
+    public ResponseEntity<Order> getOrderDetails(@PathVariable int orderId, @RequestHeader HttpHeaders headers) {
         try {
-            Order order = orderService.getOrderById(orderId);
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            Order order = orderService.getOrderById(orderId, loggedInUser);
             return ResponseEntity.ok(order);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
     @GetMapping("/orders/{orderId}/total-price")
-    public ResponseEntity<Double> getOrderTotalPrice(@PathVariable int orderId, @RequestParam(required = false, defaultValue = "BGN") String currency) {
+    public ResponseEntity<Double> getOrderTotalPrice(@PathVariable int orderId,
+                                                     @RequestParam(required = false, defaultValue = "BGN") String currency,
+                                                     @RequestHeader HttpHeaders headerss) {
         try {
-            Order order = orderService.getOrderById(orderId);
+            User loggedInUser = authenticationHelper.tryGetUser(headerss);
+            Order order = orderService.getOrderById(orderId, loggedInUser);
             double totalPrice = orderService.calculateOrderTotalInCurrency(order, currency);
             return ResponseEntity.ok(totalPrice);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
     @GetMapping("/orders/{orderId}/download-pdf")
     @ResponseBody
-    public ResponseEntity<byte[]> downloadOrderAsPdf(@PathVariable int orderId, @RequestParam(defaultValue = "BGN") String currency) {
+    public ResponseEntity<byte[]> downloadOrderAsPdf(@PathVariable int orderId,
+                                                     @RequestParam(defaultValue = "BGN") String currency,
+                                                     @RequestHeader HttpHeaders headers) {
         try {
-            Order order = orderService.getOrderById(orderId);
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            Order order = orderService.getOrderById(orderId, loggedInUser);
             String clientFirstName = order.getClientCar().getOwner().getFirstName();
             String clientLastName = order.getClientCar().getOwner().getLastName();
             double totalPrice = orderService.calculateOrderTotalInCurrency(order, currency);
@@ -132,7 +172,7 @@ public class OrderRestController {
 
             byte[] pdfBytes = out.toByteArray();
 
-            HttpHeaders headers = new HttpHeaders();
+            headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("attachment", "order_" + orderId + ".pdf");
 
@@ -140,9 +180,8 @@ public class OrderRestController {
                     .headers(headers)
                     .body(pdfBytes);
 
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
 }
