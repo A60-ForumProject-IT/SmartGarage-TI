@@ -73,8 +73,7 @@ public class UserServiceImplTests {
     @Test
     public void getUserById_ReturnsUserId_WhenIdExists() {
         User mockUser = TestHelpers.createMockUser();
-        Mockito.when(userRepository.getUserById(1))
-                .thenReturn(mockUser);
+        Mockito.when(userRepository.getUserById(1)).thenReturn(mockUser);
         User result = userService.getUserById(1);
         Assertions.assertEquals("MockUsername", result.getUsername());
     }
@@ -83,7 +82,6 @@ public class UserServiceImplTests {
     @MockitoSettings(strictness = Strictness.LENIENT)
     @Test
     void getRoleById_ReturnsNull_WhenIdDoesNotExist() {
-        // Трябва да проверим дали `roleService.getRoleById(1)` се извиква и дали стойността `null` е коректно върната.
         Mockito.when(roleRepository.getRoleById(1)).thenReturn(null);
 
         Role result = roleService.getRoleById(1);
@@ -127,8 +125,7 @@ public class UserServiceImplTests {
     void getUserById_ReturnsUser_WhenEmployeeHasPermission() {
         User mockEmployee = TestHelpers.createMockUserEmployee();
         User mockUser = TestHelpers.createMockUser();
-        Mockito.when(userRepository.getUserById(1))
-                .thenReturn(mockUser);
+        Mockito.when(userRepository.getUserById(1)).thenReturn(mockUser);
 
         User result = userService.getUserById(mockEmployee, 1);
 
@@ -160,25 +157,18 @@ public class UserServiceImplTests {
         String randomPassword = "randomPassword%";
         UserDto expectedUserDto = new UserDto(mockUser.getUsername(), mockUser.getEmail(), mockUser.getPhoneNumber());
 
-        try (MockedStatic<PasswordGenerator> passwordGeneratorMock = Mockito.mockStatic(PasswordGenerator.class);
-             MockedStatic<MapperHelper> mapperHelperMock = Mockito.mockStatic(MapperHelper.class)) {
+        try (MockedStatic<PasswordGenerator> passwordGeneratorMock = Mockito.mockStatic(PasswordGenerator.class); MockedStatic<MapperHelper> mapperHelperMock = Mockito.mockStatic(MapperHelper.class)) {
 
             passwordGeneratorMock.when(PasswordGenerator::generateRandomPassword).thenReturn(randomPassword);
             mapperHelperMock.when(() -> MapperHelper.toUserEntity(userCreationDto, randomPassword, mockRole)).thenReturn(mockUser);
-            mapperHelperMock.when(() -> MapperHelper.toUserDto(mockUser)).thenReturn(expectedUserDto);  // Ensure to mock the correct return value
+            mapperHelperMock.when(() -> MapperHelper.toUserDto(mockUser)).thenReturn(expectedUserDto);
 
             Mockito.when(roleService.getRoleById(1)).thenReturn(mockRole);
 
             UserDto result = userService.createCustomerProfile(mockEmployee, userCreationDto);
 
             Mockito.verify(userRepository).create(mockUser);
-            Mockito.verify(emailService).sendEmail(
-                    userCreationDto.getSmtpEmail(),
-                    userCreationDto.getSmtpPassword(),
-                    mockUser.getEmail(),
-                    "Welcome to Smart Garage",
-                    "Your username is: " + mockUser.getUsername() + " Your password is: " + randomPassword
-            );
+            Mockito.verify(emailService).sendEmail(userCreationDto.getSmtpEmail(), userCreationDto.getSmtpPassword(), mockUser.getEmail(), "Welcome to Smart Garage", "Your username is: " + mockUser.getUsername() + " Your password is: " + randomPassword);
 
             Assertions.assertEquals(expectedUserDto.getUsername(), result.getUsername());
         }
@@ -192,8 +182,7 @@ public class UserServiceImplTests {
 
         try (MockedStatic<PermissionHelper> permissionHelperMock = Mockito.mockStatic(PermissionHelper.class)) {
 
-            permissionHelperMock.when(() -> PermissionHelper.isEmployee(mockUser, DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION))
-                    .thenThrow(new UnauthorizedOperationException(DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION));
+            permissionHelperMock.when(() -> PermissionHelper.isEmployee(mockUser, DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION)).thenThrow(new UnauthorizedOperationException(DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION));
 
             assertThrows(UnauthorizedOperationException.class, () -> userService.createCustomerProfile(mockUser, userCreationDto));
         }
@@ -201,7 +190,7 @@ public class UserServiceImplTests {
 
     @Test
     void resetPassword_ShouldResetPassword_WhenUserExists() {
-        // Arrange
+
         String email = "test@test.com";
         String newPassword = "newRandomPassword%";
         User mockUser = TestHelpers.createMockUser();
@@ -215,18 +204,10 @@ public class UserServiceImplTests {
         try (MockedStatic<PasswordGenerator> passwordGeneratorMock = Mockito.mockStatic(PasswordGenerator.class)) {
             passwordGeneratorMock.when(PasswordGenerator::generateRandomPassword).thenReturn(newPassword);
 
-            // Act
             userService.resetPassword(forgottenPasswordDto);
 
-            // Assert
             Mockito.verify(userRepository).update(mockUser);
-            Mockito.verify(emailService).sendEmail(
-                    smtpEmail,
-                    smtpPasswordFromConfig,
-                    email,
-                    "Your new password for Smart Garage TI App",
-                    "Your new password is: " + newPassword
-            );
+            Mockito.verify(emailService).sendEmail(smtpEmail, smtpPasswordFromConfig, email, "Your new password for Smart Garage TI App", "Your new password is: " + newPassword);
             Assertions.assertEquals(newPassword, mockUser.getPassword());
         }
     }
@@ -234,14 +215,13 @@ public class UserServiceImplTests {
 
     @Test
     void resetPassword_ShouldThrowEntityNotFoundException_WhenUserDoesNotExist() {
-        // Arrange
+
         String email = "nonexistent@test.com";
         ForgottenPasswordDto forgottenPasswordDto = new ForgottenPasswordDto();
         forgottenPasswordDto.setEmail(email);
 
         Mockito.when(userRepository.getUserByEmail(email)).thenReturn(null);
 
-        // Act & Assert
         assertThrows(EntityNotFoundException.class, () -> {
             userService.resetPassword(forgottenPasswordDto);
         });
@@ -257,7 +237,6 @@ public class UserServiceImplTests {
 
         Mockito.when(roleRepository.getRoleById(roleId)).thenReturn(mockRole);
 
-        // Act
         Role result = roleServiceImpl.getRoleById(roleId);
 
         // Assert
@@ -297,9 +276,7 @@ public class UserServiceImplTests {
         String sortBy = "username";
         String sortOrder = "asc";
 
-        FilteredUserOptions filteredUserOptions = new FilteredUserOptions(
-                username, email, phoneNumber, vehicleBrand, visitDateFrom, visitDateTo, sortBy, sortOrder
-        );
+        FilteredUserOptions filteredUserOptions = new FilteredUserOptions(username, email, phoneNumber, vehicleBrand, visitDateFrom, visitDateTo, sortBy, sortOrder);
 
         int page = 0;
         int size = 10;
@@ -368,8 +345,7 @@ public class UserServiceImplTests {
         mockUserToBeEdited.setId(2);
 
         try (MockedStatic<PermissionHelper> permissionHelperMock = Mockito.mockStatic(PermissionHelper.class)) {
-            permissionHelperMock.when(() -> PermissionHelper.isSameUser(mockUser, mockUserToBeEdited, CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS))
-                    .thenThrow(new UnauthorizedOperationException(CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS));
+            permissionHelperMock.when(() -> PermissionHelper.isSameUser(mockUser, mockUserToBeEdited, CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS)).thenThrow(new UnauthorizedOperationException(CAN_T_EDIT_INFORMATION_IN_OTHER_USER_ACCOUNTS));
 
             // Act & Assert
             UnauthorizedOperationException thrown = Assertions.assertThrows(UnauthorizedOperationException.class, () -> {
@@ -402,6 +378,7 @@ public class UserServiceImplTests {
             Mockito.verify(userRepository, times(1)).update(mockUserToBeEdited);
         }
     }
+
     @Test
     void changePassword_ShouldChangePassword_WhenValidDataProvided() {
         // Arrange
@@ -503,8 +480,7 @@ public class UserServiceImplTests {
         User mockUserToBeDeleted = TestHelpers.createMockUser();
 
         try (MockedStatic<PermissionHelper> permissionHelperMock = Mockito.mockStatic(PermissionHelper.class)) {
-            permissionHelperMock.when(() -> PermissionHelper.isEmployeeOrSameUser(mockUser, mockUserToBeDeleted, CAN_T_DELETE_OTHER_USERS))
-                    .thenThrow(new UnauthorizedOperationException(CAN_T_DELETE_OTHER_USERS));
+            permissionHelperMock.when(() -> PermissionHelper.isEmployeeOrSameUser(mockUser, mockUserToBeDeleted, CAN_T_DELETE_OTHER_USERS)).thenThrow(new UnauthorizedOperationException(CAN_T_DELETE_OTHER_USERS));
 
             // Act & Assert
             UnauthorizedOperationException thrown = Assertions.assertThrows(UnauthorizedOperationException.class, () -> {
