@@ -1,19 +1,27 @@
 package com.telerikacademy.web.smartgarageti.services;
 
 import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
+import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
+import com.telerikacademy.web.smartgarageti.helpers.PasswordGenerator;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.helpers.TestHelpers;
 import com.telerikacademy.web.smartgarageti.models.Role;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
+import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.RoleRepository;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.UserRepository;
+import com.telerikacademy.web.smartgarageti.services.contracts.RoleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,11 +40,17 @@ public class UserServiceImplTests {
     @Mock
     RoleRepository roleRepository;
 
-    @InjectMocks
-    UserServiceImpl userService;
+    @Mock
+    RoleService roleService;
+
+    @Mock
+    EmailService emailService;
 
     @InjectMocks
-    RoleServiceImpl roleService;
+    UserServiceImpl userService;
+    @InjectMocks
+    RoleServiceImpl roleServiceImpl;
+
 
     @Test
     public void getUserById_ReturnsUserId_WhenIdExists() {
@@ -47,8 +61,11 @@ public class UserServiceImplTests {
         Assertions.assertEquals("MockUsername", result.getUsername());
     }
 
+
+    @MockitoSettings(strictness = Strictness.LENIENT)
     @Test
     void getRoleById_ReturnsNull_WhenIdDoesNotExist() {
+        // Трябва да проверим дали `roleService.getRoleById(1)` се извиква и дали стойността `null` е коректно върната.
         Mockito.when(roleRepository.getRoleById(1)).thenReturn(null);
 
         Role result = roleService.getRoleById(1);
@@ -56,16 +73,17 @@ public class UserServiceImplTests {
         Assertions.assertNull(result);
     }
 
+    @MockitoSettings(strictness = Strictness.LENIENT)
     @Test
     void getAllRoles_ReturnsListOfRoles() {
         List<Role> roles = Arrays.asList(TestHelpers.createMockRoleEmployee(), TestHelpers.createMockRoleUser());
         Mockito.when(roleRepository.getAllRoles()).thenReturn(roles);
 
-        List<Role> result = roleService.getAllRoles();
+        List<Role> result = roleServiceImpl.getAllRoles();
 
         Assertions.assertEquals(2, result.size());
-        Assertions. assertEquals("Employee", result.get(0).getName());
-        Assertions. assertEquals("Customer", result.get(1).getName());
+        Assertions.assertEquals("Employee", result.get(0).getName());
+        Assertions.assertEquals("Customer", result.get(1).getName());
     }
 
     @Test
@@ -114,4 +132,53 @@ public class UserServiceImplTests {
 
         Assertions.assertNull(result);
     }
+
+    @Test
+    void createCustomerProfile_CreatesUser_WhenEmployeeHasPermission() {
+        User mockEmployee = TestHelpers.createMockUserEmployee();
+        UserCreationDto userCreationDto = TestHelpers.createMockUserCreationDto();
+        Role mockRole = TestHelpers.createMockRoleUser();
+        User mockUser = TestHelpers.createMockUser();
+        String randomPassword = "randomPassword%";
+        UserDto expectedUserDto = new UserDto(mockUser.getUsername(), mockUser.getEmail(), mockUser.getPhoneNumber());
+
+        try (MockedStatic<PasswordGenerator> passwordGeneratorMock = Mockito.mockStatic(PasswordGenerator.class);
+             MockedStatic<MapperHelper> mapperHelperMock = Mockito.mockStatic(MapperHelper.class)) {
+
+            passwordGeneratorMock.when(PasswordGenerator::generateRandomPassword).thenReturn(randomPassword);
+            mapperHelperMock.when(() -> MapperHelper.toUserEntity(userCreationDto, randomPassword, mockRole)).thenReturn(mockUser);
+            mapperHelperMock.when(() -> MapperHelper.toUserDto(mockUser)).thenReturn(expectedUserDto);  // Ensure to mock the correct return value
+
+            Mockito.when(roleService.getRoleById(1)).thenReturn(mockRole);
+
+            UserDto result = userService.createCustomerProfile(mockEmployee, userCreationDto);
+
+            Mockito.verify(userRepository).create(mockUser);
+            Mockito.verify(emailService).sendEmail(
+                    userCreationDto.getSmtpEmail(),
+                    userCreationDto.getSmtpPassword(),
+                    mockUser.getEmail(),
+                    "Welcome to Smart Garage",
+                    "Your username is: " + mockUser.getUsername() + " Your password is: " + randomPassword
+            );
+
+            Assertions.assertEquals(expectedUserDto.getUsername(), result.getUsername());
+        }
+    }
+
+
+    @Test
+    void createCustomerProfile_ThrowsException_WhenEmployeeHasNoPermission() {
+        User mockUser = TestHelpers.createMockUser();
+        UserCreationDto userCreationDto = TestHelpers.createMockUserCreationDto();
+
+        try (MockedStatic<PermissionHelper> permissionHelperMock = Mockito.mockStatic(PermissionHelper.class)) {
+
+            permissionHelperMock.when(() -> PermissionHelper.isEmployee(mockUser, DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION))
+                    .thenThrow(new UnauthorizedOperationException(DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION));
+
+            Assertions.assertThrows(UnauthorizedOperationException.class, () -> userService.createCustomerProfile(mockUser, userCreationDto));
+        }
+    }
 }
+

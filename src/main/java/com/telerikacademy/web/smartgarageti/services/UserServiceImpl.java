@@ -68,9 +68,6 @@ public class UserServiceImpl implements UserService {
         Role role = roleService.getRoleById(1);
         PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
         String randomPassword = PasswordGenerator.generateRandomPassword();
-        System.out.println("Generated Password: " + randomPassword);
-        String hashedPassword = PasswordHasher.hashPassword(randomPassword);
-
         User user = MapperHelper.toUserEntity(userCreationDto, randomPassword, role);
         userRepository.create(user);
 

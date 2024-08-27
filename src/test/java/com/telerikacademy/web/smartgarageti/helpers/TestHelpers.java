@@ -1,6 +1,7 @@
 package com.telerikacademy.web.smartgarageti.helpers;
 
 import com.telerikacademy.web.smartgarageti.models.*;
+import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 
 import java.time.LocalDate;
 
@@ -30,12 +31,24 @@ public class TestHelpers {
         return mockUser;
     }
 
+    public static UserCreationDto createMockUserCreationDto() {
+        return new UserCreationDto(
+                "MockUsernameDto",
+                "mockEmailDto@test.com",
+                "0895999998",
+                "MockFirstNameDto",
+                "MockLastNameDto"
+        );
+    }
+
     public static Role createMockRoleEmployee() {
         Role mockRole = new Role();
         mockRole.setId(2);
         mockRole.setName("Employee");
         return mockRole;
     }
+
+
 
     public static Role createMockRoleUser() {
         Role mockRole = new Role();
