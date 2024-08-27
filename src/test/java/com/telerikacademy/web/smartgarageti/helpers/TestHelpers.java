@@ -4,6 +4,7 @@ import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class TestHelpers {
 
@@ -108,6 +109,7 @@ public class TestHelpers {
         mockClientCar.setLicensePlate("CH6666AP");
         mockClientCar.setOwner(createMockUser());
         mockClientCar.setVehicle(createMockVehicle());
+        mockClientCar.setCarServices(new ArrayList<>());
         return mockClientCar;
     }
 

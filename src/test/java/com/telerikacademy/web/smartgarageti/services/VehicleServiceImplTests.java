@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.telerikacademy.web.smartgarageti.helpers.TestHelpers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,7 +98,7 @@ public class VehicleServiceImplTests {
 
         vehicleService.deleteVehicleById(vehicleId, createMockUserEmployee());
 
-        assertEquals(true, mockVehicle.isDeleted());
+        assertTrue(mockVehicle.isDeleted());
         verify(vehicleRepository).save(mockVehicle);
     }
 
@@ -203,7 +202,6 @@ public class VehicleServiceImplTests {
 
     @Test
     void createVehicle_ShouldThrowDeletedAgainVehicleException_WhenVehicleIsDeleted() {
-        // Arrange
         String brandName = "Toyota";
         String modelName = "Camry";
         int yearValue = 2020;
@@ -217,17 +215,14 @@ public class VehicleServiceImplTests {
         Vehicle mockVehicle = new Vehicle();
         mockVehicle.setDeleted(true);
 
-        // Mocking services to return expected entities
         when(brandService.findOrCreateBrand(eq(brandName))).thenReturn(mockBrand);
         when(modelService.findOrCreateModel(eq(modelName))).thenReturn(mockModel);
         when(yearService.findOrCreateYear(eq(yearValue))).thenReturn(mockYear);
         when(engineTypeService.findOrCreateEngineType(eq(engineType))).thenReturn(mockEngineType);
 
-        // Mocking repository to return a vehicle that is marked as deleted
         when(vehicleRepository.findByBrandAndModelAndYearAndEngineType(eq(mockBrand), eq(mockModel), eq(mockYear), eq(mockEngineType)))
                 .thenReturn(Optional.of(mockVehicle));
 
-        // Act & Assert
         assertThrows(DeletedVehicleException.class, () ->
                 vehicleService.createVehicle(brandName, modelName, yearValue, engineType, createMockUserEmployee()));
 
