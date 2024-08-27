@@ -41,10 +41,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderById(int orderId, User user) {
-        PermissionHelper.isEmployee(user, "You are not employee to see this order details!");
-
-        return orderRepository.findById(orderId)
+        Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order", orderId));
+
+        PermissionHelper.isEmployeeOrSameUser(user, order.getClientCar().getOwner(),
+                "You are not employee or order owner to see this order details!");
+
+        return order;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderRepository.findAll();
 
         if (orders.isEmpty()) {
-            throw new NullPointerException("No orders found at the moment!");
+            throw new NoResultsFoundException("No orders found at the moment!");
         }
         return orders;
     }
@@ -61,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getOrdersByUserId(User orderOwner, User loggedInUser) {
         PermissionHelper.isEmployeeOrSameUser(loggedInUser, orderOwner, "You are not employee or this user to see its orders!");
+
         List<Order> clientOrders = orderRepository.findAllByClientCarOwnerId(orderOwner.getId());
 
         if (clientOrders.isEmpty()) {

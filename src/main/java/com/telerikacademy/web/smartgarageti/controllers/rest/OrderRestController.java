@@ -100,6 +100,7 @@ public class OrderRestController {
     public ResponseEntity<Order> getOrderDetails(@PathVariable int orderId, @RequestHeader HttpHeaders headers) {
         try {
             User loggedInUser = authenticationHelper.tryGetUser(headers);
+
             Order order = orderService.getOrderById(orderId, loggedInUser);
             return ResponseEntity.ok(order);
         } catch (EntityNotFoundException e) {
@@ -114,9 +115,9 @@ public class OrderRestController {
     @GetMapping("/orders/{orderId}/total-price")
     public ResponseEntity<Double> getOrderTotalPrice(@PathVariable int orderId,
                                                      @RequestParam(required = false, defaultValue = "BGN") String currency,
-                                                     @RequestHeader HttpHeaders headerss) {
+                                                     @RequestHeader HttpHeaders headers) {
         try {
-            User loggedInUser = authenticationHelper.tryGetUser(headerss);
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
             Order order = orderService.getOrderById(orderId, loggedInUser);
             double totalPrice = orderService.calculateOrderTotalInCurrency(order, currency);
             return ResponseEntity.ok(totalPrice);
