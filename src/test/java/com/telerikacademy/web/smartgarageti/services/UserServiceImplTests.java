@@ -36,7 +36,7 @@ public class UserServiceImplTests {
     RoleServiceImpl roleService;
 
     @Test
-    public void testGetUserById() {
+    public void getUserById_ReturnsUserId_WhenIdExists() {
         // Arrange
         User mockUser = TestHelpers.createMockUser();
         Mockito.when(userRepository.getUserById(1))
