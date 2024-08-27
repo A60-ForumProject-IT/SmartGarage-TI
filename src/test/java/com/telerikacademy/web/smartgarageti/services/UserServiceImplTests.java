@@ -36,7 +36,6 @@ import java.util.List;
 import static com.telerikacademy.web.smartgarageti.services.UserServiceImpl.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTests {
