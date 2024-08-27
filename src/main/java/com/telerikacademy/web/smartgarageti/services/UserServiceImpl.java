@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (duplicateExists) {
-            throw new EntityNotFoundException("User with %s %s already exists.", "username", userToBeEdited.getUsername());
+            throw new EntityNotFoundException("User with username %s already exists.", "username", userToBeEdited.getUsername());
         }
 
         userRepository.update(userToBeEdited);
