@@ -51,22 +51,22 @@ public class UserServiceImplTests {
 
     @Test
     void getRoleById_ReturnsNull_WhenIdDoesNotExist() {
-        when(roleRepository.getRoleById(1)).thenReturn(null);
+        Mockito.when(roleRepository.getRoleById(1)).thenReturn(null);
 
         Role result = roleService.getRoleById(1);
 
-        assertNull(result);
+        Assertions.assertNull(result);
     }
 
     @Test
     void getAllRoles_ReturnsListOfRoles() {
         List<Role> roles = Arrays.asList(TestHelpers.createMockRoleEmployee(), TestHelpers.createMockRoleUser());
-        when(roleRepository.getAllRoles()).thenReturn(roles);
+        Mockito.when(roleRepository.getAllRoles()).thenReturn(roles);
 
         List<Role> result = roleService.getAllRoles();
 
-        assertEquals(2, result.size());
-        assertEquals("MockRoleEmployee", result.get(0).getName());
-        assertEquals("MockRoleUser", result.get(1).getName());
+        Assertions.assertEquals(2, result.size());
+        Assertions. assertEquals("MockRoleEmployee", result.get(0).getName());
+        Assertions. assertEquals("MockRoleUser", result.get(1).getName());
     }
 }
