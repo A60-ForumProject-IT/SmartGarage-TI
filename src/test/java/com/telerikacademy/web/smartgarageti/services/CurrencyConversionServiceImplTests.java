@@ -30,7 +30,6 @@ public class CurrencyConversionServiceImplTests {
 
     @Test
     void convertCurrency_ShouldReturnConvertedAmount_WhenCurrencyIsEUR() {
-        // Arrange
         String apiUrl = "http://example.com";
         String apiKey = "mockApiKey";
         currencyConversionService = new CurrencyConversionServiceImpl(restTemplate, apiUrl, apiKey);
@@ -48,16 +47,13 @@ public class CurrencyConversionServiceImplTests {
         when(restTemplate.getForEntity(anyString(), any(Class.class)))
                 .thenReturn(responseEntity);
 
-        // Act
         double result = currencyConversionService.convertCurrency(amount, fromCurrency, toCurrency);
 
-        // Assert
         assertEquals(50.0, result);
     }
 
     @Test
     void convertCurrency_ShouldReturnConvertedAmount_WhenCurrencyIsNotEUR() {
-        // Arrange
         String apiUrl = "http://example.com";
         String apiKey = "mockApiKey";
         currencyConversionService = new CurrencyConversionServiceImpl(restTemplate, apiUrl, apiKey);
@@ -84,16 +80,13 @@ public class CurrencyConversionServiceImplTests {
                 .thenReturn(responseEntity1)
                 .thenReturn(responseEntity2);
 
-        // Act
         double result = currencyConversionService.convertCurrency(amount, fromCurrency, toCurrency);
 
-        // Assert
         assertEquals(75.0, result);
     }
 
     @Test
     void convertCurrency_ShouldThrowRuntimeException_WhenRatesAreMissing() {
-        // Arrange
         String apiUrl = "http://example.com";
         String apiKey = "mockApiKey";
         currencyConversionService = new CurrencyConversionServiceImpl(restTemplate, apiUrl, apiKey);
@@ -108,36 +101,6 @@ public class CurrencyConversionServiceImplTests {
         when(restTemplate.getForEntity(anyString(), any(Class.class)))
                 .thenReturn(responseEntity);
 
-        // Act & Assert
         assertThrows(RuntimeException.class, () -> currencyConversionService.convertCurrency(amount, fromCurrency, toCurrency));
     }
-
-//    @Test
-//    void convertCurrency_ShouldReturnConvertedAmount() {
-//        // Arrange
-//        RestTemplate restTemplate = mock(RestTemplate.class);
-//        CurrencyConversionServiceImpl currencyConversionService = new CurrencyConversionServiceImpl(
-//                restTemplate, "https://api.example.com", "apiKey");
-//
-//        double amount = 100.0;
-//        String fromCurrency = "BGN";
-//        String toCurrency = "USD";
-//
-//        // Mock response for BGN to EUR conversion
-//        Map<String, Object> rates = new HashMap<>();
-//        rates.put("BGN", 2.0);  // Example rate
-//        Map<String, Object> responseBody = new HashMap<>();
-//        responseBody.put("rates", rates);
-//        ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity<>(responseBody, HttpStatus.OK);
-//
-//        // Mock the behavior of getForEntity to return the response entity
-//        when(restTemplate.getForEntity(anyString(), any(Class.class)))
-//                .thenReturn(responseEntity);
-//
-//        // Act
-//        double result = currencyConversionService.convertCurrency(amount, fromCurrency, toCurrency);
-//
-//        // Assert
-//        assertEquals(50.0, result);  // Adjust the expected result based on the conversion logic
-//    }
 }

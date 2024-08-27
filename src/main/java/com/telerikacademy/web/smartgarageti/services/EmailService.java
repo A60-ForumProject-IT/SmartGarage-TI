@@ -30,18 +30,11 @@ public class EmailService {
         }
     }
 
-    private JavaMailSender createMailSender(String from, String smtpPassword) {
+    JavaMailSender createMailSender(String from, String smtpPassword) {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         Properties props = mailSender.getJavaMailProperties();
 
-        if (from.endsWith("@abv.bg")) {
-            mailSender.setHost("smtp.abv.bg");
-            mailSender.setPort(465);
-            mailSender.setUsername(from);
-            mailSender.setPassword(smtpPassword);
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-        } else if (from.endsWith("@gmail.com")) {
+        if (from.endsWith("@gmail.com")) {
             mailSender.setHost("smtp.gmail.com");
             mailSender.setPort(587);
             mailSender.setUsername(from);
