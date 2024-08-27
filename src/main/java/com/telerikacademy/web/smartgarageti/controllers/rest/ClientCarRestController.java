@@ -1,8 +1,6 @@
 package com.telerikacademy.web.smartgarageti.controllers.rest;
 
-import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
-import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
-import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.*;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.models.*;
@@ -10,6 +8,7 @@ import com.telerikacademy.web.smartgarageti.models.dto.ClientCarDto;
 import com.telerikacademy.web.smartgarageti.models.dto.ClientCarUpdateDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -51,8 +50,18 @@ public class ClientCarRestController {
     @GetMapping("/client-cars/filter-sort")
     public List<ClientCar> filterAndSortClientCarsByOwner(@RequestParam(required = false) String searchTerm,
                                                           @RequestParam(required = false, defaultValue = "owner") String sortBy,
-                                                          @RequestParam(required = false, defaultValue = "asc") String sortDirection) {
-        return clientCarService.filterAndSortClientCarsByOwner(searchTerm, sortBy, sortDirection);
+                                                          @RequestParam(required = false, defaultValue = "asc") String sortDirection,
+                                                          @RequestHeader HttpHeaders headers) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            return clientCarService.filterAndSortClientCarsByOwner(loggedInUser, searchTerm, sortBy, sortDirection);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (NoResultsFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @Operation(
@@ -60,14 +69,20 @@ public class ClientCarRestController {
             description = "Works with ClientCarUpdateDto expecting VIN and license plate."
     )
     @PutMapping("/client-cars/{clientCarId}")
-    public void updateClientCar(@PathVariable int clientCarId, @Valid @RequestBody ClientCarUpdateDto clientCarUpdateDto) {
+    public void updateClientCar(@PathVariable int clientCarId, @Valid @RequestBody ClientCarUpdateDto clientCarUpdateDto,
+                                @RequestHeader HttpHeaders headers) {
         try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
             ClientCar existingClientCar = mapperHelper.updateClientCarFromDto(clientCarUpdateDto, clientCarId);
-            clientCarService.updateClientCar(existingClientCar);
+            clientCarService.updateClientCar(existingClientCar, loggedInUser);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
@@ -75,13 +90,19 @@ public class ClientCarRestController {
             summary = "Add a service to a client car."
     )
     @PostMapping("/client-cars/{clientCarId}/services/{serviceId}")
-    public ResponseEntity<Void> addServiceToClientCar(@PathVariable int clientCarId, @PathVariable int serviceId) {
+    public ResponseEntity<Void> addServiceToClientCar(@PathVariable int clientCarId, @PathVariable int serviceId,
+                                                      @RequestHeader HttpHeaders headers) {
         try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
             RepairService repairService = repairServiceService.findServiceById(serviceId);
-            carServiceService.addServiceToOrder(clientCarId, repairService);
+            carServiceService.addServiceToOrder(clientCarId, repairService, loggedInUser);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
@@ -89,31 +110,49 @@ public class ClientCarRestController {
             summary = "Finds all the services we've got in our application until this moment."
     )
     @GetMapping("/client-cars/services")
-    public List<CarServiceLog> getAllCarServices() {
-        return carServiceService.findAllCarServices();
+    public List<CarServiceLog> getAllCarServiceLogs(@RequestHeader HttpHeaders headers) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            return carServiceService.findAllCarsServiceLogs(loggedInUser);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (NoResultsFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @Operation(
             summary = "Finds all services to a concrete client car."
     )
     @GetMapping("/client-cars/{clientCarId}/services")
-    public List<CarServiceLog> getClientCarServicesByClientCarId(@PathVariable int clientCarId) {
-        return carServiceService.findCarServicesByClientCarId(clientCarId);
+    public List<CarServiceLog> getClientCarServicesByClientCarId(@PathVariable int clientCarId, @RequestHeader HttpHeaders headers) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            return carServiceService.findCarServicesByClientCarId(clientCarId, loggedInUser);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
     }
 
     @Operation(
             summary = "Finds all services that have been done in the past for this user's cars."
     )
     @GetMapping("/users/{userId}/service-history")
-    public ResponseEntity<List<CarServiceLog>> getServiceHistory(@PathVariable int userId, @RequestHeader HttpHeaders httpHeaders) {
+    public ResponseEntity<List<CarServiceLog>> getUserServiceHistory(@PathVariable int userId, @RequestHeader HttpHeaders httpHeaders) {
         try {
             User loggedInUser = authenticationHelper.tryGetUser(httpHeaders);
-            User user = userService.getUserById(loggedInUser, userId);
+            User carOwner = userService.getUserById(loggedInUser, userId);
 
-            List<ClientCar> clientCars = clientCarService.getClientCarsByClientId(userId);
-            List<CarServiceLog> serviceLogs = carServiceService.getServiceHistoryForClientCars(clientCars);
+            List<ClientCar> clientCars = clientCarService.getClientCarsByClientId(userId, loggedInUser, carOwner);
+            List<CarServiceLog> serviceLogs = carServiceService.getServiceHistoryForClientCars(clientCars, loggedInUser, carOwner);
             return ResponseEntity.ok(serviceLogs);
         } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (NoResultsFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

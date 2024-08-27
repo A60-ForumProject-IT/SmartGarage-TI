@@ -22,11 +22,4 @@ public class Order {
 
     @Column(name = "status", nullable = false)
     private String status;
-
-
-    public enum OrderStatus {
-        NOT_STARTED,
-        IN_PROGRESS,
-        READY_FOR_PICKUP
-    }
 }

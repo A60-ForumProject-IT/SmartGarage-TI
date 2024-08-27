@@ -1,9 +1,8 @@
 package com.telerikacademy.web.smartgarageti.services;
 
-import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
-import com.telerikacademy.web.smartgarageti.models.ClientCar;
-import com.telerikacademy.web.smartgarageti.models.Order;
-import com.telerikacademy.web.smartgarageti.models.RepairService;
+import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
+import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
+import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.CarServiceLogRepository;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.ClientCarRepository;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.OrderRepository;
@@ -31,13 +30,24 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
     }
 
     @Override
-    public List<CarServiceLog> findAllCarServices() {
-        return carServiceRepository.findAll();
+    public List<CarServiceLog> findAllCarsServiceLogs(User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't see all service logs!");
+        List<CarServiceLog> carServiceLogs = carServiceRepository.findAll();
+        if (carServiceLogs.isEmpty()) {
+            throw new NoResultsFoundException("No service logs found!");
+        }
+        return carServiceLogs;
     }
 
     @Override
-    public List<CarServiceLog> findCarServicesByClientCarId(int clientCarId) {
-        return carServiceRepository.findAllByClientCarId(clientCarId);
+    public List<CarServiceLog> findCarServicesByClientCarId(int clientCarId, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't see these details!");
+        List<CarServiceLog> carServiceLogs = carServiceRepository.findAllByClientCarId(clientCarId);
+
+        if (carServiceLogs.isEmpty()) {
+            throw new NoResultsFoundException("No service logs found for this car!");
+        }
+        return carServiceLogs;
     }
 
     @Override
@@ -46,7 +56,8 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
     }
 
     @Override
-    public CarServiceLog addServiceToOrder(int clientCarId, RepairService repairService) {
+    public CarServiceLog addServiceToOrder(int clientCarId, RepairService repairService, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't add services to cars!");
         Order activeOrder = orderRepository.findActiveOrderByClientCarId(clientCarId)
                 .orElseGet(() -> createNewOrder(clientCarId));
 
@@ -62,8 +73,14 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
     }
 
     @Override
-    public List<CarServiceLog> getServiceHistoryForClientCars(List<ClientCar> clientCars) {
-        return carServiceRepository.findAllByClientCarIn(clientCars);
+    public List<CarServiceLog> getServiceHistoryForClientCars(List<ClientCar> clientCars, User loggedInUser, User carOwner) {
+        PermissionHelper.isEmployeeOrSameUser(loggedInUser, carOwner, "You are not employee or this user to check this details!");
+        List<CarServiceLog> carServiceLogs = carServiceRepository.findAllByClientCarIn(clientCars);
+
+        if (carServiceLogs.isEmpty()) {
+            throw new NoResultsFoundException("No service logs found for this user!");
+        }
+        return carServiceLogs;
     }
 
     private Order createNewOrder(int clientCarId) {
