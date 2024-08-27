@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class TestHelpers {
 
-    public User createMockUser() {
+    public static User createMockUser() {
         User mockUser = new User();
         mockUser.setUsername("MockUsername");
         mockUser.setFirstName("MockFirstName");
@@ -18,7 +18,7 @@ public class TestHelpers {
         return mockUser;
     }
 
-    public User createMockUserEmployee() {
+    public static User createMockUserEmployee() {
         User mockUser = new User();
         mockUser.setUsername("MockUsername");
         mockUser.setFirstName("MockFirstName");
@@ -30,49 +30,49 @@ public class TestHelpers {
         return mockUser;
     }
 
-    public Role createMockRoleEmployee() {
+    public static Role createMockRoleEmployee() {
         Role mockRole = new Role();
         mockRole.setId(2);
         mockRole.setName("MockRoleEmployee");
         return mockRole;
     }
 
-    public Role createMockRoleUser() {
+    public static Role createMockRoleUser() {
         Role mockRole = new Role();
         mockRole.setId(1);
         mockRole.setName("MockRoleUser");
         return mockRole;
     }
 
-    public Brand createMockBrand() {
+    public static Brand createMockBrand() {
         Brand mockBrand = new Brand();
         mockBrand.setName("MockBrand");
         mockBrand.setId(1);
         return mockBrand;
     }
 
-    public EngineType createMockEngineType() {
+    public static EngineType createMockEngineType() {
         EngineType mockEngineType = new EngineType();
         mockEngineType.setName("MockEngineType");
         mockEngineType.setId(1);
         return mockEngineType;
     }
 
-    public Model createMockModel() {
+    public static Model createMockModel() {
         Model mockModel = new Model();
         mockModel.setName("MockModel");
         mockModel.setId(1);
         return mockModel;
     }
 
-    public Year createMockYear() {
+    public static Year createMockYear() {
         Year mockYear = new Year();
         mockYear.setYear(2000);
         mockYear.setId(1);
         return mockYear;
     }
 
-    public Vehicle createMockVehicle() {
+    public static Vehicle createMockVehicle() {
         Vehicle mockVehicle = new Vehicle();
         mockVehicle.setBrand(createMockBrand());
         mockVehicle.setModel(createMockModel());
@@ -81,14 +81,14 @@ public class TestHelpers {
         return mockVehicle;
     }
 
-    public RepairService createMockRepairService() {
+    public static RepairService createMockRepairService() {
         RepairService mockRepairService = new RepairService();
         mockRepairService.setName("MockRepairService");
         mockRepairService.setId(1);
         return mockRepairService;
     }
 
-    public ClientCar createMockClientCar() {
+    public static ClientCar createMockClientCar() {
         ClientCar mockClientCar = new ClientCar();
         mockClientCar.setId(1);
         mockClientCar.setVin("X1X1X1X1X1X1X1X1X");
@@ -98,7 +98,7 @@ public class TestHelpers {
         return mockClientCar;
     }
 
-    public Order createMockOrder() {
+    public static Order createMockOrder() {
         Order mockOrder = new Order();
         mockOrder.setId(1);
         mockOrder.setClientCar(createMockClientCar());
@@ -106,7 +106,7 @@ public class TestHelpers {
         return mockOrder;
     }
 
-    public CarServiceLog createMockCarServiceLog() {
+    public static CarServiceLog createMockCarServiceLog() {
         CarServiceLog mockCarServiceLog = new CarServiceLog();
         mockCarServiceLog.setId(1);
         mockCarServiceLog.setClientCar(createMockClientCar());
@@ -117,7 +117,7 @@ public class TestHelpers {
         return mockCarServiceLog;
     }
 
-    public FilteredUserOptions createMockFilteredUserOptions() {
+    public static FilteredUserOptions createMockFilteredUserOptions() {
         return new FilteredUserOptions(
                 "MockUsername",
                 "mockEmail@test.com",
