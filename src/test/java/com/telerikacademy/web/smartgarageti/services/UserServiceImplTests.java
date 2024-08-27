@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.services;
 
+import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.helpers.TestHelpers;
 import com.telerikacademy.web.smartgarageti.models.Role;
 import com.telerikacademy.web.smartgarageti.models.User;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTests {
 
+    public static final String DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION = "You dont have permissions! Only employees can do this operation.";
     @Mock
     UserRepository userRepository;
 
@@ -68,5 +70,56 @@ public class UserServiceImplTests {
         Assertions.assertEquals(2, result.size());
         Assertions. assertEquals("MockRoleEmployee", result.get(0).getName());
         Assertions. assertEquals("MockRoleUser", result.get(1).getName());
+    }
+
+    @Test
+    void getByUsername_ReturnsUser_WhenUsernameExists() {
+        User mockUser = TestHelpers.createMockUser();
+        Mockito.when(userRepository.getByUsername("MockUsername")).thenReturn(mockUser);
+
+        User result = userService.getByUsername("MockUsername");
+
+        Assertions.assertEquals("MockUsername", result.getUsername());
+    }
+
+    @Test
+    void getByUsername_ReturnsNull_WhenUsernameDoesNotExist() {
+        Mockito.when(userRepository.getByUsername("NonExistentUsername")).thenReturn(null);
+
+        User result = userService.getByUsername("NonExistentUsername");
+
+        Assertions.assertNull(result);
+    }
+
+    @Test
+    void getUserById_ReturnsUser_WhenEmployeeHasPermission() {
+        User mockEmployee = TestHelpers.createMockUserEmployee();
+        User mockUser = TestHelpers.createMockUser();
+        Mockito.when(userRepository.getUserById(1))
+                .thenReturn(mockUser);
+
+        User result = userService.getUserById(mockEmployee, 1);
+
+        Assertions.assertEquals("MockUsername", result.getUsername());
+    }
+
+    @Test
+    void getUserById_ThrowsException_WhenEmployeeHasNoPermission() {
+        User mockEmployee = TestHelpers.createMockUser();
+        Mockito.doThrow(new SecurityException(DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION))
+                .when(PermissionHelper.class);
+        PermissionHelper.isEmployee(mockEmployee, DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION);
+
+        Assertions.assertThrows(SecurityException.class, () -> userService.getUserById(mockEmployee, 1));
+    }
+
+    @Test
+    void getUserById_ReturnsNull_WhenUserIdDoesNotExist() {
+        User mockEmployee = TestHelpers.createMockUserEmployee();
+        Mockito.when(userRepository.getUserById(999)).thenReturn(null);
+
+        User result = userService.getUserById(mockEmployee, 999);
+
+        Assertions.assertNull(result);
     }
 }

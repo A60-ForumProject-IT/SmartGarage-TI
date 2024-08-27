@@ -33,14 +33,14 @@ public class TestHelpers {
     public static Role createMockRoleEmployee() {
         Role mockRole = new Role();
         mockRole.setId(2);
-        mockRole.setName("MockRoleEmployee");
+        mockRole.setName("Employee");
         return mockRole;
     }
 
     public static Role createMockRoleUser() {
         Role mockRole = new Role();
         mockRole.setId(1);
-        mockRole.setName("MockRoleUser");
+        mockRole.setName("Customer");
         return mockRole;
     }
 
