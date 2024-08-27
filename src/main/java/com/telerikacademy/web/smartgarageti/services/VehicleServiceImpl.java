@@ -3,6 +3,8 @@ package com.telerikacademy.web.smartgarageti.services;
 import com.telerikacademy.web.smartgarageti.exceptions.DeletedVehicleException;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
+import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.VehicleRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
@@ -33,7 +35,12 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public List<Vehicle> getAllVehicles() {
-        return vehicleRepository.findAllByIsDeletedFalse();
+        List<Vehicle> vehicles = vehicleRepository.findAllByIsDeletedFalse();
+
+        if (vehicles.isEmpty()) {
+            throw new NoResultsFoundException("No vehicles found");
+        }
+        return vehicles;
     }
 
     @Override
@@ -43,7 +50,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public void deleteVehicleById(int id) {
+    public void deleteVehicleById(int id, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't delete vehicles!");
         Vehicle vehicle = vehicleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle", id));
         vehicle.setDeleted(true);
@@ -51,11 +59,12 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public void updateVehicle(Vehicle vehicle) {
+    public void updateVehicle(Vehicle vehicle, User user) {
+        PermissionHelper.isEmployee(user, "You are not an employee and can't update vehicles!");
+
         if(vehicle.isDeleted()) {
             throw new DeletedVehicleException("Cannot update a deleted vehicle.");
         }
-
         vehicleRepository.save(vehicle);
     }
 
@@ -66,7 +75,8 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
-    public Vehicle createVehicle(String brandName, String modelName, int yearValue, String engineType) {
+    public Vehicle createVehicle(String brandName, String modelName, int yearValue, String engineType, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't create vehicles!");
         Brand brand = brandService.findOrCreateBrand(brandName);
         Model model = modelService.findOrCreateModel(modelName);
         Year year = yearService.findOrCreateYear(yearValue);

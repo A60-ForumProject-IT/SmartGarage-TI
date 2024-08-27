@@ -169,7 +169,7 @@ public class ClientCarRestController {
         try {
             User loggedInUser = authenticationHelper.tryGetUser(httpHeaders);
             User userToAddCar = userService.getUserById(loggedInUser, userId);
-            ClientCar newClientCar = mapperHelper.createClientCarFromDto(clientCarDto, userToAddCar);
+            ClientCar newClientCar = mapperHelper.createClientCarFromDto(clientCarDto, userToAddCar, loggedInUser);
 
             return clientCarService.createClientCar(newClientCar);
         } catch (AuthenticationException e) {
