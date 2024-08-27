@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.services;
 
+import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.helpers.TestHelpers;
 import com.telerikacademy.web.smartgarageti.models.Role;
@@ -39,16 +40,11 @@ public class UserServiceImplTests {
 
     @Test
     public void getUserById_ReturnsUserId_WhenIdExists() {
-        // Arrange
         User mockUser = TestHelpers.createMockUser();
         Mockito.when(userRepository.getUserById(1))
                 .thenReturn(mockUser);
-
-        // Act
         User result = userService.getUserById(1);
-
-        // Assert
-        assertEquals("MockUsername", result.getUsername());
+        Assertions.assertEquals("MockUsername", result.getUsername());
     }
 
     @Test
@@ -68,8 +64,8 @@ public class UserServiceImplTests {
         List<Role> result = roleService.getAllRoles();
 
         Assertions.assertEquals(2, result.size());
-        Assertions. assertEquals("MockRoleEmployee", result.get(0).getName());
-        Assertions. assertEquals("MockRoleUser", result.get(1).getName());
+        Assertions. assertEquals("Employee", result.get(0).getName());
+        Assertions. assertEquals("Customer", result.get(1).getName());
     }
 
     @Test
@@ -106,11 +102,7 @@ public class UserServiceImplTests {
     @Test
     void getUserById_ThrowsException_WhenEmployeeHasNoPermission() {
         User mockEmployee = TestHelpers.createMockUser();
-        Mockito.doThrow(new SecurityException(DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION))
-                .when(PermissionHelper.class);
-        PermissionHelper.isEmployee(mockEmployee, DONT_HAVE_PERMISSIONS_ONLY_EMPLOYEES_CAN_DO_THIS_OPERATION);
-
-        Assertions.assertThrows(SecurityException.class, () -> userService.getUserById(mockEmployee, 1));
+        Assertions.assertThrows(UnauthorizedOperationException.class, () -> userService.getUserById(mockEmployee, 1));
     }
 
     @Test
