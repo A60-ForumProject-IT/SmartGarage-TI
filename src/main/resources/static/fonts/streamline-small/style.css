@@ -1,0 +1,311 @@
+@font-face {
+	font-family: 'streamline-small-cs';
+	src:url('fonts/streamline-small-cs.eot');
+	src:url('fonts/streamline-small-cs.eot?#iefix') format('embedded-opentype'),
+		url('fonts/streamline-small-cs.ttf') format('truetype'),
+		url('fonts/streamline-small-cs.woff') format('woff'),
+		url('fonts/streamline-small-cs.svg#streamline-small-cs') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="sl-small-"]::before, [class*=" sl-small-"]::before {
+	font-family: 'streamline-small-cs';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	direction: ltr;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.sl-small-car-battery:before {
+	content: "\61";
+}
+.sl-small-car-key:before {
+	content: "\62";
+}
+.sl-small-electric-wrench:before {
+	content: "\63";
+}
+.sl-small-check-shield:before {
+	content: "\64";
+}
+.sl-small-truck:before {
+	content: "\65";
+}
+.sl-small-truck-tow:before {
+	content: "\66";
+}
+.sl-small-clock:before {
+	content: "\67";
+}
+.sl-small-phone-call:before {
+	content: "\68";
+}
+.sl-small-phone-circle:before {
+	content: "\69";
+}
+.sl-small-location-map:before {
+	content: "\6a";
+}
+.sl-small-car:before {
+	content: "\6b";
+}
+.sl-small-car-check:before {
+	content: "\6c";
+}
+.sl-small-car-checklist:before {
+	content: "\6d";
+}
+.sl-small-car-fix:before {
+	content: "\6e";
+}
+.sl-small-service-24h:before {
+	content: "\6f";
+}
+.sl-small-car-oil:before {
+	content: "\70";
+}
+.sl-small-car-lock:before {
+	content: "\71";
+}
+.sl-small-car-music:before {
+	content: "\72";
+}
+.sl-small-car-setting:before {
+	content: "\73";
+}
+.sl-small-check:before {
+	content: "\74";
+}
+.sl-small-eco-fuel:before {
+	content: "\75";
+}
+.sl-small-eco-fuel-barrel:before {
+	content: "\76";
+}
+.sl-small-eco-globe:before {
+	content: "\77";
+}
+.sl-small-eco-car:before {
+	content: "\78";
+}
+.sl-small-eco-nature:before {
+	content: "\79";
+}
+.sl-small-inflator-pump:before {
+	content: "\7a";
+}
+.sl-small-lightbulb:before {
+	content: "\41";
+}
+.sl-small-gps:before {
+	content: "\42";
+}
+.sl-small-oil-can:before {
+	content: "\43";
+}
+.sl-small-oil-gauge:before {
+	content: "\44";
+}
+.sl-small-oil-station:before {
+	content: "\45";
+}
+.sl-small-piggy-bank:before {
+	content: "\46";
+}
+.sl-small-road:before {
+	content: "\47";
+}
+.sl-small-seatbelt-lock:before {
+	content: "\48";
+}
+.sl-small-share-time:before {
+	content: "\49";
+}
+.sl-small-steering-wheel:before {
+	content: "\4a";
+}
+.sl-small-car-audio:before {
+	content: "\4b";
+}
+.sl-small-engine-belt:before {
+	content: "\4c";
+}
+.sl-small-camper:before {
+	content: "\4d";
+}
+.sl-small-wallet:before {
+	content: "\4e";
+}
+.sl-small-parking-sensor:before {
+	content: "\4f";
+}
+.sl-small-wrench:before {
+	content: "\50";
+}
+.sl-small-wrench-double:before {
+	content: "\51";
+}
+.sl-small-windshield:before {
+	content: "\52";
+}
+.sl-small-alarm:before {
+	content: "\53";
+}
+.sl-small-car-2:before {
+	content: "\54";
+}
+.sl-small-car-3:before {
+	content: "\55";
+}
+.sl-small-cog-double:before {
+	content: "\56";
+}
+.sl-small-email:before {
+	content: "\57";
+}
+.sl-small-gearbox:before {
+	content: "\58";
+}
+.sl-small-gauge:before {
+	content: "\59";
+}
+.sl-small-garage:before {
+	content: "\5a";
+}
+.sl-small-tunning:before {
+	content: "\30";
+}
+.sl-small-phone-call-24h:before {
+	content: "\31";
+}
+.sl-small-phone:before {
+	content: "\32";
+}
+.sl-small-video:before {
+	content: "\33";
+}
+.sl-small-image:before {
+	content: "\34";
+}
+.sl-small-images:before {
+	content: "\35";
+}
+.sl-small-quote:before {
+	content: "\36";
+}
+.sl-small-screwdriver:before {
+	content: "\37";
+}
+.sl-small-signal-warning:before {
+	content: "\38";
+}
+.sl-small-snow-crystal:before {
+	content: "\39";
+}
+.sl-small-speed-gauge:before {
+	content: "\21";
+}
+.sl-small-air-conditioning:before {
+	content: "\40";
+}
+.sl-small-heating:before {
+	content: "\23";
+}
+.sl-small-toolbox:before {
+	content: "\24";
+}
+.sl-small-engine-belt-2:before {
+	content: "\25";
+}
+.sl-small-toolbox-2:before {
+	content: "\5e";
+}
+.sl-small-wrench-screwdriver:before {
+	content: "\26";
+}
+.sl-small-caution-fence:before {
+	content: "\2a";
+}
+.sl-small-certificate:before {
+	content: "\28";
+}
+.sl-small-fax:before {
+	content: "\29";
+}
+.sl-small-headlight:before {
+	content: "\2d";
+}
+.sl-small-facebook:before {
+	content: "\3d";
+}
+.sl-small-twitter:before {
+	content: "\5b";
+}
+.sl-small-google-plus:before {
+	content: "\5d";
+}
+.sl-small-youtube:before {
+	content: "\3b";
+}
+.sl-small-pen:before {
+	content: "\27";
+}
+.sl-small-faq:before {
+	content: "\5c";
+}
+.sl-small-testimonials:before {
+	content: "\2c";
+}
+.sl-small-team:before {
+	content: "\2e";
+}
+.sl-small-person:before {
+	content: "\2f";
+}
+.sl-small-percent:before {
+	content: "\60";
+}
+.sl-small-shopping-cart:before {
+	content: "\7e";
+}
+.sl-small-check-2:before {
+	content: "\7b";
+}
+.sl-small-payment:before {
+	content: "\7d";
+}
+.sl-small-coffee:before {
+	content: "\22";
+}
+.sl-small-checklist:before {
+	content: "\7c";
+}
+.sl-small-fax-2:before {
+	content: "\3c";
+}
+.sl-small-user-chat:before {
+	content: "\3e";
+}
+.sl-small-car-fire:before {
+    content: "\e900";
+}
+.sl-small-car-wash:before {
+    content: "\e901";
+}
+.sl-small-car-wheel:before {
+    content: "\e902";
+}
+.sl-small-sign-zigzag:before {
+    content: "\e903";
+}
+.sl-small-wedding-car:before {
+    content: "\e904";
+}

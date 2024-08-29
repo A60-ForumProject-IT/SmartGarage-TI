@@ -17,5 +17,6 @@ public interface RepairServiceRepository extends JpaRepository<RepairService, In
 
     @Query("SELECT r FROM RepairService r WHERE (:name IS NULL OR LOWER(r.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
             "AND (:price IS NULL OR r.price <= :price)")
-    List<RepairService> findAllByNameAndPrice(@Param("name") String name, @Param("price") Double price, Sort sort);
+    List<RepairService> findAllByNameAndPrice(@Param("name") String name,
+                                              @Param("price") Double price, Sort sort);
 }
