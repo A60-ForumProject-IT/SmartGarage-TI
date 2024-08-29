@@ -258,7 +258,7 @@ img.radius
 }
 .padding-top-70
 {
-	padding-top: 70px;
+	padding-top: 40px;
 }
 .margin-top-0
 {
@@ -3364,7 +3364,7 @@ td.ui-datepicker-current-day a
 	color: #333;
 	line-height: 26px;
 	background: #F5F5F5;
-	padding: 11px 16px 13px;
+	padding: 2px 16px 2px;
 }
 .cost-calculator-box .cost-slider-container
 {
@@ -3971,44 +3971,60 @@ body.lock-position
 	height: 100%;
 }
 
-.login-form-container {
+.login-register-container {
 	display: flex;
 	justify-content: center;
-	align-items: center;
-	min-height: 400px; /* Увеличаване на височината за повече пространство */
+	align-items: flex-start;
+	min-height: calc(100vh - 200px);
 	background-color: #f7f7f7;
-	padding-top: 70px; /* Добавяне на отстояние отгоре */
-	padding-bottom: 50px; /* Добавяне на отстояние отдолу */
-	 / /* Можеш да избереш цвят, който съответства на дизайна */
+	padding-bottom: 20px;
 }
 
-.login-box {
+.login-register-box {
 	background-color: #fff;
 	padding: 30px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	border-radius: 8px;
-	position: relative; /* Уверяване, че не се припокрива */
-	z-index: 2;
-	font-family: 'Open Sans', Arial, sans-serif; /* За целия контейнер на логин формата */
+	width: 100%;
+	max-width: 400px;
 }
 
-.login-box .box-header {
+.form-tabs {
+	display: flex;
+	justify-content: space-between;
 	margin-bottom: 20px;
-	font-size: 24px;
 	text-align: center;
-	font-family: 'Open Sans', Arial, sans-serif; /* За заглавия и етикети в логин формата */
+	width: 100%;
 }
 
-.contact-form label {
-	font-family: 'Open Sans', Arial, sans-serif; /* За заглавия и етикети в логин формата */
+.form-tabs button {
+	flex: 1;
+	background: none;
+	border: none;
+	padding: 10px;
+	cursor: pointer;
+	font-weight: bold;
+	color: #333;
+	border-bottom: 2px solid transparent;
+	transition: color 0.3s ease, border-bottom 0.3s ease;
 }
+
+.form-tabs button.active {
+	color: #007bff;
+	border-bottom: 2px solid #007bff;
+}
+
+.contact-form {
+	width: 100%;
+}
+
 .contact-form .form-group {
 	margin-bottom: 20px;
 }
 
 .contact-form .text-input {
 	width: 100%;
-	padding: 10px;
+	padding: 12px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 }
@@ -4024,10 +4040,27 @@ body.lock-position
 	border-radius: 4px;
 	cursor: pointer;
 	transition: background-color 0.3s;
-	font-family: 'Open Sans', Arial, sans-serif;
-	font-weight: bold;
 }
 
 .contact-form .more:hover {
 	background-color: #0056b3;
 }
+
+#login-username,
+#login-password {
+	font-size: 14px; /* Пример за по-малък шрифт */
+	padding: 5px;
+	margin-top: 5px !important;/* Пример за по-малки padding */
+}
+
+/* За registration формата */
+#reg-username,
+#reg-email,
+#reg-first-name,
+#reg-last-name,
+#reg-phone {
+	font-size: 14px; /* Пример за по-малък шрифт */
+	padding: 5px;
+	margin-top: 5px !important;/* Пример за по-малки padding */
+}
+
