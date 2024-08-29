@@ -1,56 +1,46 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>CarService - Mechanic Auto Shop Template</title>
-		<!--meta-->
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.2" />
-		<meta name="format-detection" content="telephone=no" />
-		<meta name="keywords" content="Mechanic, Car, Auto" />
-		<meta name="description" content="Responsive Mechanic Auto Shop Template" />
-		<!--slider revolution-->
-		<link rel="stylesheet" type="text/css" href="rs-plugin/css/settings.css" media="screen" />
-		<!--style-->
-		<link href='//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,600,700,800&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" type="text/css" href="style/reset.css">
-		<link rel="stylesheet" type="text/css" href="style/superfish.css">
-		<link rel="stylesheet" type="text/css" href="style/prettyPhoto.css">
-		<link rel="stylesheet" type="text/css" href="style/jquery.qtip.css">
-		<link rel="stylesheet" type="text/css" href="style/style.css">
-		<link rel="stylesheet" type="text/css" href="style/animations.css">
-		<link rel="stylesheet" type="text/css" href="style/responsive.css">
-		<link rel="stylesheet" type="text/css" href="style/odometer-theme-default.css">
-		<!--fonts-->
-		<link rel="stylesheet" type="text/css" href="fonts/streamline-small/style.css">
-		<link rel="stylesheet" type="text/css" href="fonts/template/styles.css">
-		<link rel="stylesheet" type="text/css" href="fonts/social/styles.css">
-		<link rel="shortcut icon" href="images/favicon.ico">
-	</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Smart Garage TI - Mechanic Auto Shop</title>
+	<!--meta-->
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.2" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="keywords" content="Mechanic, Car, Auto" />
+	<meta name="description" content="Responsive Mechanic Auto Shop Template" />
+	<!--slider revolution-->
+	<link rel="stylesheet" type="text/css" href="../static/plugins/rs-plugin/css/settings.css" media="screen" />
+	<!--style-->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,600,700,800&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="../static/css/reset.css" th:href="@{/css/reset.css}">
+	<link rel="stylesheet" type="text/css" href="../static/css/superfish.css" th:href="@{/css/superfish.css}">
+	<link rel="stylesheet" type="text/css" href="../static/css/prettyPhoto.css" th:href="@{/css/prettyPhoto.css}">
+	<link rel="stylesheet" type="text/css" href="../static/css/jquery.qtip.css" th:href="@{/css/jquery.qtip.css}">
+	<link rel="stylesheet" type="text/css" href="../static/css/style.css" th:href="@{/css/style.css}">
+	<link rel="stylesheet" type="text/css" href="../static/css/animations.css" th:href="@{/css/animations.css}">
+	<link rel="stylesheet" type="text/css" href="../static/css/responsive.css" th:href="@{/css/responsive.css}">
+	<link rel="stylesheet" type="text/css" href="../static/css/odometer-theme-default.css" th:href="@{/css/odometer-theme-default.css}">
+	<!--fonts-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/streamline-small/style.css" th:href="@{/fonts/streamline-small/style.css}">
+	<link rel="stylesheet" type="text/css" href="../static/fonts/template/styles.css" th:href="@{/template/styles.css}">
+	<link rel="stylesheet" type="text/css" href="../static/fonts/social/styles.css" th:href="@{/fonts/social/styles.css}">
+	<link rel="shortcut icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}">
+</head>
 	<body>
 		<div class="site-container">
 			<div class="header-top-bar-container clearfix">
 				<div class="header-top-bar">
 					<ul class="contact-details clearfix">
 						<li class="template-phone">
-							(520) 577 2710
+							(+359) 888 667788
 						</li>
 						<li class="template-mail">
-							<a href="mailto:carservice@mail.com">carservice@mail.com</a>
+							<a href="mailto:carservice@mail.com">ikaragyozov19@mail.com</a>
 						</li>
 						<li class="template-clock">
-							Mon - Fri: 7:30am - 5:30pm
+							Mon - Fri: 7:30 - 18:30
 						</li>
 					</ul>
-					<div class="search-container">
-						<a class="template-search" href="#" title="Search"></a>
-						<form class="search" action="search.html">
-							<input type="text" name="s" placeholder="Search..." value="Search..." class="search-input hint">
-							<fieldset class="search-submit-container">
-								<span class="template-search"></span>
-								<input type="submit" class="search-submit" value="">
-							</fieldset>
-						</form>
-					</div>
 					<ul class="social-icons">
 						<li>
 							<a target="_blank" href="https://facebook.com/QuanticaLabs" class="social-facebook" title="facebook"></a>
@@ -61,83 +51,16 @@
 						<li>
 							<a href="https://pinterest.com/quanticalabs/" class="social-pinterest" title="pinterest"></a>
 						</li>
-						<!--<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-google-plus"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-youtube"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-linkedin"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-pinterest"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-dribble"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-skype"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-tumblr"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-instagram"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-xing"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-foursquare"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-rss"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-behance"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-picasa"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-stumbleupon"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-vimeo"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-houzz"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-yelp"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-github"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-reddit"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-soundcloud"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-vk"></a>
-						</li>
-						<li>
-							<a title="" href="https://1.envato.market/quanticalabs" class="social-vine"></a>
-						</li>
-						-->
 					</ul>
 				</div>
 				<a href="#" class="header-toggle template-arrow-up"></a>
 			</div>
 			<div class="header-container">
-			<!--<div class="header-container sticky">-->
+				<!--<div class="header-container sticky">-->
 				<div class="vertical-align-table column-1-1">
 					<div class="header clearfix">
 						<div class="logo vertical-align-cell">
-							<h1><a href="home" title="CarService">CARSERVICE</a></h1>
+							<h1><a href="home.html" title="CarService">SMART GARAGE TI</a></h1>
 						</div>
 						<a href="#" class="mobile-menu-switch vertical-align-cell">
 							<span class="line"></span>
@@ -147,27 +70,16 @@
 						<div class="menu-container clearfix vertical-align-cell">
 							<nav>
 								<ul class="sf-menu">
-									<li>
-										<a href="index.html" title="Home">
+									<li class="selected">
+										<a href="home.html" title="Home">
 											Home
 										</a>
-										<ul>
-											<li>
-												<a href="index.html" title="Home Style 1">
-													Home Style 1
-												</a>
-											</li>
-											<li>
-												<a href="home2.html" title="Home Style 2">
-													Home Style 2
-												</a>
-											</li>
-										</ul>
 									</li>
 									<li>
 										<a href="services.html" title="Services">
 											Services
 										</a>
+
 										<ul>
 											<li>
 												<a href="service_engine_diagnostics.html" title="Engine Diagnostics">
@@ -177,11 +89,6 @@
 											<li>
 												<a href="service_lube_oil_filters.html" title="Lube, Oil and Filters">
 													Lube, Oil and Filters
-												</a>
-											</li>
-											<li>
-												<a href="service_belts_hoses.html" title="Belts and Hoses">
-													Belts and Hoses
 												</a>
 											</li>
 											<li>
@@ -202,167 +109,16 @@
 										</ul>
 									</li>
 									<li>
-										<a href="galleries.html" title="Gallery">
-											Gallery
-										</a>
-										<ul>
-											<li>
-												<a href="gallery_engine_diagnostics.html" title="Engine Diagnostics">
-													Engine Diagnostics
-												</a>
-											</li>
-											<li>
-												<a href="gallery_oil_change.html" title="Oil Change">
-													Oil Change
-												</a>
-											</li>
-											<li>
-												<a href="gallery_belts_hoses.html" title="Belts and Hoses">
-													Belts and Hoses
-												</a>
-											</li>
-											<li>
-												<a href="gallery_tire_change.html" title="Tire Change">
-													Tire Change
-												</a>
-											</li>
-											<li>
-												<a href="gallery_wheel_services.html" title="Wheel Services">
-													Wheel Services
-												</a>
-											</li>
-											<li>
-												<a href="gallery_lube_services.html" title="Lube Services">
-													Lube Services
-												</a>
-											</li>
-											<li>
-												<a href="gallery_brake_repair.html" title="Brake Repair">
-													Brake Repair
-												</a>
-											</li>
-											<li>
-												<a href="gallery_other_car_services.html" title="Other Car Services">
-													Other Car Services
-												</a>
-											</li>
-										</ul>
+										<a href="galleries.html" title="Gallery">Gallery</a>
 									</li>
-									<li>
-										<a href="team.html" title="Our Team">
-											Our Team
-										</a>
-									</li>
-									<li>
-										<a href="about.html" title="Pages">
-											Pages
-										</a>
-										<ul>
-											<li>
-												<a href="about.html" title="About">
-													About
-												</a>
-											</li>
-											<li>
-												<a href="404.html" title="404 Not Found">
-													404 Not Found
-												</a>
-											</li>
-											<li>
-												<a href="services.html" title="Services Style 1">
-													Services Style 1
-												</a>
-											</li>
-											<li>
-												<a href="services2.html" title="Services Style 2">
-													Services Style 2
-												</a>
-											</li>
-											<li>
-												<a href="service_engine_diagnostics.html" title="Single Service">
-													Single Service
-												</a>
-											</li>
-											<li>
-												<a href="galleries.html" title="Galleries">
-													Galleries
-												</a>
-											</li>
-											<li>
-												<a href="gallery_engine_diagnostics.html" title="Single Project">
-													Single Gallery
-												</a>
-											</li>
-											<li>
-												<a href="team.html" title="Team">
-													Team
-												</a>
-											</li>
-											<li>
-												<a href="team_mark_whilberg.html" title="Single Team">
-													Single Team
-												</a>
-											</li>
-										</ul>
-									</li>
-									<li>
-										<a href="blog.html" title="Blog">
-											Blog
-										</a>
-										<ul>
-											<li>
-												<a href="blog.html" title="Blog">
-													Blog
-												</a>
-											</li>
-											<li>
-												<a href="blog_left_sidebar.html" title="Blog">
-													Blog Left Sidebar
-												</a>
-											</li>
-											<li>
-												<a href="blog_2_columns.html" title="Blog 2 Columns">
-													Blog 2 Columns
-												</a>
-											</li>
-											<li>
-												<a href="blog_3_columns.html" title="Blog 3 Columns">
-													Blog 3 Columns
-												</a>
-											</li>
-											<li>
-												<a href="post.html" title="Single Post">
-													Single Post
-												</a>
-											</li>
-											<li>
-												<a href="search.html?s=ipsum" title="Search Template">
-													Search Template
-												</a>
-											</li>
-										</ul>
-									</li>
+
 									<li>
 										<a href="appointment.html" title="Appointment">
 											Appointment
 										</a>
 									</li>
-									<li class="left-flyout selected">
-										<a href="contact.html" title="Contact">
-											Contact
-										</a>
-										<ul>
-											<li>
-												<a href="contact.html" title="Contact Style 1">
-													Contact Style 1
-												</a>
-											</li>
-											<li class="selected">
-												<a href="contact_2.html" title="Contact Style 2">
-													Contact Style 2
-												</a>
-											</li>
-										</ul>
+									<li class="left-flyout">
+										<a href="contact_2.html" title="Contact">Contact</a>
 									</li>
 								</ul>
 							</nav>
@@ -370,23 +126,10 @@
 								<div class="mobile-menu-divider"></div>
 								<nav>
 									<ul class="mobile-menu collapsible-mobile-submenus">
-										<li>
-											<a href="index.html" title="Home">
+										<li class="selected">
+											<a href="home.html" title="Home">
 												Home
 											</a>
-											<a href="#" class="template-arrow-menu"></a>
-											<ul>
-												<li>
-													<a href="index.html" title="Home Style 1">
-														Home Style 1
-													</a>
-												</li>
-												<li>
-													<a href="home2.html" title="Home Style 2">
-														Home Style 2
-													</a>
-												</li>
-											</ul>
 										</li>
 										<li>
 											<a href="services.html" title="Services">
@@ -402,11 +145,6 @@
 												<li>
 													<a href="service_lube_oil_filters.html" title="Lube, Oil and Filters">
 														Lube, Oil and Filters
-													</a>
-												</li>
-												<li>
-													<a href="service_belts_hoses.html" title="Belts and Hoses">
-														Belts and Hoses
 													</a>
 												</li>
 												<li>
@@ -430,168 +168,16 @@
 											<a href="galleries.html" title="Gallery">
 												Gallery
 											</a>
-											<a href="#" class="template-arrow-menu"></a>
-											<ul>
-												<li>
-													<a href="gallery_engine_diagnostics.html" title="Engine Diagnostics">
-														Engine Diagnostics
-													</a>
-												</li>
-												<li>
-													<a href="gallery_oil_change.html" title="Oil Change">
-														Oil Change
-													</a>
-												</li>
-												<li>
-													<a href="gallery_belts_hoses.html" title="Belts and Hoses">
-														Belts and Hoses
-													</a>
-												</li>
-												<li>
-													<a href="gallery_tire_change.html" title="Tire Change">
-														Tire Change
-													</a>
-												</li>
-												<li>
-													<a href="gallery_wheel_services.html" title="Wheel Services">
-														Wheel Services
-													</a>
-												</li>
-												<li>
-													<a href="gallery_lube_services.html" title="Lube Services">
-														Lube Services
-													</a>
-												</li>
-												<li>
-													<a href="gallery_brake_repair.html" title="Brake Repair">
-														Brake Repair
-													</a>
-												</li>
-												<li>
-													<a href="gallery_other_car_services.html" title="Other Car Services">
-														Other Car Services
-													</a>
-												</li>
-											</ul>
-										</li>
-										<li>
-											<a href="team.html" title="Our Team">
-												Our Team
-											</a>
-										</li>
-										<li>
-											<a href="about.html" title="Pages">
-												Pages
-											</a>
-											<a href="#" class="template-arrow-menu"></a>
-											<ul>
-												<li>
-													<a href="about.html" title="About">
-														About
-													</a>
-												</li>
-												<li>
-													<a href="404.html" title="404 Not Found">
-														404 Not Found
-													</a>
-												</li>
-												<li>
-													<a href="services.html" title="Services Style 1">
-														Services Style 1
-													</a>
-												</li>
-												<li>
-													<a href="services2.html" title="Services Style 2">
-														Services Style 2
-													</a>
-												</li>
-												<li>
-													<a href="service_engine_diagnostics.html" title="Single Service">
-														Single Service
-													</a>
-												</li>
-												<li>
-													<a href="galleries.html" title="Galleries">
-														Galleries
-													</a>
-												</li>
-												<li>
-													<a href="gallery_engine_diagnostics.html" title="Single Project">
-														Single Gallery
-													</a>
-												</li>
-												<li>
-													<a href="team.html" title="Team">
-														Team
-													</a>
-												</li>
-												<li>
-													<a href="team_mark_whilberg.html" title="Single Team">
-														Single Team
-													</a>
-												</li>
-											</ul>
-										</li>
-										<li>
-											<a href="blog.html" title="Blog">
-												Blog
-											</a>
-											<a href="#" class="template-arrow-menu"></a>
-											<ul>
-												<li>
-													<a href="blog.html" title="Blog">
-														Blog
-													</a>
-												</li>
-												<li>
-													<a href="blog_left_sidebar.html" title="Blog">
-														Blog Left Sidebar
-													</a>
-												</li>
-												<li>
-													<a href="blog_2_columns.html" title="Blog 2 Columns">
-														Blog 2 Columns
-													</a>
-												</li>
-												<li>
-													<a href="blog_3_columns.html" title="Blog 3 Columns">
-														Blog 3 Columns
-													</a>
-												</li>
-												<li>
-													<a href="post.html" title="Single Post">
-														Single Post
-													</a>
-												</li>
-												<li>
-													<a href="search.html?s=ipsum" title="Search Template">
-														Search Template
-													</a>
-												</li>
-											</ul>
 										</li>
 										<li>
 											<a href="appointment.html" title="Appointment">
 												Appointment
 											</a>
 										</li>
-										<li class="left-flyout selected">
-											<a href="contact.html" title="Contact">
+										<li class="left-flyout">
+											<a href="contact_2.html" title="Contact">
 												Contact
 											</a>
-											<a href="#" class="template-arrow-menu"></a>
-											<ul>
-												<li>
-													<a href="contact.html" title="Contact Style 1">
-														Contact Style 1
-													</a>
-												</li>
-												<li class="selected">
-													<a href="contact_2.html" title="Contact Style 2">
-														Contact Style 2
-													</a>
-												</li>
-											</ul>
 										</li>
 									</ul>
 								</nav>
@@ -648,12 +234,12 @@
 							<div class="column column-1-3">
 								<ul class="features-list">
 									<li>
-										<h5>TUCSON CAR SERVICE</h5>
+										<h5>SOFIA CAR SERVICE</h5>
 										<div class="icon sl-small-location-map"></div>
 										<p>
-											Tucson, Arizona 80210<br>
-											501 Archwood Lane<br>
-											<a target="_blank" href="//www.google.pl/maps/place/Tucson,+Arizona,+Stany+Zjednoczone/@32.15591,-110.883805,11z/data=!3m1!4b1!4m2!3m1!1s0x86d665410b2ced2b:0x73c32d384d16c715">Display on Map</a>
+											1324 Sofia, Bulgaria<br>
+											256 Tsar Simeon St.<br>
+											<a target="_blank" href="https://www.google.com/maps/place/42%C2%B042'14.9%22N+23%C2%B018'20.3%22E/@42.704136,23.305625,17z">Display on Map</a>
 										</p>
 									</li>
 								</ul>
@@ -698,112 +284,50 @@
 							<div class="call-to-action">
 								<div class="hexagon small"><div class="sl-small-percent"></div></div>
 								<h4 class="margin-top-58">ONLINE APPOINTMENT</h4>
-								<p class="description">Book your appointment now and get $5 discount.</p>
+								<p class="description">Book your appointment now!</p>
 								<a class="more" href="appointment.html" title="MAKE APPOINTMENT"><span>MAKE APPOINTMENT</span></a>
 							</div>
-							<h6 class="box-header page-margin-top">LATEST POSTS</h6>
-							<ul class="blog small margin-top-30 clearfix">
-								<li>
-									<a href="post.html" title="Clunking Sound Under The Hood" class="post-image">
-										<img src="images/samples/90x90/image_01.jpg" alt="">
-									</a>
-									<div class="post-content">
-										<a href="post.html" title="Clunking Sound Under The Hood">Clunking Sound Under The Hood</a>
-										<ul class="post-details">
-											<li class="date">April 25, 2015</li>
-										</ul>
-									</div>
-								</li>
-								<li>
-									<a href="post.html" title="Signs Your Car Needs Engine Repair" class="post-image">
-										<img src="images/samples/90x90/image_02.jpg" alt="">
-									</a>
-									<div class="post-content">
-										<a href="post.html" title="Signs Your Car Needs Engine Repair">Signs Your Car Needs Engine Repair</a>
-										<ul class="post-details">
-											<li class="date">April 17, 2015</li>
-										</ul>
-									</div>
-								</li>
-								<li>
-									<a href="post.html" title="Replacing a Timing Belt Service Cost" class="post-image">
-										<img src="images/samples/90x90/image_03.jpg" alt="">
-									</a>
-									<div class="post-content">
-										<a href="post.html" title="Replacing a Timing Belt Service Cost">Replacing a Timing Belt Service Cost</a>
-										<ul class="post-details">
-											<li class="date">March 05, 2015</li>
-										</ul>
-									</div>
-								</li>
-							</ul>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row dark-gray footer-row full-width padding-top-30 padding-bottom-50">
-				<div class="row row-4-4">
-					<div class="column column-1-4">
+				<div class="row row-3-3 top-border page-padding-top">
+					<div class="column column-1-3">
 						<h6 class="box-header">ABOUT US</h6>
 						<ul class="list simple margin-top-20">
-							<li>Tucson, Arizona 80210</li>
-							<li>501 Archwood Lane</li>
-							<li><span>Mobile:</span>(520) 577 2710</li>
-							<li><span>Assistance:</span>(520) 577 2725</li>
-							<li><span>E-mail:</span><a href="mailto:carservice@mail.com">carservice@mail.com</a></li>
+							<li>1324 Sofia, Bulgaria</li>
+							<li>256 Tsar Simeon St.</li>
+							<li><span>Mobile:</span>(+359) 888 667788</li>
+							<li><span>Assistance:</span>(+359) 888 667799</li>
+							<li><span>E-mail:</span><a href="mailto:ikaragyozov19@mail.com">ikaragyozov19@mail.com</a></li>
 						</ul>
 						<ul class="social-icons gray margin-top-26">
-							<li>
-								<a target="_blank" href="https://facebook.com/QuanticaLabs" class="social-facebook" title="facebook"></a>
-							</li>
-							<li>
-								<a target="_blank" href="https://twitter.com/QuanticaLabs" class="social-twitter" title="twitter"></a>
-							</li>
-							<li>
-								<a target="_blank" href="https://1.envato.market/quanticalabs-portfolio" class="social-linkedin" title="linkedin"></a>
-							</li>
-							<li>
-								<a href="https://pinterest.com/quanticalabs/" class="social-pinterest" title="pinterest"></a>
-							</li>
+							<li><a target="_blank" href="https://facebook.com/QuanticaLabs" class="social-facebook" title="facebook"></a></li>
+							<li><a target="_blank" href="https://twitter.com/QuanticaLabs" class="social-twitter" title="twitter"></a></li>
+							<li><a target="_blank" href="https://1.envato.market/quanticalabs-portfolio" class="social-linkedin" title="linkedin"></a></li>
+							<li><a href="https://pinterest.com/quanticalabs/" class="social-pinterest" title="pinterest"></a></li>
 						</ul>
 					</div>
-					<div class="column column-1-4">
+					<div class="column column-1-3">
 						<h6 class="box-header">OUR SERVICES</h6>
 						<ul class="list margin-top-20">
 							<li class="template-bullet">Engine Diagnostics</li>
 							<li class="template-bullet">Lube, Oil and Filters</li>
-							<li class="template-bullet">Belts and Hoses</li>
 							<li class="template-bullet">Air Conditioning</li>
 							<li class="template-bullet">Brake Repair</li>
 							<li class="template-bullet">Tire and Wheel Services</li>
-							<li class="template-bullet">Other Car Services</li>
 						</ul>
 					</div>
-					<div class="column column-1-4">
-						<h6 class="box-header">POPULAR TAGS</h6>
-						<ul class="taxonomies margin-top-30">
-							<li><a href="category.html" title="BELTS">BELTS</a></li>
-							<li><a href="category.html" title="BRAKES">BRAKES</a></li>
-							<li><a href="category.html" title="DIAGNOSTICS">DIAGNOSTICS</a></li>
-							<li><a href="category.html" title="ENGINE">ENGINE</a></li>
-							<li><a href="category.html" title="FILTERS">FILTERS</a></li>
-							<li><a href="category.html" title="HEATING">HEATING</a></li>
-							<li><a href="category.html" title="OILS">OILS</a></li>
-							<li><a href="category.html" title="STEERING">STEERING</a></li>
-							<li><a href="category.html" title="SUSPENSION">SUSPENSION</a></li>
-							<li><a href="category.html" title="TIRES">TIRES</a></li>
-							<li><a href="category.html" title="TRANSMISSION">TRANSMISSION</a></li>
-						</ul>
-					</div>
-					<div class="column column-1-4">
+					<div class="column column-1-3">
 						<h6 class="box-header">HOURS</h6>
 						<ul class="list simple margin-top-20">
-							<li><span>Monday:</span>7:30am - 5:30pm</li>
-							<li><span>Tuesday:</span>7:30am - 5:30pm</li>
-							<li><span>Wednesday:</span>7:30am - 5:30pm</li>
-							<li><span>Thursday:</span>7:30am - 5:30pm</li>
-							<li><span>Friday:</span>7:30am - 5:30pm</li>
-							<li><span>Saturday:</span>7:30am - 3:00pm</li>
+							<li><span>Monday:</span>7:30 - 18:30</li>
+							<li><span>Tuesday:</span>7:30 - 18:30</li>
+							<li><span>Wednesday:</span>7:30 - 18:30</li>
+							<li><span>Thursday:</span>7:30 - 18:30</li>
+							<li><span>Friday:</span>7:30 - 18:30</li>
+							<li><span>Saturday:</span>7:30 - 18:30</li>
 							<li><span>Sunday:</span>Closed</li>
 						</ul>
 					</div>
@@ -816,26 +340,43 @@
 		<a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
 		<div class="background-overlay"></div>
 		<!--js-->
-		<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
 		<!--slider revolution-->
-		<script type="text/javascript" src="rs-plugin/js/jquery.themepunch.tools.min.js"></script>
-		<script type="text/javascript" src="rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
-		<script type="text/javascript" src="js/jquery.ba-bbq.min.js"></script>
-		<script type="text/javascript" src="js/jquery-ui-1.12.1.custom.min.js"></script>
-		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
-		<script type="text/javascript" src="js/jquery.isotope.min.js"></script>
-		<script type="text/javascript" src="js/jquery.easing.1.4.1.min.js"></script>
-		<script type="text/javascript" src="js/jquery.carouFredSel-6.2.1-packed.js"></script>
-		<script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
-		<script type="text/javascript" src="js/jquery.transit.min.js"></script>
-		<script type="text/javascript" src="js/jquery.hint.min.js"></script>
-		<script type="text/javascript" src="js/jquery.costCalculator.min.js"></script>
-		<script type="text/javascript" src="js/jquery.prettyPhoto.js"></script>
-		<script type="text/javascript" src="js/jquery.qtip.min.js"></script>
-		<script type="text/javascript" src="js/jquery.blockUI.min.js"></script>
-		<script type="text/javascript" src="js/jquery.imagesloaded-packed.js"></script>
-		<script type="text/javascript" src="//maps.google.com/maps/api/js?key=YOUR_API_KEY"></script>
-		<script type="text/javascript" src="js/main.js"></script>
-		<script type="text/javascript" src="js/odometer.min.js"></script>
+		<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
+		<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.ba-bbq.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery-ui-1.12.1.custom.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.isotope.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.easing.1.4.1.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.carouFredSel-6.2.1-packed.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.touchSwipe.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.transit.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.hint.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.costCalculator.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.prettyPhoto.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.qtip.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.blockUI.min.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.imagesloaded-packed.js"></script>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZbvntbc4pL_sGoiAAUTv7EhTgNJLl3Z8"></script>
+		<script type="text/javascript" src="../static/js/main.js"></script>
+		<script type="text/javascript" src="../static/js/odometer.min.js"></script>
+		<script>
+			function initMap() {
+				var location = {lat: 42.704136, lng: 23.305625}; // Актуализирани координати за 256 ул. Цар Симеон, София
+				var map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 17, // Подходящо zoom ниво
+					center: location
+				});
+
+				var marker = new google.maps.Marker({
+					position: location,
+					map: map
+				});
+			}
+
+			google.maps.event.addDomListener(window, 'load', initMap);
+		</script>
 	</body>
+
 </html>

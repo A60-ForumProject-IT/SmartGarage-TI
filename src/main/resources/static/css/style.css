@@ -234,7 +234,7 @@ img.radius
 }
 .padding-bottom-70
 {
-	padding-bottom: 70px;
+	padding-bottom: 40px;
 }
 .padding-bottom-87
 {
@@ -861,6 +861,8 @@ body.overlay .background-overlay
 /* --- page --- */
 .theme-page
 {
+	position: relative;
+	z-index: 1;
 }
 .page-margin-top
 {
@@ -3027,6 +3029,7 @@ li.template-bullet:before
 {
 	border-color: #FFF;
 }
+
 .social-icons.gray li a
 {
 	height: 18px;
@@ -3966,4 +3969,65 @@ body.lock-position
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
+}
+
+.login-form-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 400px; /* Увеличаване на височината за повече пространство */
+	background-color: #f7f7f7;
+	padding-top: 70px; /* Добавяне на отстояние отгоре */
+	padding-bottom: 50px; /* Добавяне на отстояние отдолу */
+	 / /* Можеш да избереш цвят, който съответства на дизайна */
+}
+
+.login-box {
+	background-color: #fff;
+	padding: 30px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	position: relative; /* Уверяване, че не се припокрива */
+	z-index: 2;
+	font-family: 'Open Sans', Arial, sans-serif; /* За целия контейнер на логин формата */
+}
+
+.login-box .box-header {
+	margin-bottom: 20px;
+	font-size: 24px;
+	text-align: center;
+	font-family: 'Open Sans', Arial, sans-serif; /* За заглавия и етикети в логин формата */
+}
+
+.contact-form label {
+	font-family: 'Open Sans', Arial, sans-serif; /* За заглавия и етикети в логин формата */
+}
+.contact-form .form-group {
+	margin-bottom: 20px;
+}
+
+.contact-form .text-input {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.contact-form .more {
+	display: block;
+	width: 100%;
+	text-align: center;
+	background-color: #007bff;
+	color: #fff;
+	padding: 10px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	font-family: 'Open Sans', Arial, sans-serif;
+	font-weight: bold;
+}
+
+.contact-form .more:hover {
+	background-color: #0056b3;
 }
