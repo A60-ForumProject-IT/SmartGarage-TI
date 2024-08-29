@@ -17,8 +17,12 @@ import com.telerikacademy.web.smartgarageti.services.contracts.RoleService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -49,18 +53,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByUsername(String username) {
-        return userRepository.getByUsername(username);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User", "username", username));
     }
 
     @Override
     public User getUserById(User employee, int id) {
         PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
-        return userRepository.getUserById(id);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User", id));
     }
 
     @Override
     public User getUserById(int id) {
-        return userRepository.getUserById(id);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User", id));
     }
 
     @Override
@@ -69,7 +76,7 @@ public class UserServiceImpl implements UserService {
         PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
         String randomPassword = PasswordGenerator.generateRandomPassword();
         User user = MapperHelper.toUserEntity(userCreationDto, randomPassword, role);
-        userRepository.create(user);
+        userRepository.save(user);
 
         emailService.sendEmail(
                 userCreationDto.getSmtpEmail(),
@@ -84,14 +91,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(ForgottenPasswordDto forgottenPasswordDto) {
-        User user = userRepository.getUserByEmail(forgottenPasswordDto.getEmail());
+        User user = userRepository.findByEmail(forgottenPasswordDto.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("User", "email", forgottenPasswordDto.getEmail()));
         if (user == null) {
             throw new EntityNotFoundException("User with email " + forgottenPasswordDto.getEmail() + " not found.");
         }
 
         String newPassword = PasswordGenerator.generateRandomPassword();
         user.setPassword(newPassword);
-        userRepository.update(user);
+        userRepository.save(user);
 
         emailService.sendEmail(
                 smtpEmail,
@@ -103,9 +111,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers(User employee, FilteredUserOptions filteredUserOptions, int page, int size) {
+    public Page<User> getAllUsers(User employee, String username, String email, String phoneNumber, String vehicleBrand,
+                                  LocalDate visitDateFrom, LocalDate visitDateTo, Pageable pageable) {
         PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
-        return userRepository.getAllUsers(filteredUserOptions, page, size);
+        return userRepository.findAllFiltered(username,email,phoneNumber,vehicleBrand,visitDateFrom,
+                visitDateTo,pageable);
     }
 
     @Override
@@ -114,7 +124,8 @@ public class UserServiceImpl implements UserService {
         boolean duplicateExists = true;
 
         try {
-            User existingUser = userRepository.getByUsername(userToBeEdited.getUsername());
+            User existingUser = userRepository.findByUsername(userToBeEdited.getUsername())
+                    .orElseThrow(() -> new EntityNotFoundException("User", "username", userToBeEdited.getUsername()));
             if (existingUser.getId() == userToBeEdited.getId()) {
                 duplicateExists = false;
             }
@@ -126,7 +137,7 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("User with username %s already exists.", "username", userToBeEdited.getUsername());
         }
 
-        userRepository.update(userToBeEdited);
+        userRepository.save(userToBeEdited);
         return userToBeEdited;
     }
 
@@ -147,7 +158,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(changePasswordDto.getNewPassword());
-        userRepository.update(user);
+        userRepository.save(user);
     }
 
     @Override

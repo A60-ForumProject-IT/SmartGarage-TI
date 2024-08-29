@@ -12,6 +12,10 @@ import com.telerikacademy.web.smartgarageti.models.dto.*;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,13 +51,21 @@ public class UserRestController {
                                   @RequestParam(required = false) LocalDate visitDateFrom,
                                   @RequestParam(required = false) LocalDate visitDateTo,
                                   @RequestParam(required = false) String sortBy,
-                                  @RequestParam(required = false) String sortOrder,
-                                  @RequestParam(defaultValue = "1") int page,
+                                  @RequestParam(defaultValue = "asc") String sortDirection,
+                                  @RequestParam(defaultValue = "0") int page,   // New parameter for page number
                                   @RequestParam(defaultValue = "10") int size) {
         try {
             User employee = authenticationHelper.tryGetUser(headers);
-            FilteredUserOptions filteredUserOptions = new FilteredUserOptions(username, email, phoneNumber, vehicleBrand, visitDateFrom, visitDateTo, sortBy, sortOrder);
-            return userService.getAllUsers(employee, filteredUserOptions, page, size);
+            // Validate the 'sortBy' parameter
+            Sort sort = Sort.unsorted();  // Default to unsorted
+            if (sortBy != null && !sortBy.trim().isEmpty()) {  // Check for null and empty
+                sort = Sort.by("asc".equalsIgnoreCase(sortDirection) ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+            }
+            Pageable pageable = PageRequest.of(page, size, sort);
+            Page<User> userPage = userService.getAllUsers(employee, username, email, phoneNumber, vehicleBrand, visitDateFrom, visitDateTo, pageable);
+
+            // Return only the content of the page as a List
+            return userPage.getContent();
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (AuthenticationException e) {

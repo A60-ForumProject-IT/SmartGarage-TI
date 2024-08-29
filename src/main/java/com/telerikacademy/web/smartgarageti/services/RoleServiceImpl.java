@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.services;
 
+import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.models.Role;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.RoleRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.RoleService;
@@ -19,11 +20,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getAllRoles() {
-        return roleRepository.getAllRoles();
+        return roleRepository.findAll();
     }
 
     @Override
     public Role getRoleById(int id) {
-        return roleRepository.getRoleById(id);
+        return roleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Role", id));
     }
 }

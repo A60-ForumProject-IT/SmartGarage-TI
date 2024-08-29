@@ -6,7 +6,11 @@ import com.telerikacademy.web.smartgarageti.models.dto.ChangePasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface UserService {
@@ -19,7 +23,8 @@ public interface UserService {
 
     void resetPassword(ForgottenPasswordDto forgottenPasswordDto);
 
-    List<User> getAllUsers(User employee, FilteredUserOptions filteredUserOptions, int page, int size);
+    Page<User> getAllUsers(User employee, String username, String email, String phoneNumber, String vehicleBrand,
+                           LocalDate visitDateFrom, LocalDate visitDateTo, Pageable pageable);
 
     User updateUser(User user, User userToBeEdited);
 
