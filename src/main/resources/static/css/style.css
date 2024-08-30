@@ -4078,7 +4078,9 @@ body.lock-position
 
 .vehicle-list .vehicle-item {
 	display: flex;
+	justify-content: center;
 	padding: 20px 0;
+	text-align: center;
 }
 
 .vehicle-list .vehicle-item.gray {
@@ -4093,27 +4095,43 @@ body.lock-position
 	padding: 0 15px;
 }
 
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px; /* Няма нужда от auto, тъй като Flexbox ще го центрира */
+	float: none;
+}
+
 .pagination ul {
 	list-style: none;
 	display: flex;
-	justify-content: center;
 	padding: 0;
+	margin: 0;
 }
 
 .pagination ul li {
 	margin: 0 5px;
+	display: flex;
 }
 
 .pagination ul li a {
+	display: inline-block;
 	padding: 10px 15px;
 	border: 1px solid #ccc;
 	text-decoration: none;
 	color: #333;
+	text-align: center;
+	min-width: 40px; /* Задаване на минимална ширина на бутоните, за да изглеждат последователни */
 }
 
 .pagination ul li a.active {
 	background-color: #007bff;
 	color: white;
 	border-color: #007bff;
+}
+
+.pagination ul li:first-child a, .pagination ul li:last-child a {
+	min-width: 80px; /* Увеличаване на ширината на бутоните "Previous" и "Next", за да бъдат по-лесно разпознаваеми */
 }
 

@@ -254,26 +254,22 @@
                                 <div class="column column-1-4" th:text="${vehicle.year.year}">Year</div>
                             </div>
                         </div>
-                        <div class="pagination">
-                            <ul>
-                                <!-- Previous бутон -->
-                                <li th:if="${currentPage > 0}">
-                                    <a th:href="@{/vehicles(page=${currentPage - 1}, size=${totalPages})}">Previous</a>
-                                </li>
+                    </div>
+                    <div class="pagination">
+                        <ul>
+                            <li th:if="${currentPage > 0}">
+                                <a th:href="@{/ti/vehicles(page=${currentPage - 1}, size=${size})}">Previous</a>
+                            </li>
 
-                                <!-- Линкове към страниците -->
-                                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                                    <a th:href="@{/vehicles(page=${i}, size=${totalPages})}"
-                                       th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
-                                </li>
+                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                                <a th:href="@{/ti/vehicles(page=${i}, size=${size})}"
+                                   th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                            </li>
 
-                                <!-- Next бутон -->
-                                <li th:if="${currentPage < totalPages - 1}">
-                                    <a th:href="@{/vehicles(page=${currentPage + 1}, size=${totalPages})}">Next</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Ще добавиш още редове динамично тук -->
+                            <li th:if="${currentPage < totalPages - 1}">
+                                <a th:href="@{/ti/vehicles(page=${currentPage + 1}, size=${size})}">Next</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

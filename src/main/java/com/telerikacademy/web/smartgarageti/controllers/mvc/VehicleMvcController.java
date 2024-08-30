@@ -36,11 +36,6 @@ public class VehicleMvcController {
         return request.getRequestURI();
     }
 
-    @ModelAttribute("vehicles")
-    public List<Vehicle> populateVehicles(HttpSession session){
-        return vehicleService.getAllVehicles();
-    }
-
     @GetMapping
     public String showVehicles(
             Model model,
@@ -49,9 +44,11 @@ public class VehicleMvcController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Vehicle> vehiclePage = vehicleService.getAllVehicles(pageable);
+
         model.addAttribute("vehicles", vehiclePage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", vehiclePage.getTotalPages());
+        model.addAttribute("size", size);
         return "Vehicles";
     }
 }
