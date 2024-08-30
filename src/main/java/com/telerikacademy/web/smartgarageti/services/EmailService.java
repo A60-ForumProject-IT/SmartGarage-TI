@@ -2,6 +2,7 @@ package com.telerikacademy.web.smartgarageti.services;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,13 +14,19 @@ import java.util.Properties;
 @Service
 public class EmailService {
 
-    public void sendEmail(String from, String smtpPassword, String to, String subject, String text) {
-        JavaMailSender mailSender = createMailSender(from, smtpPassword);
+    @Value("${spring.mail.username}")
+    private String defaultFromEmail;
+
+    @Value("${spring.mail.password}")
+    private String defaultSmtpPassword;
+
+    public void sendEmail(String to, String subject, String text) {
+        JavaMailSender mailSender = createMailSender(defaultFromEmail, defaultSmtpPassword);
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom(from);
+            helper.setFrom(defaultFromEmail);
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(text, true);

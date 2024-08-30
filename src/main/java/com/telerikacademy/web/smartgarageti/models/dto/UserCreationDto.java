@@ -28,8 +28,6 @@ public class UserCreationDto {
     private String phoneNumber;
     private String firstName;
     private String lastName;
-    private String smtpEmail;
-    private String smtpPassword;
 
     public UserCreationDto(String username, String email, String phoneNumber, String firstName, String lastName) {
         this.username = username;
@@ -37,7 +35,5 @@ public class UserCreationDto {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.smtpEmail = "ikaragyozov19@gmail.com";
-        this.smtpPassword = "xpve hqtn hfcc llwg";
     }
 }

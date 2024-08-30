@@ -94,8 +94,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         emailService.sendEmail(
-                smtpEmail,
-                smtpPasswordFromConfig,
                 forgottenPasswordDto.getEmail(),
                 "Your new password for Smart Garage TI App",
                 "Your new password is: " + newPassword
@@ -166,8 +164,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         emailService.sendEmail(
-                userCreationDto.getSmtpEmail(),
-                userCreationDto.getSmtpPassword(),
                 user.getEmail(),
                 "Welcome to Smart Garage",
                 "Your username is: " + user.getUsername() + " Your password is: " + randomPassword
