@@ -17,7 +17,7 @@
                             <label>YOU ARE HERE:</label>
                             <ul class="bread-crumb">
                                 <li>
-                                    <a title="HOME" href="home.html" th:href="@{/ti}">
+                                    <a title="HOME" th:href="@{/ti}">
                                         HOME
                                     </a>
                                 </li>
@@ -77,19 +77,18 @@
                     </div>
                 </div>
                 <h3 class="box-header page-margin-top">DROP US A LINE</h3>
+
+                <!-- Contact Form -->
                 <form class="contact-form page-margin-top" id="contact-form" method="post"
-                      action="contact_form/contact_form.php">
+                      th:action="@{/ti/contact}">
                     <div class="row">
                         <fieldset class="column column-1-2">
-                            <input class="text-input" name="name" type="text" value="Your Name *"
-                                   placeholder="Your Name *">
-                            <input class="text-input" name="email" type="text" value="Your Email *"
-                                   placeholder="Your Email *">
-                            <input class="text-input" name="phone" type="text" value="Your Phone"
-                                   placeholder="Your Phone">
+                            <input class="text-input" name="name" type="text" th:value="${name}" placeholder="Your Name *">
+                            <input class="text-input" name="email" type="text" th:value="${email}" placeholder="Your Email *">
+                            <input class="text-input" name="phone" type="text" th:value="${phone}" placeholder="Your Phone">
                         </fieldset>
                         <fieldset class="column column-1-2">
-                            <textarea name="message" placeholder="Message *">Message *</textarea>
+                            <textarea name="message" placeholder="Message *" th:text="${message}"></textarea>
                         </fieldset>
                     </div>
                     <div class="row margin-top-30">
@@ -99,12 +98,17 @@
                         <div class="column column-1-2 align-right">
                             <input type="hidden" name="action" value="contact_form"/>
                             <div class="row margin-top-20 padding-bottom-20">
-                                <a class="more submit-contact-form" href="#"
-                                   title="SEND MESSAGE"><span>SEND MESSAGE</span></a>
+                                <button type="submit" class="more submit-contact-form" title="SEND MESSAGE"><span>SEND MESSAGE</span></button>
                             </div>
                         </div>
                     </div>
                 </form>
+
+                <!-- Success/Error Messages -->
+                <div class="row margin-top-20">
+                    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                </div>
             </div>
             <div class="column column-1-4 re-smart-column">
                 <div class="re-smart-column-wrapper">
@@ -114,8 +118,7 @@
                         </div>
                         <h4 class="margin-top-58">ONLINE APPOINTMENT</h4>
                         <p class="description">Book your appointment now!</p>
-                        <a class="more" href="appointment.html"
-                           title="MAKE APPOINTMENT"><span>MAKE APPOINTMENT</span></a>
+                        <a class="more" th:href="@{/ti/appointment}" title="MAKE APPOINTMENT"><span>MAKE APPOINTMENT</span></a>
                     </div>
                 </div>
             </div>

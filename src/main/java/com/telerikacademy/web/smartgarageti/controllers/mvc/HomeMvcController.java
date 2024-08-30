@@ -2,22 +2,27 @@ package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.services.EmailService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/ti")
 public class HomeMvcController {
+    @Value("${spring.mail.username}")
+    private String defaultFromEmail;
+
     private final AuthenticationHelper authenticationHelper;
+    private final EmailService emailService;
 
     @Autowired
-    public HomeMvcController(AuthenticationHelper authenticationHelper) {
+    public HomeMvcController(AuthenticationHelper authenticationHelper, EmailService emailService) {
         this.authenticationHelper = authenticationHelper;
+        this.emailService = emailService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -49,13 +54,90 @@ public class HomeMvcController {
         return "galleries";
     }
 
-    @GetMapping("/contact")
-    public String showContactPage() {
-        return "contact_2";
-    }
-
     @GetMapping("/appointment")
     public String showAppointmentPage() {
         return "appointment";
     }
+
+    @GetMapping("/contact")
+    public String showContactPage(Model model) {
+        model.addAttribute("name", "");
+        model.addAttribute("email", "");
+        model.addAttribute("phone", "");
+        model.addAttribute("message", "");
+        return "contact_2";
+    }
+
+    @PostMapping("/contact")
+    public String handleContactForm(
+            @RequestParam("name") String name,
+            @RequestParam("email") String email,
+            @RequestParam("phone") String phone,
+            @RequestParam("message") String message,
+            Model model) {
+
+        String subject = "New Contact Request";
+        String text = "Name: " + name + "\n" +
+                "Email: " + email + "\n" +
+                "Phone: " + phone + "\n" +
+                "Message: " + message;
+
+        try {
+            emailService.sendEmail(defaultFromEmail, subject, text);
+            model.addAttribute("successMessage", "Thank you for contacting us.");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Sorry, we can't send this message.");
+        }
+
+        // Препращаме празни стойности обратно в модела, за да не светят полетата
+        model.addAttribute("name", name);
+        model.addAttribute("email", email);
+        model.addAttribute("phone", phone);
+        model.addAttribute("message", message);
+
+        return "contact_2";  // Връща към страницата contact.html с актуализиран модел
+    }
+
+    @PostMapping("/appointment")
+    public String handleAppointmentForm(
+            @RequestParam("name") String name,
+            @RequestParam("email") String email,
+            @RequestParam("phone") String phone,
+            @RequestParam("vehicle-year") String vehicleYear,
+            @RequestParam("vehicle-make") String vehicleMake,
+            @RequestParam("vehicle-mileage") String vehicleMileage,
+            @RequestParam("appointment-date") String appointmentDate,
+            @RequestParam("time-frame") String timeFrame,
+            @RequestParam(value = "services", required = false) String[] services,
+            @RequestParam("message_appointment") String message,
+            Model model) {
+
+        String subject = "New Appointment Request";
+        StringBuilder text = new StringBuilder();
+        text.append("Name: ").append(name).append("\n")
+                .append("Email: ").append(email).append("\n")
+                .append("Phone: ").append(phone).append("\n")
+                .append("Vehicle Year: ").append(vehicleYear).append("\n")
+                .append("Vehicle Make: ").append(vehicleMake).append("\n")
+                .append("Vehicle Mileage: ").append(vehicleMileage).append("\n")
+                .append("Appointment Date: ").append(appointmentDate).append("\n")
+                .append("Preferred Time Frame: ").append(timeFrame).append("\n");
+
+        if (services != null) {
+            text.append("Services: ").append(String.join(", ", services)).append("\n");
+        }
+
+        text.append("Additional Message: ").append(message);
+
+        try {
+            emailService.sendEmail(defaultFromEmail, subject, text.toString());
+            model.addAttribute("successMessage", "Appointment request sent successfully!");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to send appointment request.");
+        }
+
+        return "appointment";  // Връща към страницата за запазване на час (или друга страница)
+    }
 }
+
+
