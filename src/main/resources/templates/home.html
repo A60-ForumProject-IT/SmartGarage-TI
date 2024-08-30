@@ -54,8 +54,13 @@
 							<a href="https://pinterest.com/quanticalabs/" class="social-pinterest" title="pinterest"></a>
 						</li>
 						<li>
-							<a href="LoginView.html" class="social-login" th:href="@{/ti/auth/login}" title="Login">
+							<a href="LoginView.html" class="social-login" th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}" title="Login">
 								<i class="fas fa-sign-in-alt"></i>
+							</a>
+						</li>
+						<li>
+							<a href="LoginView.html" class="social-login" th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}" title="Logout">
+								<i class="fas fa-sign-out-alt"></i>
 							</a>
 						</li>
 					</ul>
@@ -396,6 +401,7 @@
 					<div class="row page-margin-top-section">
 						<div class="row">
 							<h2 class="box-header">WHY CHOOSE US?</h2>
+							<h4 th:if="${isAuthenticated}" th:text="${username}">username</h4>
 							<p class="description align-center">We are one of the leading auto repair shops serving customers in Tucson.<br>All mechanic services are performed by highly qualified mechanics.</p>
 							<div class="row page-margin-top">
 								<div class="column column-1-3">
