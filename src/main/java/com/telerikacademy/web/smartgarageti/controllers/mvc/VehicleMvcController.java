@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/ti/vehicles")
 public class VehicleMvcController {
-    private VehicleService vehicleService;
+    private final VehicleService vehicleService;
 
     public VehicleMvcController(VehicleService vehicleService) {
         this.vehicleService = vehicleService;

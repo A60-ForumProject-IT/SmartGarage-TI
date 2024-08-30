@@ -57,8 +57,13 @@
                 <a title="" href="https://www.linkedin.com/in/todor-raynov-786b80291/" th:href="@{https://www.linkedin.com/in/todor-raynov-786b80291/}" class="social-linkedin"></a>
             </li>
             <li>
-                <a href="LoginView.html" class="social-login" title="Login" th:href="@{/ti/auth/login}">
+                <a href="LoginView.html" class="social-login" th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}" title="Login">
                     <i class="fas fa-sign-in-alt"></i>
+                </a>
+            </li>
+            <li>
+                <a href="LoginView.html" class="social-login" th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
                 </a>
             </li>
         </ul>
@@ -81,12 +86,12 @@
                 <nav>
                     <ul class="sf-menu">
                         <li>
-                            <a href="home.html" title="Home">
+                            <a href="home.html" th:href="@{/ti}" title="Home">
                                 Home
                             </a>
                         </li>
                         <li>
-                            <a href="services.html" title="Services">
+                            <a href="services.html" th:href="@{/ti/services}" title="Services">
                                 Services
                             </a>
                             <ul>
@@ -124,7 +129,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="galleries.html" title="Gallery">
+                            <a href="galleries.html" title="Gallery" th:href="@{/ti/gallery}">
                                 Gallery
                             </a>
                         </li>

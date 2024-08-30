@@ -35,7 +35,17 @@ public class HomeMvcController {
     }
 
     @GetMapping
-    public String showHomePage(Model model) {
+    public String showHomePage() {
         return "home";
+    }
+
+    @GetMapping("/about")
+    public String showAboutPage() {
+        return "about";
+    }
+
+    @GetMapping("/gallery")
+    public String showGalleryPage() {
+        return "galleries";
     }
 }
