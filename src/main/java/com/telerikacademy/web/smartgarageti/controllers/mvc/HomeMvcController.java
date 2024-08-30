@@ -48,4 +48,14 @@ public class HomeMvcController {
     public String showGalleryPage() {
         return "galleries";
     }
+
+    @GetMapping("/contact")
+    public String showContactPage() {
+        return "contact_2";
+    }
+
+    @GetMapping("/appointment")
+    public String showAppointmentPage() {
+        return "appointment";
+    }
 }
