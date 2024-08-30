@@ -213,14 +213,14 @@
                     </div>
                     <!-- Login Form -->
                     <div id="login-form" class="form-content">
-                        <form action="/login" method="POST" class="contact-form">
+                        <form th:action="@{/ti/auth/login}" th:object="${login}" method="post" class="contact-form">
                             <div class="form-group">
                                 <label for="login-username">Username</label>
-                                <input type="text" id="login-username" name="username" class="text-input" required>
+                                <input type="text" id="login-username" th:field="*{username}" class="text-input" required>
                             </div>
                             <div class="form-group">
                                 <label for="login-password">Password</label>
-                                <input type="password" id="login-password" name="password" class="text-input" required>
+                                <input type="password" id="login-password" th:field="*{password}" class="text-input" required>
                             </div>
                             <button type="submit" class="more">Login</button>
                             <p><a href="/forgot-password" class="nounderline">Forgot Password?</a></p>
@@ -228,27 +228,31 @@
                     </div>
 
                     <!-- Registration Form -->
-                    <div id="register-form" class="form-content" style="display:none;">
-                        <form action="/register" method="POST" class="contact-form">
+                    <div id="register-form" class="form-content"  style="display: none;">
+                        <form th:action="@{/ti/auth/register}" th:object="${register}" method="post" class="contact-form">
                             <div class="form-group">
                                 <label for="reg-username">Username</label>
-                                <input type="text" id="reg-username" name="username" class="text-input" required>
+                                <input type="text" id="reg-username" th:field="*{username}" class="text-input" required>
+                                <label class="error-message" th:errors="*{username}"></label>
                             </div>
                             <div class="form-group">
                                 <label for="reg-email">Email</label>
-                                <input type="email" id="reg-email" name="email" class="text-input" required>
+                                <input type="email" id="reg-email" th:field="*{email}" class="text-input" required>
+                                <label class="error-message" th:errors="*{email}"></label>
                             </div>
                             <div class="form-group">
                                 <label for="reg-first-name">First Name</label>
-                                <input type="text" id="reg-first-name" name="first-name" class="text-input" required>
+                                <input type="text" id="reg-first-name" th:field="*{firstName}" class="text-input" required>
+                                <label class="error-message" th:errors="*{firstName}"></label>
                             </div>
                             <div class="form-group">
                                 <label for="reg-last-name">Last Name</label>
-                                <input type="text" id="reg-last-name" name="last-name" class="text-input" required>
+                                <input type="text" id="reg-last-name" th:field="*{lastName}" class="text-input" required>
+                                <label class="error-message" th:errors="*{lastName}"></label>
                             </div>
                             <div class="form-group">
                                 <label for="reg-phone">Phone Number</label>
-                                <input type="tel" id="reg-phone" name="phone" class="text-input" required>
+                                <input type="tel" id="reg-phone" th:field="*{phoneNumber}" class="text-input" required>
                             </div>
                             <button type="submit" class="more">Register</button>
                         </form>

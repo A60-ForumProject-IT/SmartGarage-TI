@@ -21,6 +21,8 @@ public interface UserService {
 
     UserDto createCustomerProfile(User employee, UserCreationDto userCreationDto);
 
+    UserDto createCustomerProfile( UserCreationDto userCreationDto);
+
     void resetPassword(ForgottenPasswordDto forgottenPasswordDto);
 
     Page<User> getAllUsers(User employee, String username, String email, String phoneNumber, String vehicleBrand,

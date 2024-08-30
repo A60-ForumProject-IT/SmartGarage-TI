@@ -72,21 +72,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createCustomerProfile(User employee, UserCreationDto userCreationDto) {
-        Role role = roleService.getRoleById(1);
         PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
-        String randomPassword = PasswordGenerator.generateRandomPassword();
-        User user = MapperHelper.toUserEntity(userCreationDto, randomPassword, role);
-        userRepository.save(user);
+        return userRegistration(userCreationDto);
+    }
 
-        emailService.sendEmail(
-                userCreationDto.getSmtpEmail(),
-                userCreationDto.getSmtpPassword(),
-                user.getEmail(),
-                "Welcome to Smart Garage",
-                "Your username is: " + user.getUsername() + " Your password is: " + randomPassword
-        );
-
-        return MapperHelper.toUserDto(user);
+    @Override
+    public UserDto createCustomerProfile(UserCreationDto userCreationDto) {
+        return userRegistration(userCreationDto);
     }
 
     @Override
@@ -165,5 +157,22 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(User user, User userToBeDeleted) {
         PermissionHelper.isEmployeeOrSameUser(user, userToBeDeleted, CAN_T_DELETE_OTHER_USERS);
         userRepository.delete(userToBeDeleted);
+    }
+
+    private UserDto userRegistration(UserCreationDto userCreationDto) {
+        Role role = roleService.getRoleById(1);
+        String randomPassword = PasswordGenerator.generateRandomPassword();
+        User user = MapperHelper.toUserEntity(userCreationDto, randomPassword, role);
+        userRepository.save(user);
+
+        emailService.sendEmail(
+                userCreationDto.getSmtpEmail(),
+                userCreationDto.getSmtpPassword(),
+                user.getEmail(),
+                "Welcome to Smart Garage",
+                "Your username is: " + user.getUsername() + " Your password is: " + randomPassword
+        );
+
+        return MapperHelper.toUserDto(user);
     }
 }

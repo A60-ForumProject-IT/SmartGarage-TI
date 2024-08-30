@@ -7,6 +7,7 @@ import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.LoginDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
+import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -39,13 +40,17 @@ public class AuthenticationMvcController {
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("login", new LoginDto());
+        model.addAttribute("register", new UserCreationDto());
+        model.addAttribute("showLogin", true);
         return "LoginView";
     }
 
     @PostMapping("/login")
     public String handleLogin(@Valid @ModelAttribute("login") LoginDto login,
-                              BindingResult bindingResult, HttpSession session) {
+                              BindingResult bindingResult, HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("showLogin", true);
+            model.addAttribute("register", new UserCreationDto());
             return "LoginView";
         }
         try {
@@ -54,6 +59,8 @@ public class AuthenticationMvcController {
             return "redirect:/ti";
         } catch (AuthenticationException e) {
             bindingResult.rejectValue("username", "error.login", e.getMessage());
+            model.addAttribute("showLogin", true);
+            model.addAttribute("register", new UserCreationDto());
             return "LoginView";
         }
     }
@@ -63,29 +70,50 @@ public class AuthenticationMvcController {
         session.removeAttribute("currentUser");
         return "redirect:/ti";
     }
-//
-//    @GetMapping("/register")
-//    public String showRegister(Model model) {
-//        model.addAttribute("register", new UserCreationDto());
-//        return "RegisterView";
-//    }
-//
-//    @PostMapping("/register")
-//    public String handleRegister(@Valid @ModelAttribute("register") UserCreationDto registrationDto,
-//                                 BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "RegisterView";
-//        }
-//
+
+    @GetMapping("/register")
+    public String showRegister(Model model) {
+        model.addAttribute("login", new LoginDto());
+        model.addAttribute("register", new UserCreationDto());
+        model.addAttribute("showLogin", false);
+        return "LoginView";
+    }
+
+    @PostMapping("/register")
+    public String handleRegister(@Valid @ModelAttribute("register") UserCreationDto userCreationDto,
+                                 BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("login", new LoginDto());
+            model.addAttribute("showLogin", false);
+            return "LoginView";
+        }
+        try {
+            UserDto user = userService.createCustomerProfile(userCreationDto);
+            model.addAttribute("login", new LoginDto());
+            model.addAttribute("showLogin", false);
+            model.addAttribute("register", new UserCreationDto());
+            return "redirect:/ti/auth/login";
+        } catch (DuplicateEntityException e) {
+            bindingResult.rejectValue("username", "registration_error", e.getMessage());
+            model.addAttribute("login", new LoginDto());
+            model.addAttribute("showLogin", false);
+            return "LoginView";
+        }
+    }
+
 //        try {
-//            User user = mapperHelper.(registrationDto);
+//            User user = mapperHelper.createUserFromRegistrationDto(registrationDto);
 //
-//            userService.cre(user);
+//            Avatar defaultAvatar = avatarService.initializeDefaultAvatar();
+//            user.setAvatar(defaultAvatar);
+//
+//            userService.create(user);
 //            return "redirect:/ti/auth/login";
 //        } catch (DuplicateEntityException e) {
 //            bindingResult.rejectValue("username", "registration_error", e.getMessage());
+//            model.addAttribute("login", new LoginDto());
+//            model.addAttribute("showLogin", false);
+//            return "AuthView";
 //        }
-//
-//        return "RegisterView";
-//    }
+
 }
