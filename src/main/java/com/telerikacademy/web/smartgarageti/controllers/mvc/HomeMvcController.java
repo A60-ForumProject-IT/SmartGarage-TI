@@ -36,6 +36,6 @@ public class HomeMvcController {
 
     @GetMapping
     public String showHomePage(Model model) {
-        return "HomeView";
+        return "home";
     }
 }

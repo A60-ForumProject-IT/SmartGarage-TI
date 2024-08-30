@@ -9,6 +9,8 @@ import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.VehicleRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +43,11 @@ public class VehicleServiceImpl implements VehicleService {
             throw new NoResultsFoundException("No vehicles found");
         }
         return vehicles;
+    }
+
+    @Override
+    public Page<Vehicle> getAllVehicles(Pageable pageable) {
+        return vehicleRepository.findAllByIsDeletedFalse(pageable);
     }
 
     @Override

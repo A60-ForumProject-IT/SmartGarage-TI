@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Smart Garage TI - Mechanic Auto Shop</title>
+    <!--meta-->
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.2"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="keywords" content="Mechanic, Car, Auto"/>
+    <meta name="description" content="Responsive Mechanic Auto Shop Template"/>
+    <!--slider revolution-->
+    <link rel="stylesheet" type="text/css" href="../static/plugins/rs-plugin/css/settings.css" media="screen"/>
+    <!--style-->
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,600,700,800&amp;subset=latin,latin-ext'
+          rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../static/css/reset.css" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/superfish.css" th:href="@{/css/superfish.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/prettyPhoto.css" th:href="@{/css/prettyPhoto.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/jquery.qtip.css" th:href="@{/css/jquery.qtip.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/animations.css" th:href="@{/css/animations.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/responsive.css" th:href="@{/css/responsive.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/odometer-theme-default.css"
+          th:href="@{/css/odometer-theme-default.css}">
+    <!--fonts-->
+    <link rel="stylesheet" type="text/css" href="../static/fonts/streamline-small/style.css"
+          th:href="@{/fonts/streamline-small/style.css}">
+    <link rel="stylesheet" type="text/css" href="../static/fonts/template/styles.css" th:href="@{/template/styles.css}">
+    <link rel="stylesheet" type="text/css" href="../static/fonts/social/styles.css"
+          th:href="@{/fonts/social/styles.css}">
+    <link rel="shortcut icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div class="site-container">
+    <div class="header-top-bar-container clearfix">
+        <div class="header-top-bar">
+            <ul class="contact-details clearfix">
+                <li class="template-phone">
+                    (+359) 888 667788
+                </li>
+                <li class="template-mail">
+                    <a href="mailto:carservice@mail.com" th:href="@{'mailto:carservice@mail.com'}">ikaragyozov19@abv.bg</a>
+                </li>
+                <li class="template-clock">
+                    Mon - Fri: 7:30 - 18:30
+                </li>
+            </ul>
+
+            <ul class="social-icons">
+                <li>
+                    <a target="_blank" href="https://www.facebook.com/todor.raynov" th:href="@{https://www.facebook.com/todor.raynov}" class="social-facebook"
+                       title="facebook"></a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://twitter.com/QuanticaLabs" class="social-twitter"
+                       title="twitter"></a>
+                </li>
+                <li>
+                    <a title="" href="https://www.linkedin.com/in/todor-raynov-786b80291/" th:href="@{https://www.linkedin.com/in/todor-raynov-786b80291/}" class="social-linkedin"></a>
+                </li>
+                <li>
+                    <a href="LoginView.html" class="social-login" title="Login" th:href="@{/ti/auth/login}">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <a href="#" class="header-toggle template-arrow-up"></a>
+    </div>
+    <div class="header-container">
+        <!--<div class="header-container sticky">-->
+        <div class="vertical-align-table column-1-1">
+            <div class="header clearfix">
+                <div class="logo vertical-align-cell">
+                    <h1><a href="home.html" title="CarService">SMART GARAGE TI</a></h1>
+                </div>
+                <a href="#" class="mobile-menu-switch vertical-align-cell">
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                </a>
+                <div class="menu-container clearfix vertical-align-cell">
+                    <nav>
+                        <ul class="sf-menu">
+                            <li>
+                                <a href="home.html" title="Home">
+                                    Home
+                                </a>
+                            </li>
+                            <li>
+                                <a href="services.html" title="Services">
+                                    Services
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href="service_engine_diagnostics.html" title="Engine Diagnostics">
+                                            Engine Diagnostics
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="service_lube_oil_filters.html" title="Lube, Oil and Filters">
+                                            Lube, Oil and Filters
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="service_air_conditioning.html" title="Air Conditioning">
+                                            Air Conditioning
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="service_brake_repair.html" title="Brake Repair">
+                                            Brake Repair
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="service_tire_wheel.html" title="Tire and Wheel Services">
+                                            Tire and Wheel Services
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="Vehicles.html" title="Vehicles" th:href="@{/ti/vehicles}">
+                                    Vehicles
+                                </a>
+                            </li>
+                            <li>
+                                <a href="galleries.html" title="Gallery">
+                                    Gallery
+                                </a>
+                            </li>
+                            <li>
+                                <a href="appointment.html" title="Appointment">
+                                    Appointment
+                                </a>
+                            </li>
+                            <li class="left-flyout">
+                                <a href="contact_2.html" title="Contact">
+                                    Contact
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="mobile-menu-container">
+                        <div class="mobile-menu-divider"></div>
+                        <nav>
+                            <ul class="mobile-menu collapsible-mobile-submenus">
+                                <li>
+                                    <a href="home.html" title="Home">
+                                        Home
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="services.html" title="Services">
+                                        Services
+                                    </a>
+                                    <a href="#" class="template-arrow-menu"></a>
+                                    <ul>
+                                        <li>
+                                            <a href="service_engine_diagnostics.html" title="Engine Diagnostics">
+                                                Engine Diagnostics
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="service_lube_oil_filters.html" title="Lube, Oil and Filters">
+                                                Lube, Oil and Filters
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="service_air_conditioning.html" title="Air Conditioning">
+                                                Air Conditioning
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="service_brake_repair.html" title="Brake Repair">
+                                                Brake Repair
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="service_tire_wheel.html" title="Tire and Wheel Services">
+                                                Tire and Wheel Services
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="galleries.html" title="Gallery">
+                                        Gallery
+                                    </a>
+
+                                </li>
+                                <li>
+                                    <a href="services.html" title="Services Style 1">
+                                        Services Style 1
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="service_engine_diagnostics.html" title="Single Service">
+                                        Single Service
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="galleries.html" title="Galleries">
+                                        Galleries
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="appointment.html" title="Appointment">
+                                        Appointment
+                                    </a>
+                                </li>
+                                <li class="left-flyout">
+                                    <a href="contact_2.html" title="Contact">
+                                        Contact
+                                    </a>
+                                    <a href="#" class="template-arrow-menu"></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="theme-page padding-bottom-66">
+        <div class="clearfix">
+            <div class="row full-width">
+                <div class="three-images-container">
+                    <img src="../static/images/Audi.jpg" th:src="@{/images/Audi.jpg}" alt="Audi">
+                    <img src="../static/images/Volkswagen.png" th:src="@{/images/Volkswagen.png}" alt="Volkswagen">
+                    <img src="../static/images/Porsche.png" th:src="@{/images/Porsche.png}" alt="Porsche">
+                </div>
+            </div>
+            <div class="row page-margin-top">
+                <div class="column column-1-1">
+                    <h2 class="box-header">VEHICLES</h2>
+                    <div class="vehicle-list">
+                        <!-- Пример за редове със сив и бял фон -->
+                        <div class="row vehicle-item gray">
+                            <div class="column column-1-4" style="font-weight: bold; font-size: 18px;">Brand</div>
+                            <div class="column column-1-4" style="font-weight: bold; font-size: 18px;">Model</div>
+                            <div class="column column-1-4" style="font-weight: bold; font-size: 18px;">Engine Type</div>
+                            <div class="column column-1-4" style="font-weight: bold; font-size: 18px;">Year</div>
+                        </div>
+                        <div class="vehicle-list">
+                            <div th:each="vehicle, iterStat : ${vehicles}"
+                                 th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
+                                <div class="column column-1-4" th:text="${vehicle.brand.name}">Brand</div>
+                                <div class="column column-1-4" th:text="${vehicle.model.name}">Model</div>
+                                <div class="column column-1-4" th:text="${vehicle.engineType.name}">Engine Type</div>
+                                <div class="column column-1-4" th:text="${vehicle.year.year}">Year</div>
+                            </div>
+                        </div>
+                        <div class="pagination">
+                            <ul>
+                                <!-- Previous бутон -->
+                                <li th:if="${currentPage > 0}">
+                                    <a th:href="@{/vehicles(page=${currentPage - 1}, size=${totalPages})}">Previous</a>
+                                </li>
+
+                                <!-- Линкове към страниците -->
+                                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                                    <a th:href="@{/vehicles(page=${i}, size=${totalPages})}"
+                                       th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                                </li>
+
+                                <!-- Next бутон -->
+                                <li th:if="${currentPage < totalPages - 1}">
+                                    <a th:href="@{/vehicles(page=${currentPage + 1}, size=${totalPages})}">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Ще добавиш още редове динамично тук -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row dark-gray footer-row full-width padding-top-30 padding-bottom-50">
+        <div class="row padding-bottom-30">
+            <div class="column column-1-3">
+                <ul class="contact-details-list">
+                    <li class="sl-small-location-map">
+                        <p>1324 Sofia, Bulgaria:<br>
+                            256 Tsar Simeon St</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="column column-1-3">
+                <ul class="contact-details-list">
+                    <li class="sl-small-phone-circle">
+                        <p>Feel Free to Call Us Now<br>
+                            (+359) 888 667788</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="column column-1-3">
+                <ul class="contact-details-list">
+                    <li class="sl-small-truck-tow">
+                        <p>24/7 Roadside Assistance<br>
+                            (+359) 888 667799</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row row-4-4 top-border page-padding-top">
+            <div class="column column-1-4">
+                <h6 class="box-header">ABOUT US</h6>
+                <ul class="list simple margin-top-20">
+                    <li>1324 Sofia, Bulgaria:</li>
+                    <li>256 Tsar Simeon St</li>
+                    <li><span>Mobile:</span>(+359) 888 667788</li>
+                    <li><span>Assistance:</span>(+359) 888 667799</li>
+                    <li><span>E-mail:</span><a href="mailto:carservice@mail.com">ikaragyozov19@abv.bg</a></li>
+                </ul>
+                <ul class="social-icons gray margin-top-26">
+                    <li>
+                        <a target="_blank" href="https://facebook.com/QuanticaLabs" class="social-facebook"
+                           title="facebook"></a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://twitter.com/QuanticaLabs" class="social-twitter"
+                           title="twitter"></a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://1.envato.market/quanticalabs-portfolio"
+                           class="social-linkedin"
+                           title="linkedin"></a>
+                    </li>
+                    <li>
+                        <a href="https://pinterest.com/quanticalabs/" class="social-pinterest"
+                           title="pinterest"></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column column-1-4">
+                <h6 class="box-header">OUR SERVICES</h6>
+                <ul class="list margin-top-20">
+                    <li class="template-bullet">Engine Diagnostics</li>
+                    <li class="template-bullet">Lube, Oil and Filters</li>
+                    <li class="template-bullet">Belts and Hoses</li>
+                    <li class="template-bullet">Air Conditioning</li>
+                    <li class="template-bullet">Brake Repair</li>
+                    <li class="template-bullet">Tire and Wheel Services</li>
+                    <li class="template-bullet">Other Car Services</li>
+                </ul>
+            </div>
+
+            <div class="column column-1-4">
+                <h6 class="box-header">HOURS</h6>
+                <ul class="list simple margin-top-20">
+                    <li><span>Monday:</span>7:30 - 18:30</li>
+                    <li><span>Tuesday:</span>7:30 - 18:30</li>
+                    <li><span>Wednesday:</span>7:30 - 18:30</li>
+                    <li><span>Thursday:</span>7:30 - 18:30</li>
+                    <li><span>Friday:</span>7:30 - 18:30</li>
+                    <li><span>Saturday:</span>7:30 - 18:30</li>
+                    <li><span>Sunday:</span>Closed</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row align-center padding-top-bottom-30">
+        <span class="copyright">© Copyright 2021 <a
+                href="https://1.envato.market/car-service-mechanic-auto-shop-template" title="Carservice Template"
+                target="_blank">Carservice Template</a> by <a href="https://quanticalabs.com" title="QuanticaLabs"
+                                                              target="_blank">QuanticaLabs</a></span>
+    </div>
+</div>
+<a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
+<div class="background-overlay"></div>
+<!--js-->
+<script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
+<!--slider revolution-->
+<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
+<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.ba-bbq.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery-ui-1.12.1.custom.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.isotope.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.easing.1.4.1.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.carouFredSel-6.2.1-packed.js"></script>
+<script type="text/javascript" src="../static/js/jquery.touchSwipe.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.transit.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.hint.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.costCalculator.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.prettyPhoto.js"></script>
+<script type="text/javascript" src="../static/js/jquery.qtip.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.blockUI.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.imagesloaded-packed.js"></script>
+<script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZbvntbc4pL_sGoiAAUTv7EhTgNJLl3Z8"></script>
+<script type="text/javascript" src="../static/js/main.js"></script>
+<script type="text/javascript" src="../static/js/odometer.min.js"></script>
+<script>
+    function initMap() {
+        var location = {lat: 42.704136, lng: 23.305625}
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 17,
+            center: location
+        });
+
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initMap);
+</script>
+</body>
+</html>
