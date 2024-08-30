@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="FragmentForm.html :: head"></form>
+<body>
+<div class="site-container">
+    <form th:replace="FragmentForm.html :: header-icons-info"></form>
+    <form th:replace="FragmentForm.html :: header-container"></form>
+    <div class="theme-page padding-bottom-66">
+        <div class="clearfix">
+<!--            <div class="row full-width">-->
+<!--&lt;!&ndash;                <div class="three-images-container">&ndash;&gt;-->
+<!--                    <img src="../static/images/Audi.jpg" th:src="@{/images/Audi.jpg}" alt="Audi">-->
+<!--                    <img src="../static/images/Volkswagen.png" th:src="@{/images/Volkswagen.png}" alt="Volkswagen">-->
+<!--                    <img src="../static/images/Porsche.png" th:src="@{/images/Porsche.png}" alt="Porsche">-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            </div>-->
+            <div class="row page-margin-top">
+                <div class="column column-1-1">
+                    <h2 class="box-header" style="margin-bottom: 25px;">USERS</h2>
+                    <div class="user-list">
+                        <!-- Заглавие за колоните -->
+                        <div class="row vehicle-item gray">
+                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Username</div>
+                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Email</div>
+                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Phone Number</div>
+                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Car Brand</div>
+                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Service Dates</div>
+                        </div>
+                        <div class="user-list" style="text-align: center">
+                            <!-- Извеждане на информация за всеки потребител -->
+                            <div th:each="user, iterStat : ${users}"
+                                 th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
+                                <div class="column column-1-6" style="text-align: center" th:text="${user.username}">Username</div>
+                                <div class="column column-1-6" th:text="${user.email}">Email</div>
+                                <div class="column column-1-6" style="text-align: center" th:text="${user.phoneNumber}">Phone Number</div>
+
+                                <!-- Марка на колата, която потребителят притежава -->
+                                <div class="column column-1-6" style="text-align: center">
+                                    <ul>
+                                        <li th:each="car : ${user.clientCars}" th:text="${car.vehicle.brand.name}">Car Brand</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Дати за посещения в сервиз -->
+                                <div class="column column-1-6" style="text-align: center">
+                                    <ul>
+                                        <li th:each="car : ${user.clientCars}">
+                                            <ul>
+                                                <li th:each="service : ${car.carServices}" th:text="${service.serviceDate}">Service Date</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pagination">
+                        <ul>
+                            <li th:if="${currentPage > 0}">
+                                <a th:href="@{/users(page=${currentPage - 1}, size=${size})}">Previous</a>
+                            </li>
+
+                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                                <a th:href="@{/users(page=${i}, size=${size})}"
+                                   th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                            </li>
+
+                            <li th:if="${currentPage < totalPages - 1}">
+                                <a th:href="@{/users(page=${currentPage + 1}, size=${size})}">Next</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <form th:replace="FragmentForm.html :: footer-and-copyright"></form>
+</div>
+<a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
+<div class="background-overlay"></div>
+<!-- JavaScript и библиотеки -->
+<script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.tools.min.js" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
+<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.ba-bbq.min.js" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery-ui-1.12.1.custom.min.js" th:src="@{/js/jquery-ui-1.12.1.custom.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.ui.touch-punch.min.js" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.isotope.min.js" th:src="@{/js/jquery.isotope.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.easing.1.4.1.min.js" th:src="@{/js/jquery.easing.1.4.1.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.carouFredSel-6.2.1-packed.js" th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.touchSwipe.min.js" th:src="@{/js/jquery.touchSwipe.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.transit.min.js" th:src="@{/js/jquery.transit.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.hint.min.js" th:src="@{/js/jquery.hint.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.costCalculator.min.js" th:src="@{/js/jquery.costCalculator.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.prettyPhoto.js" th:src="@{/js/jquery.prettyPhoto.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.qtip.min.js" th:src="@{/js/jquery.qtip.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.blockUI.min.js" th:src="@{/js/jquery.blockUI.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.imagesloaded-packed.js" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
+<script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
+<script type="text/javascript" src="../static/js/odometer.min.js" th:src="@{/js/odometer.min.js}"></script>
+</body>
+</html>

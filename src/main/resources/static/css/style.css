@@ -4134,4 +4134,89 @@ body.lock-position
 .pagination ul li:first-child a, .pagination ul li:last-child a {
 	min-width: 80px; /* Увеличаване на ширината на бутоните "Previous" и "Next", за да бъдат по-лесно разпознаваеми */
 }
+.header-row {
+	font-weight: bold;
+	font-size: 18px;
+	text-align: center;
+	background-color: #f5f5f5;
+	border-bottom: 2px solid #e5e5e5;
+}
 
+.header-cell {
+	padding: 10px 5px;
+}
+
+/* Основни стилове за таблицата */
+.user-list {
+	width: 100%;
+	margin: 0 auto;
+	border-collapse: collapse; /* За премахване на двойни граници */
+}
+
+/* Стилове за заглавната част */
+.user-list .vehicle-item {
+	display: flex; /* Използване на Flexbox за подравняване на колоните */
+	padding: 10px 0;
+	border-bottom: 1px solid #ddd; /* Добавяне на долна граница */
+}
+
+/* Стилове за заглавната лента */
+.user-list .vehicle-item.gray {
+	background-color: #f9f9f9;
+}
+
+.user-list .vehicle-item.white {
+	background-color: #ffffff;
+}
+
+/* Колоните са със същата ширина */
+.user-list .column {
+	flex: 1; /* Flexbox расте еднакво за всички колони */
+	padding: 10px;
+	text-align: left;
+	font-size: 16px;
+	overflow: hidden; /* Скриване на текст, който излиза извън рамката */
+	white-space: nowrap; /* Премахване на автоматичния нов ред */
+	text-overflow: ellipsis; /* Добавяне на три точки за изрязан текст */
+}
+
+/* Стилове за текста в заглавната лента */
+.user-list .column.header {
+	font-weight: bold;
+	font-size: 18px;
+	text-align: center;
+}
+
+/* Разделяне на датите на нов ред */
+.user-list ul {
+	padding-left: 0;
+	list-style-type: none; /* Без маркери за списъците */
+	margin: 0;
+}
+
+.user-list ul li {
+	margin-bottom: 5px; /* Разстояние между датите */
+}
+
+/* Стилове за навигационните бутони */
+.pagination ul {
+	display: flex;
+	justify-content: center;
+	list-style-type: none;
+	padding: 0;
+}
+
+.pagination ul li a {
+	padding: 8px 16px;
+	margin: 0 5px;
+	border: 1px solid #007bff;
+	color: #007bff;
+	text-decoration: none;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination ul li a.active,
+.pagination ul li a:hover {
+	background-color: #007bff;
+	color: white;
+}
