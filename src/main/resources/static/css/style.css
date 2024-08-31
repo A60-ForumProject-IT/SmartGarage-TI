@@ -4220,3 +4220,67 @@ body.lock-position
 	background-color: #007bff;
 	color: white;
 }
+
+/* Custom styles for the client car form */
+.client-car-form {
+	display: flex;
+	justify-content: space-between; /* Подрежда контейнерите на един ред */
+	gap: 10px;
+	align-items: center;
+	padding: 0 4%;
+}
+
+.input-container {
+	display: flex;
+	flex-wrap: wrap; /* Подрежда input полетата на редове */
+	gap: 10px;
+	align-items: flex-start; /* Запазва подравняването на input полетата */
+	width: 90%; /* Задава ширина, за да се остави място за бутона */
+}
+
+.button-container {
+	display: flex;
+	align-items: flex-start;
+	margin-top: 15px/* Позиционира бутона по-надолу */
+}
+
+.custom-form-row {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.custom-form-row input,
+.custom-form-row select,
+.custom-form-row button {
+	padding: 10px;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 100%;
+	box-sizing: border-box;
+	height: 40px;
+}
+
+.custom-form-row button {
+	padding: 0 20px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+	text-transform: uppercase;
+	height: 40px;
+}
+
+.custom-form-row button:hover {
+	background-color: #0056b3;
+}
+
+.custom-form-row label {
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+

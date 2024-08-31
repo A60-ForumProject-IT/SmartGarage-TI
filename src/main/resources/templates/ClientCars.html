@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{FragmentForm.html :: head}"></form>
+<body>
+<div class="site-container">
+    <form th:replace="~{FragmentForm.html :: header-icons-info}"></form>
+    <form th:replace="~{FragmentForm.html :: header-container}"></form>
+    <div class="theme-page padding-bottom-70">
+        <div class="row gray full-width page-header vertical-align-table">
+            <div class="row full-width padding-top-bottom-50 vertical-align-cell">
+                <div class="row">
+                    <div class="page-header-left">
+                        <h1>CLIENT CARS</h1>
+                    </div>
+                    <div class="page-header-right">
+                        <div class="bread-crumb-container">
+                            <label>YOU ARE HERE:</label>
+                            <ul class="bread-crumb">
+                                <li>
+                                    <a title="Home" href="home.html" th:href="@{/ti}">
+                                        HOME
+                                    </a>
+                                </li>
+                                <li class="separator">
+                                    &#47;
+                                </li>
+                                <li>
+                                    CLIENT CARS
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="custom-form-container margin-top-70">
+            <div class="custom-form-header">
+                <h2 style="text-align: center; margin-bottom: 20px; font-weight: bold;">YOU WANT TO ADD CLIENT CAR? DO IT!</h2>
+            </div>
+            <form class="client-car-form">
+                <div class="input-container"> <!-- Нов контейнер за полетата и dropdown менюто -->
+                    <div class="custom-form-row">
+                        <label for="vin">VIN</label>
+                        <input id="vin" type="text" placeholder="Put the VIN here...">
+                    </div>
+                    <div class="custom-form-row">
+                        <label  for="license-plate">LICENSE PLATE</label>
+                        <input id="license-plate" type="text" placeholder="Put the license plate here...">
+                    </div>
+                    <div class="custom-form-row">
+                        <label for="owner">OWNER</label>
+                        <input id="owner" type="text" placeholder="Owner...">
+                    </div>
+                    <div class="custom-form-row" style="width: 5%;">
+                        <label for="brand">BRAND</label>
+                        <select id="brand">
+                            <option value="">Brands</option>
+                            <!-- Add options here -->
+                        </select>
+                    </div>
+                    <div class="custom-form-row">
+                        <label for="make">MAKE</label>
+                        <input id="make" type="text" placeholder="Put the make here...">
+                    </div>
+                    <div class="custom-form-row" style="width: 5%;">
+                        <label for="engine-type" style="font-weight: bold;">ENGINE TYPE</label>
+                        <input id="engine-type" type="text" placeholder="Put the engine here..." style="width: 100%;">
+                    </div>
+                    <div class="custom-form-row" style="width: 5%;">
+                        <label for="year-of-creation" style="font-weight: bold;">YEAR OF CREATION</label>
+                        <input id="year-of-creation" type="text" placeholder="Put the year here..." style="width: 100%;">
+                    </div>
+                </div>
+                <div class="button-container"> <!-- Нов контейнер за бутона -->
+                    <div class="custom-form-row">
+                        <button type="submit">ADD CLIENT CAR</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form th:replace="~{FragmentForm.html :: footer-and-copyright}"></form>
+</div>
+<a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
+<div class="background-overlay"></div>
+<!--js-->
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<!--slider revolution-->
+<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-ui-1.12.1.custom.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.isotope.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.easing.1.4.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.touchSwipe.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.transit.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.hint.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.costCalculator.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.prettyPhoto.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.qtip.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.blockUI.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
+</body>
+</html>
