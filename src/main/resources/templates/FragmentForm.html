@@ -14,7 +14,9 @@
     <link rel="stylesheet" type="text/css" th:href="@{/plugins/rs-plugin/css/settings.css}" media="screen"/>
 
     <!-- Google Fonts -->
-    <link rel="stylesheet" th:href="@{'https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,600,700,800&amp;subset=latin,latin-ext'}" type="text/css">
+    <link rel="stylesheet"
+          th:href="@{'https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,600,700,800&amp;subset=latin,latin-ext'}"
+          type="text/css">
     <link rel="stylesheet" type="text/css" th:href="@{/css/reset.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/superfish.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/prettyPhoto.css}"/>
@@ -46,7 +48,8 @@
 
         <ul class="social-icons">
             <li>
-                <a target="_blank" href="https://www.facebook.com/todor.raynov" th:href="@{https://www.facebook.com/todor.raynov}" class="social-facebook"
+                <a target="_blank" href="https://www.facebook.com/todor.raynov"
+                   th:href="@{https://www.facebook.com/todor.raynov}" class="social-facebook"
                    title="facebook"></a>
             </li>
             <li>
@@ -54,15 +57,18 @@
                    title="twitter"></a>
             </li>
             <li>
-                <a title="" href="https://www.linkedin.com/in/todor-raynov-786b80291/" th:href="@{https://www.linkedin.com/in/todor-raynov-786b80291/}" class="social-linkedin"></a>
+                <a title="" href="https://www.linkedin.com/in/todor-raynov-786b80291/"
+                   th:href="@{https://www.linkedin.com/in/todor-raynov-786b80291/}" class="social-linkedin"></a>
             </li>
             <li>
-                <a href="LoginView.html" class="social-login" th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}" title="Login">
+                <a href="LoginView.html" class="social-login" th:unless="${isAuthenticated}" th:href="@{/ti/auth/login}"
+                   title="Login">
                     <i class="fas fa-sign-in-alt"></i>
                 </a>
             </li>
             <li>
-                <a href="LoginView.html" class="social-login" th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}" title="Logout">
+                <a href="LoginView.html" class="social-login" th:if="${isAuthenticated}" th:href="@{/ti/auth/logout}"
+                   title="Logout">
                     <i class="fas fa-sign-out-alt"></i>
                 </a>
             </li>
@@ -90,6 +96,10 @@
                                 Home
                             </a>
                         </li>
+                        <li>
+                            <a href="AllUsers.html" th:if="${isEmployee}" th:href="@{/ti/users}" title="All Users">
+                                All Users
+                            </a>
                         <li>
                             <a href="services.html" th:href="@{/ti/services}" title="Services">
                                 Services
@@ -271,9 +281,12 @@
                 <li><span>E-mail:</span><a href="mailto:ikaragyozov19@mail.com">ikaragyozov19@mail.com</a></li>
             </ul>
             <ul class="social-icons gray margin-top-26">
-                <li><a target="_blank" href="https://facebook.com/QuanticaLabs" class="social-facebook" title="facebook"></a></li>
-                <li><a target="_blank" href="https://twitter.com/QuanticaLabs" class="social-twitter" title="twitter"></a></li>
-                <li><a target="_blank" href="https://1.envato.market/quanticalabs-portfolio" class="social-linkedin" title="linkedin"></a></li>
+                <li><a target="_blank" href="https://facebook.com/QuanticaLabs" class="social-facebook"
+                       title="facebook"></a></li>
+                <li><a target="_blank" href="https://twitter.com/QuanticaLabs" class="social-twitter"
+                       title="twitter"></a></li>
+                <li><a target="_blank" href="https://1.envato.market/quanticalabs-portfolio" class="social-linkedin"
+                       title="linkedin"></a></li>
                 <li><a href="https://pinterest.com/quanticalabs/" class="social-pinterest" title="pinterest"></a></li>
             </ul>
         </div>

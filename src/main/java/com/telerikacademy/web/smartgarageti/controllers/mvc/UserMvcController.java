@@ -46,6 +46,14 @@ public class UserMvcController {
         // Получаване на списъка с всички брандове на коли от VehicleService
         return brandService.findAllBrands();
     }
+    @ModelAttribute("isEmployee")
+    public boolean populateIsEmployee(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            return user.getRole().getName().equals("Employee");
+        }
+        return false;
+    }
 
     @GetMapping
     public String getAllUsers(HttpSession session,

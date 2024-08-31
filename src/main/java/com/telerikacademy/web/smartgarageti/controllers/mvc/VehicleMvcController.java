@@ -1,10 +1,13 @@
 package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
 
+import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
+import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.Vehicle;
 import com.telerikacademy.web.smartgarageti.services.contracts.VehicleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +24,12 @@ import java.util.List;
 @RequestMapping("/ti/vehicles")
 public class VehicleMvcController {
     private final VehicleService vehicleService;
+    private final AuthenticationHelper authenticationHelper;
 
-    public VehicleMvcController(VehicleService vehicleService) {
+    @Autowired
+    public VehicleMvcController(VehicleService vehicleService, AuthenticationHelper authenticationHelper) {
         this.vehicleService = vehicleService;
+        this.authenticationHelper = authenticationHelper;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -31,6 +37,14 @@ public class VehicleMvcController {
         return session.getAttribute("currentUser") !=null;
     }
 
+    @ModelAttribute("isEmployee")
+    public boolean populateIsEmployee(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            return user.getRole().getName().equals("Employee");
+        }
+        return false;
+    }
     @ModelAttribute("requestURI")
     public String requestURI(final HttpServletRequest request) {
         return request.getRequestURI();

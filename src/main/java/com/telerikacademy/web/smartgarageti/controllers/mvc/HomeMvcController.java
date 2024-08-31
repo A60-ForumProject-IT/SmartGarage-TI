@@ -30,6 +30,15 @@ public class HomeMvcController {
         return session.getAttribute("currentUser") !=null;
     }
 
+    @ModelAttribute("isEmployee")
+    public boolean populateIsEmployee(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            return user.getRole().getName().equals("Employee");
+        }
+        return false;
+    }
+
     @ModelAttribute("username")
     public String populateUsername(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
