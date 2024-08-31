@@ -4300,13 +4300,12 @@ body.lock-position
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Стилизация за полетата за филтриране */
 .filter-input {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	padding: 6px 8px;
 	margin-right: 10px;
-	width: 160px; /* Ширина на полетата за филтриране */
+	width: 160px;
 }
 
 .filter-select {
@@ -4315,4 +4314,38 @@ body.lock-position
 	border-radius: 4px;
 	border: 1px solid #ccc;
 }
+
+.client-car-form-search {
+	display: flex;
+	justify-content: flex-start;/* Подравнява полетата вляво */
+	gap: 10px; /* Запазва малко разстояние между полетата */
+	align-items: center;
+	padding: 0 4%;
+}
+
+.client-car-form-search .custom-form-row input,
+.client-car-form-search .custom-form-row select,
+.client-car-form-search .custom-form-row button {
+	width: 285px; /* Задава фиксирана ширина само за елементите в долния ред */
+	height: 40px; /* Задава фиксирана височина за елементите */
+	margin-top: 5px;
+	margin-bottom: 10px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+}
+
+.custom-form-row-inline {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.input-container-search {
+	display: flex;
+	flex-wrap: wrap; /* Подрежда input полетата на редове */
+	gap: 10px;
+	align-items: flex-start; /* Запазва подравняването на input полетата */
+	width: 42.5%;
+}
+
 

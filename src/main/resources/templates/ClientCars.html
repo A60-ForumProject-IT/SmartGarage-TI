@@ -33,9 +33,9 @@
                 </div>
             </div>
         </div>
-        <div class="custom-form-container margin-top-70">
+        <div class="custom-form-container margin-top-70" style="margin-top: 35px !important;">
             <div class="custom-form-header">
-                <h2 style="text-align: center; margin-bottom: 20px; font-weight: bold;">YOU WANT TO ADD CLIENT CAR? DO IT!</h2>
+                <h2 style="text-align: center; margin-bottom: 35px; font-weight: bold;">YOU WANT TO ADD CLIENT CAR? DO IT!</h2>
             </div>
             <form class="client-car-form">
                 <div class="input-container"> <!-- Нов контейнер за полетата и dropdown менюто -->
@@ -75,6 +75,35 @@
                     <div class="custom-form-row">
                         <button type="submit">ADD CLIENT CAR</button>
                     </div>
+                </div>
+            </form>
+
+            <form class="client-car-form-search">
+                <div class="input-container-search">
+                    <div class="custom-form-row-inline">
+                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="search">SEARCH</label>
+                        <input id="search" type="text" placeholder="Search..." style="margin-top: 5px; margin-bottom: 10px; height: 15px; width: 250px; border-radius: 4px">
+                    </div>
+                    <div class="custom-form-row-inline">
+                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="sort-by">SORT BY</label>
+                        <select id="sort-by" style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 288px; border-radius: 4px">
+                            <option value="">Choose sorting option</option>
+                            <option value="owner first name">Owner First Name</option>
+                            <option value="owner username">Owner Username</option>
+                        </select>
+                    </div>
+                    <div class="custom-form-row-inline">
+                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="order">ORDER</label>
+                        <select id="order" style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 235px; border-radius: 4px">
+                            <option value="asc">ASCENDING</option>
+                            <option value="desc">DESCENDING</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="custom-form-row-inline">
+                    <button type="submit" class="modern-button" style="height: 38px; width: 38px; margin-top: 45px; margin-bottom: 13px;">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </div>
             </form>
         </div>
