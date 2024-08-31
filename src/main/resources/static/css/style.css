@@ -4409,10 +4409,9 @@ body.lock-position
 }
 
 .custom-car-list-container {
-	width: 100%; /* Задава на контейнера да заема цялата ширина */
+	width: 92%; /* Задава на контейнера да заема цялата ширина */
 	padding: 0 4%; /* Добавя малко отстояние от краищата */
 	background-color: #ffffff;
-	max-width: 100%;
 	overflow-x: hidden;/* Светъл фон, за да се отличава */
 }
 
