@@ -11,6 +11,17 @@
                 <div class="column column-1-1">
                     <h2 class="box-header" style="margin-bottom: 25px;">USERS</h2>
 
+                    <!-- Стилове за placeholder и текст -->
+                    <style>
+                        .filter-input::placeholder,
+                        .filter-select option[value=""][disabled] {
+                            color: gray; /* Цвят на placeholder-а */
+                        }
+                        .filter-select {
+                            color: #6c757d; /* Сив цвят за текста */
+                        }
+                    </style>
+
                     <!-- Форма за филтриране и сортиране -->
                     <form method="get" action="#" class="filter-form">
                         <div class="filter-container">
@@ -18,11 +29,16 @@
                             <input type="text" name="username" placeholder="Filter by Username" th:value="${username}" class="filter-input">
                             <input type="text" name="email" placeholder="Filter by Email" th:value="${email}" class="filter-input">
                             <input type="text" name="phoneNumber" placeholder="Filter by Phone Number" th:value="${phoneNumber}" class="filter-input">
-                            <input type="text" name="vehicleBrand" placeholder="Filter by Vehicle Brand" th:value="${vehicleBrand}" class="filter-input">
+                            <select name="vehicleBrand" class="filter-input filter-select" style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
+                                <option value="" disabled selected>Filter by Car Brand</option>
+                                <option th:each="brand : ${allVehicleBrands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+                            </select>
 
                             <!-- Полета за филтриране по дати с placeholder -->
-                            <input type="date" id="visitDateFrom" name="visitDateFrom" placeholder="Visit Date From" th:value="${visitDateFrom}" class="filter-input">
-                            <input type="date" id="visitDateTo" name="visitDateTo" placeholder="Visit Date To" th:value="${visitDateTo}" class="filter-input">
+                            <input type="date" id="visitDateFrom" onfocus="(this.type='date')"
+                                   onblur="(this.type='text')" name="visitDateFrom" placeholder="Visit Date From" th:value="${visitDateFrom}" class="filter-input">
+                            <input type="date" id="visitDateTo" onfocus="(this.type='date')"
+                                   onblur="(this.type='text')" name="visitDateTo" placeholder="Visit Date To" th:value="${visitDateTo}" class="filter-input">
 
                             <!-- Полета за сортиране -->
                             <select name="sortBy" class="filter-select" style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
@@ -37,14 +53,12 @@
                                 <option value="desc" th:selected="${sortDirection == 'desc'}">Descending</option>
                             </select>
 
-
                             <!-- Стилизиране на бутоните -->
                             <button type="submit" class="modern-button" style="height: 38px; width: 38px; margin-top: 13px; margin-bottom: 13px;">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
                     </form>
-
 
                     <div class="user-list">
                         <!-- Заглавие за колоните -->

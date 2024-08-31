@@ -4,7 +4,9 @@ import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
 import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
+import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,11 +32,19 @@ public class UserMvcController {
 
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
+    private final BrandService brandService;
 
     @Autowired
-    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper) {
+    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper , BrandService brandService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
+        this.brandService = brandService;
+    }
+
+    @ModelAttribute("allVehicleBrands")
+    public List<Brand> populateAllVehicleBrands() {
+        // Получаване на списъка с всички брандове на коли от VehicleService
+        return brandService.findAllBrands();
     }
 
     @GetMapping
