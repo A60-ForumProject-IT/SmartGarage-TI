@@ -4228,6 +4228,7 @@ body.lock-position
 	gap: 10px;
 	align-items: center;
 	padding: 0 4%;
+	max-width: 100%;
 }
 
 .input-container {
@@ -4346,6 +4347,113 @@ body.lock-position
 	gap: 10px;
 	align-items: flex-start; /* Запазва подравняването на input полетата */
 	width: 42.5%;
+}
+
+.column-1-8 {
+	width: 12.5%;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+/* Media Queries за респонсив дизайн */
+@media (max-width: 1024px) {
+	.client-car-form, .client-car-form-search {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.input-container, .input-container-search {
+		width: 100%;
+	}
+
+	.client-car-form .custom-form-row,
+	.client-car-form-search .custom-form-row-inline {
+		width: 100%;
+		margin-bottom: 15px;
+	}
+}
+
+@media (max-width: 768px) {
+	.client-car-form, .client-car-form-search {
+		padding: 0 2%;
+	}
+
+	.custom-form-row input,
+	.custom-form-row select,
+	.custom-form-row button {
+		width: 100%;
+	}
+
+	.client-car-form-search .custom-form-row-inline,
+	.input-container-search {
+		width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.custom-form-row label {
+		font-size: 14px;
+	}
+
+	.custom-form-row input,
+	.custom-form-row select,
+	.custom-form-row button {
+		font-size: 12px;
+		padding: 8px;
+	}
+
+	.modern-button {
+		padding: 6px 10px;
+		font-size: 12px;
+	}
+}
+
+.custom-car-list-container {
+	width: 100%; /* Задава на контейнера да заема цялата ширина */
+	padding: 0 4%; /* Добавя малко отстояние от краищата */
+	background-color: #ffffff;
+	max-width: 100%;
+	overflow-x: hidden;/* Светъл фон, за да се отличава */
+}
+
+.custom-car-list-header,
+.custom-car-list-row {
+	display: flex; /* Подравнява елементите в редове */
+	justify-content: space-between; /* Разпределя колоните равномерно */
+	padding: 10px 0; /* Малко разстояние между редовете */
+}
+
+.custom-car-list-column {
+	flex: 1; /* Всяка колона ще заема равномерно място */
+	text-align: left; /* Подравняване на текста вляво */
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.custom-car-list-header .custom-car-list-column {
+	font-weight: bold; /* Удебелява заглавията на колоните */
+	background-color: #e1e1e1; /* Светло сив фон за заглавията */
+}
+
+.custom-car-list-row:nth-child(even) {
+	background-color: #f1f1f1; /* Светло сив фон за четните редове */
+}
+
+.custom-car-list-row:nth-child(odd) {
+	background-color: #ffffff; /* Бял фон за нечетните редове */
+}
+
+.custom-car-list-row button {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.custom-car-list-row button:hover {
+	background-color: #0056b3;
 }
 
 

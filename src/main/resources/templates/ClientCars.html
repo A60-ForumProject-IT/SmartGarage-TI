@@ -35,7 +35,8 @@
         </div>
         <div class="custom-form-container margin-top-70" style="margin-top: 35px !important;">
             <div class="custom-form-header">
-                <h2 style="text-align: center; margin-bottom: 35px; font-weight: bold;">YOU WANT TO ADD CLIENT CAR? DO IT!</h2>
+                <h2 style="text-align: center; margin-bottom: 35px; font-weight: bold;">YOU WANT TO ADD CLIENT CAR? DO
+                    IT!</h2>
             </div>
             <form class="client-car-form">
                 <div class="input-container"> <!-- Нов контейнер за полетата и dropdown менюто -->
@@ -44,7 +45,7 @@
                         <input id="vin" type="text" placeholder="Put the VIN here...">
                     </div>
                     <div class="custom-form-row">
-                        <label  for="license-plate">LICENSE PLATE</label>
+                        <label for="license-plate">LICENSE PLATE</label>
                         <input id="license-plate" type="text" placeholder="Put the license plate here...">
                     </div>
                     <div class="custom-form-row">
@@ -68,7 +69,8 @@
                     </div>
                     <div class="custom-form-row" style="width: 5%;">
                         <label for="year-of-creation" style="font-weight: bold;">YEAR OF CREATION</label>
-                        <input id="year-of-creation" type="text" placeholder="Put the year here..." style="width: 100%;">
+                        <input id="year-of-creation" type="text" placeholder="Put the year here..."
+                               style="width: 100%;">
                     </div>
                 </div>
                 <div class="button-container"> <!-- Нов контейнер за бутона -->
@@ -81,31 +83,68 @@
             <form class="client-car-form-search">
                 <div class="input-container-search">
                     <div class="custom-form-row-inline">
-                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="search">SEARCH</label>
-                        <input id="search" type="text" placeholder="Search..." style="margin-top: 5px; margin-bottom: 10px; height: 15px; width: 250px; border-radius: 4px">
+                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;"
+                               for="search">SEARCH</label>
+                        <input id="search" type="text" placeholder="Search..."
+                               style="margin-top: 5px; margin-bottom: 10px; height: 15px; width: 250px; border-radius: 4px">
                     </div>
                     <div class="custom-form-row-inline">
-                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="sort-by">SORT BY</label>
-                        <select id="sort-by" style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 288px; border-radius: 4px">
+                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="sort-by">SORT
+                            BY</label>
+                        <select id="sort-by"
+                                style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 288px; border-radius: 4px">
                             <option value="">Choose sorting option</option>
                             <option value="owner first name">Owner First Name</option>
                             <option value="owner username">Owner Username</option>
                         </select>
                     </div>
                     <div class="custom-form-row-inline">
-                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="order">ORDER</label>
-                        <select id="order" style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 235px; border-radius: 4px">
+                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;"
+                               for="order">ORDER</label>
+                        <select id="order"
+                                style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 235px; border-radius: 4px">
                             <option value="asc">ASCENDING</option>
                             <option value="desc">DESCENDING</option>
                         </select>
                     </div>
                 </div>
                 <div class="custom-form-row-inline">
-                    <button type="submit" class="modern-button" style="height: 38px; width: 38px; margin-top: 45px; margin-bottom: 13px;">
+                    <button type="submit" class="modern-button"
+                            style="height: 38px; width: 38px; margin-top: 45px; margin-bottom: 13px;">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
             </form>
+            <div class="custom-car-list-container">
+                <div class="custom-car-list-header" style="height: 55px; text-align: center; max-width: 100%">
+                    <div class="custom-car-list-column">VIN</div>
+                    <div class="custom-car-list-column">License Plate</div>
+                    <div class="custom-car-list-column">Owner</div>
+                    <div class="custom-car-list-column">Brand</div>
+                    <div class="custom-car-list-column">Make</div>
+                    <div class="custom-car-list-column">Engine Type</div>
+                    <div class="custom-car-list-column">Year of Creation</div>
+                    <div class="custom-car-list-column">Actions</div>
+                </div>
+                <div class="custom-car-list-items">
+                    <!-- Пример за динамични данни -->
+                    <div class="custom-car-list-row">
+                        <div class="custom-car-list-column">1HGCM82633A123456</div>
+                        <div class="custom-car-list-column">CA1234AB</div>
+                        <div class="custom-car-list-column">John Doe</div>
+                        <div class="custom-car-list-column">Honda</div>
+                        <div class="custom-car-list-column">Civic</div>
+                        <div class="custom-car-list-column">Petrol</div>
+                        <div class="custom-car-list-column">2003</div>
+                        <div class="custom-car-list-column">
+                            <button>Edit</button>
+                            <button>Delete</button>
+                        </div>
+                    </div>
+                    <!-- Повтаряй динамичните редове тук -->
+                </div>
+            </div>
+
         </div>
     </div>
     <form th:replace="~{FragmentForm.html :: footer-and-copyright}"></form>
