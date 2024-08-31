@@ -7,16 +7,45 @@
     <form th:replace="FragmentForm.html :: header-container"></form>
     <div class="theme-page padding-bottom-66">
         <div class="clearfix">
-<!--            <div class="row full-width">-->
-<!--&lt;!&ndash;                <div class="three-images-container">&ndash;&gt;-->
-<!--                    <img src="../static/images/Audi.jpg" th:src="@{/images/Audi.jpg}" alt="Audi">-->
-<!--                    <img src="../static/images/Volkswagen.png" th:src="@{/images/Volkswagen.png}" alt="Volkswagen">-->
-<!--                    <img src="../static/images/Porsche.png" th:src="@{/images/Porsche.png}" alt="Porsche">-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--            </div>-->
             <div class="row page-margin-top">
                 <div class="column column-1-1">
                     <h2 class="box-header" style="margin-bottom: 25px;">USERS</h2>
+
+                    <!-- Форма за филтриране и сортиране -->
+                    <form method="get" action="#" class="filter-form">
+                        <div class="filter-container">
+                            <!-- Полета за филтриране -->
+                            <input type="text" name="username" placeholder="Filter by Username" th:value="${username}" class="filter-input">
+                            <input type="text" name="email" placeholder="Filter by Email" th:value="${email}" class="filter-input">
+                            <input type="text" name="phoneNumber" placeholder="Filter by Phone Number" th:value="${phoneNumber}" class="filter-input">
+                            <input type="text" name="vehicleBrand" placeholder="Filter by Vehicle Brand" th:value="${vehicleBrand}" class="filter-input">
+
+                            <!-- Полета за филтриране по дати с placeholder -->
+                            <input type="date" id="visitDateFrom" name="visitDateFrom" placeholder="Visit Date From" th:value="${visitDateFrom}" class="filter-input">
+                            <input type="date" id="visitDateTo" name="visitDateTo" placeholder="Visit Date To" th:value="${visitDateTo}" class="filter-input">
+
+                            <!-- Полета за сортиране -->
+                            <select name="sortBy" class="filter-select" style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
+                                <option value="" disabled selected>Sort By</option>
+                                <option value="username" th:selected="${sortBy == 'username'}">Username</option>
+                                <option value="email" th:selected="${sortBy == 'email'}">Email</option>
+                                <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Phone Number</option>
+                                <option value="vehicleBrand" th:selected="${sortBy == 'vehicleBrand'}">Vehicle Brand</option>
+                            </select>
+                            <select name="sortDirection" class="filter-select" style="width: 179px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
+                                <option value="asc" th:selected="${sortDirection == 'asc'}">Ascending</option>
+                                <option value="desc" th:selected="${sortDirection == 'desc'}">Descending</option>
+                            </select>
+
+
+                            <!-- Стилизиране на бутоните -->
+                            <button type="submit" class="modern-button" style="height: 38px; width: 38px; margin-top: 13px; margin-bottom: 13px;">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+
+
                     <div class="user-list">
                         <!-- Заглавие за колоните -->
                         <div class="row vehicle-item gray">
@@ -57,16 +86,16 @@
                     <div class="pagination">
                         <ul>
                             <li th:if="${currentPage > 0}">
-                                <a th:href="@{/users(page=${currentPage - 1}, size=${size})}">Previous</a>
+                                <a th:href="@{/ti/users(page=${currentPage - 1}, size=${size}, username=${username}, email=${email}, phoneNumber=${phoneNumber}, vehicleBrand=${vehicleBrand}, visitDateFrom=${visitDateFrom}, visitDateTo=${visitDateTo}, sortBy=${sortBy}, sortDirection=${sortDirection})}">Previous</a>
                             </li>
 
                             <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                                <a th:href="@{/users(page=${i}, size=${size})}"
+                                <a th:href="@{/ti/users(page=${i}, size=${size}, username=${username}, email=${email}, phoneNumber=${phoneNumber}, vehicleBrand=${vehicleBrand}, visitDateFrom=${visitDateFrom}, visitDateTo=${visitDateTo}, sortBy=${sortBy}, sortDirection=${sortDirection})}"
                                    th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
                             </li>
 
                             <li th:if="${currentPage < totalPages - 1}">
-                                <a th:href="@{/users(page=${currentPage + 1}, size=${size})}">Next</a>
+                                <a th:href="@{/ti/users(page=${currentPage + 1}, size=${size}, username=${username}, email=${email}, phoneNumber=${phoneNumber}, vehicleBrand=${vehicleBrand}, visitDateFrom=${visitDateFrom}, visitDateTo=${visitDateTo}, sortBy=${sortBy}, sortDirection=${sortDirection})}">Next</a>
                             </li>
                         </ul>
                     </div>

@@ -29,7 +29,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "WHERE (:username IS NULL OR u.username LIKE %:username%) " +
             "AND (:email IS NULL OR u.email LIKE %:email%) " +
             "AND (:phoneNumber IS NULL OR u.phoneNumber LIKE %:phoneNumber%) " +
-            "AND (:vehicleBrand IS NULL OR LOWER(b.name) LIKE LOWER(CONCAT('%', :vehicleBrand, '%'))) " +
+            "AND (:vehicleBrand IS NULL OR :vehicleBrand = '' OR LOWER(b.name) LIKE LOWER(CONCAT('%', :vehicleBrand, '%'))) " + // добавяне на проверка за празен низ
             "AND (:visitDateFrom IS NULL OR cs.serviceDate >= :visitDateFrom) " +
             "AND (:visitDateTo IS NULL OR cs.serviceDate <= :visitDateTo)")
     Page<User> findAllFiltered(
@@ -39,6 +39,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             @Param("vehicleBrand") String vehicleBrand,
             @Param("visitDateFrom") LocalDate visitDateFrom,
             @Param("visitDateTo") LocalDate visitDateTo,
-            Pageable pageable  // Accept Pageable for pagination and sorting
+            Pageable pageable
     );
 }

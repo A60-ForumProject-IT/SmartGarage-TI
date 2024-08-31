@@ -49,10 +49,14 @@ public class UserMvcController {
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size,
                               Model model) {
+
+        if (vehicleBrand != null && vehicleBrand.trim().isEmpty()) {
+            vehicleBrand = null;
+        }
+
         try {
             // Извличане на текущия потребител от сесията
             User employee = authenticationHelper.tryGetUserFromSession(session);
-
             // Проверка дали потребителят е служител
             PermissionHelper.isEmployee(employee, "Only employees can access this resource.");
 
@@ -66,11 +70,17 @@ public class UserMvcController {
             // Получаване на потребители с филтрация и пагинация
             Page<User> userPage = userService.getAllUsers(employee, username, email, phoneNumber, vehicleBrand, visitDateFrom, visitDateTo, pageable);
 
-            // Добавяне на потребители към модела за предаване към изгледа
+            // Добавяне на параметри към модела за предаване към изгледа
             model.addAttribute("users", userPage.getContent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", userPage.getTotalPages());
             model.addAttribute("totalItems", userPage.getTotalElements());
+            model.addAttribute("username", username);
+            model.addAttribute("email", email);
+            model.addAttribute("phoneNumber", phoneNumber);
+            model.addAttribute("vehicleBrand", vehicleBrand);
+            model.addAttribute("visitDateFrom", visitDateFrom);
+            model.addAttribute("visitDateTo", visitDateTo);
             model.addAttribute("sortBy", sortBy);
             model.addAttribute("sortDirection", sortDirection);
             model.addAttribute("size", size);
