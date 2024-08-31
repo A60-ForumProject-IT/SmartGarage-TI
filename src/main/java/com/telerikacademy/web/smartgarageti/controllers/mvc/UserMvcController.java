@@ -1,11 +1,13 @@
 package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
 import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
+import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.dto.UserEditInfoDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -17,10 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -115,4 +114,26 @@ public class UserMvcController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
+    @GetMapping("/{id}/details")
+    public String showUserDetails(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            User userToDisplay = userService.getUserById(id, currentUser);
+
+            // Добавяне на потребителските данни към модела
+            model.addAttribute("user", userToDisplay);
+            model.addAttribute("userEditInfoDto", new UserEditInfoDto());
+           // model.addAttribute("avatarUrl", userToDisplay.getAvatarUrl()); // Placeholder за Cloudinary
+
+            return "team_curtis_greene"; // Името на изгледа за детайлите на потребителя
+        } catch (UnauthorizedOperationException | EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "404";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
+
 }

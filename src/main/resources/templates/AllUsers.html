@@ -17,6 +17,7 @@
                         .filter-select option[value=""][disabled] {
                             color: gray; /* Цвят на placeholder-а */
                         }
+
                         .filter-select {
                             color: #6c757d; /* Сив цвят за текста */
                         }
@@ -26,12 +27,16 @@
                     <form method="get" action="#" class="filter-form">
                         <div class="filter-container">
                             <!-- Полета за филтриране -->
-                            <input type="text" name="username" placeholder="Filter by Username" th:value="${username}" class="filter-input">
-                            <input type="text" name="email" placeholder="Filter by Email" th:value="${email}" class="filter-input">
-                            <input type="text" name="phoneNumber" placeholder="Filter by Phone Number" th:value="${phoneNumber}" class="filter-input">
-                            <select name="vehicleBrand" class="filter-input filter-select" style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
+                            <input type="text" name="username" placeholder="Filter by Username" th:value="${username}"
+                                   class="filter-input">
+                            <input type="text" name="email" placeholder="Filter by Email" th:value="${email}"
+                                   class="filter-input">
+                            <input type="text" name="phoneNumber" placeholder="Filter by Phone Number"
+                                   th:value="${phoneNumber}" class="filter-input">
+                            <select name="vehicleBrand" class="filter-input filter-select"
+                                    style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
                                 <!-- Добавяме опция "All" за да позволим филтриране по всичко -->
-                                <option value="" th:selected="${vehicleBrand == null}" >All Brands</option>
+                                <option value="" th:selected="${vehicleBrand == null}">All Brands</option>
                                 <option th:each="brand : ${allVehicleBrands}"
                                         th:value="${brand.name}"
                                         th:text="${brand.name}"
@@ -41,26 +46,33 @@
 
                             <!-- Полета за филтриране по дати с placeholder -->
                             <input type="date" id="visitDateFrom" onfocus="(this.type='date')"
-                                   onblur="(this.type='text')" name="visitDateFrom" placeholder="Visit Date From" th:value="${visitDateFrom}" class="filter-input">
+                                   onblur="(this.type='text')" name="visitDateFrom" placeholder="Visit Date From"
+                                   th:value="${visitDateFrom}" class="filter-input">
                             <input type="date" id="visitDateTo" onfocus="(this.type='date')"
-                                   onblur="(this.type='text')" name="visitDateTo" placeholder="Visit Date To" th:value="${visitDateTo}" class="filter-input">
+                                   onblur="(this.type='text')" name="visitDateTo" placeholder="Visit Date To"
+                                   th:value="${visitDateTo}" class="filter-input">
 
                             <!-- Полета за сортиране -->
-                            <select name="sortBy" class="filter-select" style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
+                            <select name="sortBy" class="filter-select"
+                                    style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
                                 <!-- Добавяме опция "All" за сортиране по всички критерии -->
-                                <option value="" th:selected="${sortBy == null}" >Sort By</option>
+                                <option value="" th:selected="${sortBy == null}">Sort By</option>
                                 <option value="username" th:selected="${sortBy == 'username'}">Username</option>
                                 <option value="email" th:selected="${sortBy == 'email'}">Email</option>
-                                <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Phone Number</option>
-                                <option value="vehicleBrand" th:selected="${sortBy == 'vehicleBrand'}">Vehicle Brand</option>
+                                <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Phone Number
+                                </option>
+                                <option value="vehicleBrand" th:selected="${sortBy == 'vehicleBrand'}">Vehicle Brand
+                                </option>
                             </select>
-                            <select name="sortDirection" class="filter-select" style="width: 179px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
+                            <select name="sortDirection" class="filter-select"
+                                    style="width: 179px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
                                 <option value="asc" th:selected="${sortDirection == 'asc'}">Ascending</option>
                                 <option value="desc" th:selected="${sortDirection == 'desc'}">Descending</option>
                             </select>
 
                             <!-- Стилизиране на бутоните -->
-                            <button type="submit" class="modern-button" style="height: 38px; width: 38px; margin-top: 13px; margin-bottom: 13px;">
+                            <button type="submit" class="modern-button"
+                                    style="height: 38px; width: 38px; margin-top: 13px; margin-bottom: 13px;">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
@@ -69,23 +81,39 @@
                     <!-- Списък на потребители -->
                     <div class="user-list">
                         <div class="row vehicle-item gray">
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Username</div>
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Email</div>
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Phone Number</div>
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Car Brand</div>
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Service Dates</div>
+                            <div class="column column-1-6"
+                                 style="font-weight: bold; font-size: 18px; text-align: center;">Username
+                            </div>
+                            <div class="column column-1-6"
+                                 style="font-weight: bold; font-size: 18px; text-align: center;">Email
+                            </div>
+                            <div class="column column-1-6"
+                                 style="font-weight: bold; font-size: 18px; text-align: center;">Phone Number
+                            </div>
+                            <div class="column column-1-6"
+                                 style="font-weight: bold; font-size: 18px; text-align: center;">Car Brand
+                            </div>
+                            <div class="column column-1-6"
+                                 style="font-weight: bold; font-size: 18px; text-align: center;">Service Dates
+                            </div>
                         </div>
                         <div class="user-list" style="text-align: center">
                             <div th:each="user, iterStat : ${users}"
                                  th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
-                                <div class="column column-1-6" style="text-align: center" th:text="${user.username}">Username</div>
+                                <div class="column column-1-6" style="text-align: center" th:text="${user.username}">
+                                    Username
+                                </div>
                                 <div class="column column-1-6" th:text="${user.email}">Email</div>
-                                <div class="column column-1-6" style="text-align: center" th:text="${user.phoneNumber}">Phone Number</div>
+                                <div class="column column-1-6" style="text-align: center" th:text="${user.phoneNumber}">
+                                    Phone Number
+                                </div>
 
                                 <!-- Марка на колата, която потребителят притежава -->
                                 <div class="column column-1-6" style="text-align: center">
                                     <ul>
-                                        <li th:each="car : ${user.clientCars}" th:text="${car.vehicle.brand.name}">Car Brand</li>
+                                        <li th:each="car : ${user.clientCars}" th:text="${car.vehicle.brand.name}">Car
+                                            Brand
+                                        </li>
                                     </ul>
                                 </div>
 
@@ -94,7 +122,9 @@
                                     <ul>
                                         <li th:each="car : ${user.clientCars}">
                                             <ul>
-                                                <li th:each="service : ${car.carServices}" th:text="${service.serviceDate}">Service Date</li>
+                                                <li th:each="service : ${car.carServices}"
+                                                    th:text="${service.serviceDate}">Service Date
+                                                </li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -129,22 +159,31 @@
 <div class="background-overlay"></div>
 <!-- JavaScript и библиотеки -->
 <script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.tools.min.js" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
-<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
+<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.tools.min.js"
+        th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
+<script type="text/javascript" src="../static/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js"
+        th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
 <script type="text/javascript" src="../static/js/jquery.ba-bbq.min.js" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
-<script type="text/javascript" src="../static/js/jquery-ui-1.12.1.custom.min.js" th:src="@{/js/jquery-ui-1.12.1.custom.min.js}"></script>
-<script type="text/javascript" src="../static/js/jquery.ui.touch-punch.min.js" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery-ui-1.12.1.custom.min.js"
+        th:src="@{/js/jquery-ui-1.12.1.custom.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.ui.touch-punch.min.js"
+        th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
 <script type="text/javascript" src="../static/js/jquery.isotope.min.js" th:src="@{/js/jquery.isotope.min.js}"></script>
-<script type="text/javascript" src="../static/js/jquery.easing.1.4.1.min.js" th:src="@{/js/jquery.easing.1.4.1.min.js}"></script>
-<script type="text/javascript" src="../static/js/jquery.carouFredSel-6.2.1-packed.js" th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}"></script>
-<script type="text/javascript" src="../static/js/jquery.touchSwipe.min.js" th:src="@{/js/jquery.touchSwipe.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.easing.1.4.1.min.js"
+        th:src="@{/js/jquery.easing.1.4.1.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.carouFredSel-6.2.1-packed.js"
+        th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.touchSwipe.min.js"
+        th:src="@{/js/jquery.touchSwipe.min.js}"></script>
 <script type="text/javascript" src="../static/js/jquery.transit.min.js" th:src="@{/js/jquery.transit.min.js}"></script>
 <script type="text/javascript" src="../static/js/jquery.hint.min.js" th:src="@{/js/jquery.hint.min.js}"></script>
-<script type="text/javascript" src="../static/js/jquery.costCalculator.min.js" th:src="@{/js/jquery.costCalculator.min.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.costCalculator.min.js"
+        th:src="@{/js/jquery.costCalculator.min.js}"></script>
 <script type="text/javascript" src="../static/js/jquery.prettyPhoto.js" th:src="@{/js/jquery.prettyPhoto.js}"></script>
 <script type="text/javascript" src="../static/js/jquery.qtip.min.js" th:src="@{/js/jquery.qtip.min.js}"></script>
 <script type="text/javascript" src="../static/js/jquery.blockUI.min.js" th:src="@{/js/jquery.blockUI.min.js}"></script>
-<script type="text/javascript" src="../static/js/jquery.imagesloaded-packed.js" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
+<script type="text/javascript" src="../static/js/jquery.imagesloaded-packed.js"
+        th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
 <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" src="../static/js/odometer.min.js" th:src="@{/js/odometer.min.js}"></script>
 </body>

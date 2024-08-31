@@ -65,6 +65,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(int id, User currentUser) {
+        PermissionHelper.isEmployeeOrSameUser(currentUser, currentUser, INVALID_PERMISSION);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User", id));
+    }
+
+    @Override
     public User getUserById(int id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User", id));

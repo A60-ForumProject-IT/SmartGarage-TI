@@ -17,6 +17,9 @@ public interface UserService {
     User getByUsername(String username);
 
     User getUserById(User employee, int id);
+
+    User getUserById(int id, User currentUser);
+
     User getUserById(int id);
 
     UserDto createCustomerProfile(User employee, UserCreationDto userCreationDto);
