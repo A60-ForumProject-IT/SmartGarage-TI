@@ -64,6 +64,9 @@ public class UserMvcController {
         if (vehicleBrand != null && vehicleBrand.trim().isEmpty()) {
             vehicleBrand = null;
         }
+        if (sortBy != null && sortBy.trim().isEmpty()) {
+            sortBy = null;
+        }
 
         try {
             // Извличане на текущия потребител от сесията

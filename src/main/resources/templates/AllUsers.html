@@ -30,8 +30,13 @@
                             <input type="text" name="email" placeholder="Filter by Email" th:value="${email}" class="filter-input">
                             <input type="text" name="phoneNumber" placeholder="Filter by Phone Number" th:value="${phoneNumber}" class="filter-input">
                             <select name="vehicleBrand" class="filter-input filter-select" style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
-                                <option value="" disabled selected>Filter by Car Brand</option>
-                                <option th:each="brand : ${allVehicleBrands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+                                <!-- Добавяме опция "All" за да позволим филтриране по всичко -->
+                                <option value="" th:selected="${vehicleBrand == null}" >All Brands</option>
+                                <option th:each="brand : ${allVehicleBrands}"
+                                        th:value="${brand.name}"
+                                        th:text="${brand.name}"
+                                        th:selected="${vehicleBrand == brand.name}">
+                                </option>
                             </select>
 
                             <!-- Полета за филтриране по дати с placeholder -->
@@ -42,7 +47,8 @@
 
                             <!-- Полета за сортиране -->
                             <select name="sortBy" class="filter-select" style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
-                                <option value="" disabled selected>Sort By</option>
+                                <!-- Добавяме опция "All" за сортиране по всички критерии -->
+                                <option value="" th:selected="${sortBy == null}" >Sort By</option>
                                 <option value="username" th:selected="${sortBy == 'username'}">Username</option>
                                 <option value="email" th:selected="${sortBy == 'email'}">Email</option>
                                 <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Phone Number</option>
@@ -60,8 +66,8 @@
                         </div>
                     </form>
 
+                    <!-- Списък на потребители -->
                     <div class="user-list">
-                        <!-- Заглавие за колоните -->
                         <div class="row vehicle-item gray">
                             <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Username</div>
                             <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Email</div>
@@ -70,7 +76,6 @@
                             <div class="column column-1-6" style="font-weight: bold; font-size: 18px; text-align: center;">Service Dates</div>
                         </div>
                         <div class="user-list" style="text-align: center">
-                            <!-- Извеждане на информация за всеки потребител -->
                             <div th:each="user, iterStat : ${users}"
                                  th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
                                 <div class="column column-1-6" style="text-align: center" th:text="${user.username}">Username</div>
@@ -97,17 +102,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Пагинация -->
                     <div class="pagination">
                         <ul>
                             <li th:if="${currentPage > 0}">
                                 <a th:href="@{/ti/users(page=${currentPage - 1}, size=${size}, username=${username}, email=${email}, phoneNumber=${phoneNumber}, vehicleBrand=${vehicleBrand}, visitDateFrom=${visitDateFrom}, visitDateTo=${visitDateTo}, sortBy=${sortBy}, sortDirection=${sortDirection})}">Previous</a>
                             </li>
-
                             <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
                                 <a th:href="@{/ti/users(page=${i}, size=${size}, username=${username}, email=${email}, phoneNumber=${phoneNumber}, vehicleBrand=${vehicleBrand}, visitDateFrom=${visitDateFrom}, visitDateTo=${visitDateTo}, sortBy=${sortBy}, sortDirection=${sortDirection})}"
                                    th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
                             </li>
-
                             <li th:if="${currentPage < totalPages - 1}">
                                 <a th:href="@{/ti/users(page=${currentPage + 1}, size=${size}, username=${username}, email=${email}, phoneNumber=${phoneNumber}, vehicleBrand=${vehicleBrand}, visitDateFrom=${visitDateFrom}, visitDateTo=${visitDateTo}, sortBy=${sortBy}, sortDirection=${sortDirection})}">Next</a>
                             </li>
