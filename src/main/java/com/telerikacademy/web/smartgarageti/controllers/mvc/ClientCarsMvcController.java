@@ -97,7 +97,6 @@ public class ClientCarsMvcController {
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("order", order);
         model.addAttribute("clientCarDtoMvc", new ClientCarDtoMvc());
-        model.addAttribute("editMode", false);
 
         return "ClientCars";
     }
@@ -166,15 +165,13 @@ public class ClientCarsMvcController {
             model.addAttribute("clientCars", clientCarService.getAllClientCars(PageRequest.of(0, 10)).getContent());
             model.addAttribute("totalPages", 1);
             model.addAttribute("currentPage", 0);
-            model.addAttribute("editMode", true); // При грешка валидацията да продължи да използва editMode
-            return "ClientCars"; // Замести с името на твоя Thymeleaf шаблон
+            return "ClientCars";
         }
 
         try {
             User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
             ClientCar updatedCar = mapperHelper.updateClientCarFromDto(clientCarUpdateDto, id);
             clientCarService.updateClientCar(updatedCar, loggedInUser);
-            model.addAttribute("editMode", false); // Връщане на нормалния режим след успешна редакция
             return "redirect:/ti/client-cars";
         } catch (DuplicateEntityException e) {
             ClientCar existingCar = clientCarService.getClientCarById(id);
@@ -184,8 +181,7 @@ public class ClientCarsMvcController {
             model.addAttribute("clientCars", clientCarService.getAllClientCars(PageRequest.of(0, 10)).getContent());
             model.addAttribute("totalPages", 1);
             model.addAttribute("currentPage", 0);
-            model.addAttribute("editMode", true); // Поддържане на editMode при грешка
-            return "ClientCars"; // Замести с името на твоя Thymeleaf шаблон
+            return "ClientCars";
         }
     }
 }

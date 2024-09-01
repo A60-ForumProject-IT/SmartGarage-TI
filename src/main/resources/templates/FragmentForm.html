@@ -139,7 +139,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="ClientCars.html" title="Client Cars" th:href="@{/ti/client-cars}">
+                            <a href="ClientCars.html" title="Client Cars" th:if="${isAuthenticated && isEmployee}" th:href="@{/ti/client-cars}">
                                 Client Cars
                             </a>
                         </li>

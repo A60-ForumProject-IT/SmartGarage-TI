@@ -4485,6 +4485,7 @@ body.lock-position
 	margin-top: 5px;
 	padding-left: 5px;
 	height: 15px;
+	position: relative;
 }
 
 .row.button-section {
