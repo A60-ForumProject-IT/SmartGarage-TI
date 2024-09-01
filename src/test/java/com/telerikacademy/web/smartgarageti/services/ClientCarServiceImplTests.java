@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -202,11 +202,15 @@ public class ClientCarServiceImplTests {
     void getAllClientCars_Should_Pass() {
         List<ClientCar> clientCars = new ArrayList<>();
         Vehicle vehicle = createMockVehicle();
+        clientCars.add(new ClientCar("VIN1", "Plate1", new User(), vehicle));
 
-        when(clientCarRepository.findAll()).thenReturn(clientCars);
+        Pageable pageable = PageRequest.of(0, 10); // Симулира се първа страница с 10 резултата
+        Page<ClientCar> clientCarPage = new PageImpl<>(clientCars, pageable, clientCars.size());
 
-        carService.getAllClientCars();
+        when(clientCarRepository.findAll(pageable)).thenReturn(clientCarPage);
 
-        verify(clientCarRepository).findAll();
+        carService.getAllClientCars(pageable);
+
+        verify(clientCarRepository).findAll(pageable);
     }
 }
