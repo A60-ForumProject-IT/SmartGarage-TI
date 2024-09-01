@@ -42,46 +42,53 @@
                 <!-- Поле за VIN -->
                 <div class="custom-form-row">
                     <label for="vin">VIN</label>
-                    <input id="vin" type="text" th:field="*{vin}" placeholder="Put the VIN here...">
+                    <input id="vin" type="text" th:field="*{vin}" placeholder="Put the VIN here..." required>
+                    <div class="error-message" th:if="${#fields.hasErrors('vin')}" th:errors="*{vin}"></div>
                 </div>
 
                 <!-- Поле за License Plate -->
                 <div class="custom-form-row">
                     <label for="licensePlate">LICENSE PLATE</label>
-                    <input id="licensePlate" type="text" th:field="*{license_plate}" placeholder="Put the license plate here...">
+                    <input id="licensePlate" type="text" th:field="*{license_plate}" placeholder="Put the license plate here..." required>
+                    <div class="error-message" th:if="${#fields.hasErrors('license_plate')}" th:errors="*{license_plate}"></div>
                 </div>
 
                 <!-- Поле за Owner -->
                 <div class="custom-form-row">
                     <label for="owner">OWNER</label>
-                    <input id="owner" type="text" th:field="*{owner}" placeholder="Owner...">
+                    <input id="owner" type="text" th:field="*{owner}" placeholder="Owner..." required>
+                    <div class="error-message" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></div>
                 </div>
 
                 <!-- Поле за Brand (Dropdown меню) -->
                 <div class="custom-form-row">
                     <label for="brand">BRAND</label>
-                    <select id="brand" name="brand" th:field="*{brandName}">
+                    <select id="brand" name="brand" th:field="*{brandName}" required>
                         <option value="">Select Brand</option>
                         <option th:each="brand : ${allVehicleBrands}" th:value="${brand.name}" th:text="${brand.name}"></option>
                     </select>
+                    <div class="error-message" th:if="${#fields.hasErrors('brandName')}" th:errors="*{brandName}"></div>
                 </div>
 
                 <!-- Поле за Make -->
                 <div class="custom-form-row">
                     <label for="make">MAKE</label>
-                    <input id="make" type="text" th:field="*{modelName}" placeholder="Put the make here...">
+                    <input id="make" type="text" th:field="*{modelName}" placeholder="Put the make here..." required>
+                    <div class="error-message" th:if="${#fields.hasErrors('modelName')}" th:errors="*{modelName}"></div>
                 </div>
 
                 <!-- Поле за Engine Type -->
                 <div class="custom-form-row">
                     <label for="engineType">ENGINE TYPE</label>
-                    <input id="engineType" type="text" th:field="*{engineType}" placeholder="Put the engine here...">
+                    <input id="engineType" type="text" th:field="*{engineType}" placeholder="Put the engine here..." required>
+                    <div class="error-message" th:if="${#fields.hasErrors('engineType')}" th:errors="*{engineType}"></div>
                 </div>
 
                 <!-- Поле за Year of Creation -->
                 <div class="custom-form-row">
                     <label for="yearOfCreation">YEAR OF CREATION</label>
-                    <input id="yearOfCreation" type="text" th:field="*{year}" placeholder="Put the year here...">
+                    <input id="yearOfCreation" type="text" th:field="*{year}" placeholder="Put the year here..." required>
+                    <div class="error-message" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
                 </div>
 
                 <!-- Бутон за добавяне на автомобила -->
@@ -142,17 +149,36 @@
                 <div class="custom-car-list-items">
                     <div th:each="clientCar, iterStat : ${clientCars}"
                          th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white custom-car-list-row' : 'vehicle-item gray custom-car-list-row'">
-                        <div class="custom-car-list-column" th:text="${clientCar.getVin()}">VIN</div>
-                        <div class="custom-car-list-column" th:text="${clientCar.getLicensePlate()}">License Plate</div>
+                        <div class="custom-car-list-column" id="vin-${clientCar.id}" th:text="${clientCar.getVin()}"></div>
+
+                        <!-- License Plate -->
+                        <div class="custom-car-list-column" id="licensePlate-${clientCar.id}" th:text="${clientCar.getLicensePlate()}"></div>
+
+                        <!-- Owner -->
                         <div class="custom-car-list-column" th:text="${clientCar.getOwner().username}">Owner Username</div>
+
+                        <!-- Brand -->
                         <div class="custom-car-list-column" th:text="${clientCar.getVehicle().brand.name}">Brand</div>
+
+                        <!-- Make -->
                         <div class="custom-car-list-column" th:text="${clientCar.getVehicle().model.name}">Make</div>
+
+                        <!-- Engine Type -->
                         <div class="custom-car-list-column" th:text="${clientCar.getVehicle().engineType.name}">Engine Type</div>
+
+                        <!-- Year of Creation -->
                         <div class="custom-car-list-column" th:text="${clientCar.getVehicle().year.year}">Year of Creation</div>
+
+                        <!-- Actions -->
                         <div class="custom-car-list-column">
-                            <button>Edit</button>
-                            <button>Delete</button>
-                            <button>Add Services</button>
+                            <!-- Edit button -->
+                            <button th:if="${clientCar.id != null}" id="edit-${clientCar.id}" onclick="editClientCar('${clientCar.id}')">Edit</button>
+                            <!-- Save button -->
+                            <button id="save-${clientCar.id}" style="display:none;" onclick="saveClientCar(${clientCar.id})">Save</button>
+                            <!-- Delete button -->
+                            <button id="delete-${clientCar.id}">Delete</button>
+                            <!-- Add Services button -->
+                            <button id="add-services-${clientCar.id}">Add Services</button>
                         </div>
                     </div>
                 </div>
@@ -235,6 +261,51 @@
             minLength: 2
         });
     });
+</script>
+<script>
+    function editClientCar(carId) {
+        const vinElement = document.querySelector(`#vin-${carId}`);
+        const licensePlateElement = document.querySelector(`#licensePlate-${carId}`);
+        const saveButton = document.querySelector(`#save-${carId}`);
+        const editButton = document.querySelector(`#edit-${carId}`);
+        const deleteButton = document.querySelector(`#delete-${carId}`);
+        const addServicesButton = document.querySelector(`#add-services-${carId}`);
+
+        // Преобразуване на VIN и License Plate текст в инпут полета
+        vinElement.innerHTML = `<input type="text" value="${vinElement.textContent}" id="input-vin-${carId}" />`;
+        licensePlateElement.innerHTML = `<input type="text" value="${licensePlateElement.textContent}" id="input-licensePlate-${carId}" />`;
+
+        // Промяна на видимостта на бутоните
+        saveButton.style.display = 'inline-block';
+        editButton.style.display = 'none';
+        deleteButton.style.display = 'none';
+        addServicesButton.style.display = 'none';
+    }
+
+    function saveClientCar(carId) {
+        const vinValue = document.querySelector(`#input-vin-${carId}`).value;
+        const licensePlateValue = document.querySelector(`#input-licensePlate-${carId}`).value;
+
+        // Създаване на формуляр за изпращане на обновените стойности
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = `/ti/client-cars/edit/${carId}`;
+
+        const vinInput = document.createElement('input');
+        vinInput.type = 'hidden';
+        vinInput.name = 'vin';
+        vinInput.value = vinValue;
+        form.appendChild(vinInput);
+
+        const licensePlateInput = document.createElement('input');
+        licensePlateInput.type = 'hidden';
+        licensePlateInput.name = 'license_plate';
+        licensePlateInput.value = licensePlateValue;
+        form.appendChild(licensePlateInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
 
 </body>

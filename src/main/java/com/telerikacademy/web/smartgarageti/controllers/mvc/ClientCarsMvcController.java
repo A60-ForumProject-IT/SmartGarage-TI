@@ -8,6 +8,7 @@ import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.ClientCarDtoMvc;
+import com.telerikacademy.web.smartgarageti.models.dto.ClientCarUpdateDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -100,9 +102,18 @@ public class ClientCarsMvcController {
     }
 
     @PostMapping
-    public String addClientCar(@Valid @ModelAttribute ClientCarDtoMvc clientCarDtoMvc,
-                               Model model,
-                               HttpSession session) {
+    public String addClientCar(
+            @Valid @ModelAttribute("clientCarDtoMvc") ClientCarDtoMvc clientCarDtoMvc,
+            BindingResult bindingResult,
+            Model model,
+            HttpSession session) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("clientCars", clientCarService.getAllClientCars(PageRequest.of(0, 10)).getContent());
+            model.addAttribute("totalPages", 1);
+            model.addAttribute("currentPage", 0);
+            return "ClientCars";
+        }
 
         try {
             User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
@@ -110,13 +121,56 @@ public class ClientCarsMvcController {
             Brand brand = brandService.findBrandByName(clientCarDtoMvc.getBrandName());
 
             ClientCar newClientCar = mapperHelper.createClientCarFromDto(clientCarDtoMvc, userToAddCar, brand);
-
             clientCarService.createClientCar(newClientCar, loggedInUser);
             return "redirect:/ti/client-cars";
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "404";
         } catch (DuplicateEntityException e) {
+            bindingResult.rejectValue("vin", "error.clientCarDtoMvc", e.getMessage());
+            model.addAttribute("clientCars", clientCarService.getAllClientCars(PageRequest.of(0, 10)).getContent());
+            model.addAttribute("totalPages", 1);
+            model.addAttribute("currentPage", 0);
+            return "ClientCars";
+        }
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editClientCar(@PathVariable int id, Model model) {
+        try {
+            ClientCar clientCar = clientCarService.getClientCarById(id);
+            ClientCarUpdateDto clientCarUpdateDto = new ClientCarUpdateDto();
+            clientCarUpdateDto.setVin(clientCar.getVin());
+            clientCarUpdateDto.setLicense_plate(clientCar.getLicensePlate());
+            model.addAttribute("clientCar", clientCar);
+            model.addAttribute("clientCarUpdateDto", clientCarUpdateDto);
+            return "ClientCars";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
+        }
+    }
+
+    @PostMapping("/edit/{id}")
+    public String saveClientCar(
+            @PathVariable int id,
+            @Valid @ModelAttribute ClientCarUpdateDto clientCarUpdateDto,
+            BindingResult bindingResult,
+            Model model, HttpSession session) {
+
+        if (bindingResult.hasErrors()) {
+            return "ClientCars";
+        }
+
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            ClientCar updatedCar = mapperHelper.updateClientCarFromDto(clientCarUpdateDto, id);
+            clientCarService.updateClientCar(updatedCar, loggedInUser);
+            return "redirect:/ti/client-cars";
+        } catch (DuplicateEntityException e) {
+            bindingResult.rejectValue("vin", "error.clientCarUpdateDto", e.getMessage());
+            return "ClientCars";
+        } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "404";
         }
