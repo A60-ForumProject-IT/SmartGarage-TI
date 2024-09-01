@@ -186,6 +186,9 @@
 <div class="background-overlay"></div>
 <!--js-->
 <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+
 <!--slider revolution-->
 <script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
@@ -205,5 +208,34 @@
 <script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        console.log("Document is ready!");
+
+        $("#owner").autocomplete({
+            source: function(request, response) {
+                console.log("Autocomplete triggered with term: ", request.term);
+
+                $.ajax({
+                    url: "/ti/client-cars/usernames",
+                    type: "GET",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        console.log("Autocomplete data received: ", data);
+                        response(data);
+                    },
+                    error: function(xhr) {
+                        console.error("Autocomplete error: ", xhr);
+                    }
+                });
+            },
+            minLength: 2
+        });
+    });
+</script>
+
 </body>
 </html>

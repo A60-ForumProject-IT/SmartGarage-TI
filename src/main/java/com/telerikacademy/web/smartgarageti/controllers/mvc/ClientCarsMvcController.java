@@ -12,6 +12,7 @@ import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,6 +61,14 @@ public class ClientCarsMvcController {
         return brandService.findAllBrands();
     }
 
+    @GetMapping("/usernames")
+    @ResponseBody
+    public List<String> findUsernames(@RequestParam("term") String term) {
+        List<String> usernames = userService.findUsernamesByTerm(term);
+        System.out.println("Usernames found: " + usernames);
+        return usernames;
+    }
+
     @GetMapping
     public String listClientCars(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -91,7 +100,7 @@ public class ClientCarsMvcController {
     }
 
     @PostMapping
-    public String addClientCar(@ModelAttribute ClientCarDtoMvc clientCarDtoMvc,
+    public String addClientCar(@Valid @ModelAttribute ClientCarDtoMvc clientCarDtoMvc,
                                Model model,
                                HttpSession session) {
 

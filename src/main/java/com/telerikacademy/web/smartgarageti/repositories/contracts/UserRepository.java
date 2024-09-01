@@ -41,4 +41,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             @Param("visitDateTo") LocalDate visitDateTo,
             Pageable pageable
     );
+
+    @Query("SELECT u.username FROM User u WHERE u.username LIKE %:term%")
+    List<String> findUsernamesByTerm(@Param("term") String term);
 }

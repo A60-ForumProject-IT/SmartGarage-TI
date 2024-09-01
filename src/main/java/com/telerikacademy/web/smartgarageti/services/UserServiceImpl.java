@@ -183,4 +183,9 @@ public class UserServiceImpl implements UserService {
 
         return MapperHelper.toUserDto(user);
     }
+
+    @Override
+    public List<String> findUsernamesByTerm(String term) {
+        return userRepository.findUsernamesByTerm(term);
+    }
 }
