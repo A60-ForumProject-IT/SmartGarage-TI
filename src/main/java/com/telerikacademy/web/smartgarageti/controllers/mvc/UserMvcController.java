@@ -52,11 +52,17 @@ public class UserMvcController {
         // Получаване на списъка с всички брандове на коли от VehicleService
         return brandService.findAllBrands();
     }
+    @ModelAttribute("isAuthenticated")
+    public boolean isAuthenticated(HttpSession session) {
+        return session.getAttribute("currentUser") != null;
+    }
+
+    // Проверява дали потребителят има роля "Employee"
     @ModelAttribute("isEmployee")
-    public boolean populateIsEmployee(HttpSession session) {
+    public boolean isEmployee(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
             User user = authenticationHelper.tryGetUserFromSession(session);
-            return user.getRole().getName().equals("Employee");
+            return "Employee".equals(user.getRole().getName());
         }
         return false;
     }
@@ -174,9 +180,8 @@ public class UserMvcController {
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
             avatarService.uploadAvatar(currentUser, avatarFile);
-            return "redirect:/ti/users/" + currentUser.getId() + "/details";  // Пренасочване към метода за детайли на потребителя
+            return "redirect:/ti/users/" + currentUser.getId() + "/details";
         } catch (IOException e) {
-            // Логване на грешка и пренасочване към страница с грешка
             model.addAttribute("errorMessage", "Error while uploading the photo.");
             return "404";
         } catch (AuthenticationException e) {
