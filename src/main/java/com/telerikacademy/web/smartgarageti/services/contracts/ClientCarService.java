@@ -27,4 +27,6 @@ public interface ClientCarService {
     Page<ClientCar> filterAndSortClientCarsByOwner(String searchTerm, Pageable pageable);
 
     ClientCar createClientCar(ClientCar clientCar, User user);
+
+    void deleteClientCar(int id, User user);
 }

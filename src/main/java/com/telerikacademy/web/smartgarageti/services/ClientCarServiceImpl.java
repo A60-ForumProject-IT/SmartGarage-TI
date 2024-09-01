@@ -27,7 +27,7 @@ public class ClientCarServiceImpl implements ClientCarService {
 
     @Override
     public Page<ClientCar> getAllClientCars(Pageable pageable) {
-        return clientCarRepository.findAll(pageable);
+        return clientCarRepository.findAllByIsDeletedFalse(pageable);
     }
 
     @Override
@@ -62,7 +62,8 @@ public class ClientCarServiceImpl implements ClientCarService {
             sort = Sort.by(Sort.Direction.DESC, sortBy);
         }
 
-        List<ClientCar> clientCars = clientCarRepository.findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCase(searchTerm, searchTerm, sort);
+        List<ClientCar> clientCars = clientCarRepository.
+                findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCaseAndIsDeletedFalse(searchTerm, searchTerm, sort);
 
         if (clientCars.isEmpty()) {
             throw new NoResultsFoundException("There are no client cars with the given search term");
@@ -73,7 +74,7 @@ public class ClientCarServiceImpl implements ClientCarService {
     @Override
     public List<ClientCar> getClientCarsByClientId(int clientId, User loggedInUser, User carOwner) {
         PermissionHelper.isEmployeeOrSameUser(loggedInUser, carOwner, "You need to be employee or same user to check this info!");
-        List<ClientCar> clientCars = clientCarRepository.findAllByOwnerId(clientId);
+        List<ClientCar> clientCars = clientCarRepository.findAllByOwnerIdAndIsDeletedFalse(clientId);
 
         if (clientCars.isEmpty()) {
             throw new NoResultsFoundException("This user does not have any client cars");
@@ -112,6 +113,18 @@ public class ClientCarServiceImpl implements ClientCarService {
     @Override
     public void updateClientCar(ClientCar clientCar, User user) {
         PermissionHelper.isEmployee(user, "You are not employee and can't update client cars!");
+        clientCarRepository.save(clientCar);
+    }
+
+    @Override
+    public void deleteClientCar(int id, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't delete client cars!");
+        ClientCar clientCar = clientCarRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client car", id));
+        if (clientCar.isDeleted()) {
+            throw new IllegalArgumentException("Client car is already deleted.");
+        }
+        clientCar.setDeleted(true);
         clientCarRepository.save(clientCar);
     }
 }
