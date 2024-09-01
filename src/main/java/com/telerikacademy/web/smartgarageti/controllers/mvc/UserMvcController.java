@@ -11,6 +11,7 @@ import com.telerikacademy.web.smartgarageti.models.dto.UserEditInfoDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -53,6 +55,12 @@ public class UserMvcController {
         }
         return false;
     }
+
+    @ModelAttribute("userEditInfoDto")
+    public UserEditInfoDto userEditInfoDto() {
+        return new UserEditInfoDto();
+    }
+
 
     @GetMapping
     public String getAllUsers(HttpSession session,
@@ -119,9 +127,9 @@ public class UserMvcController {
 
             model.addAttribute("user", userToDisplay);
             model.addAttribute("userEditInfoDto", new UserEditInfoDto());
-           // model.addAttribute("avatarUrl", userToDisplay.getAvatarUrl()); // Placeholder за Cloudinary
+            model.addAttribute("avatarUrl", userToDisplay.getAvatar().getAvatar());
 
-            return "team_curtis_greene";
+            return "UserDetails";
         } catch (UnauthorizedOperationException | EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -131,4 +139,28 @@ public class UserMvcController {
         }
     }
 
+    @PostMapping("/{id}/edit")
+    public String editUser(@PathVariable int id,
+                           @Valid @ModelAttribute("userEditInfoDto") UserEditInfoDto userEditInfoDto,
+                           BindingResult bindingResult,
+                           Model model,
+                           HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            return "UserDetails";
+        }
+
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            User userToEdit = userService.getUserById(id, currentUser);
+
+            userService.updateUser(currentUser, userToEdit);
+            return "UserDetails";
+        } catch (UnauthorizedOperationException | EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "404";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
 }

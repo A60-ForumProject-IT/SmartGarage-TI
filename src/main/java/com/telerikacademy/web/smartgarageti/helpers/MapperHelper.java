@@ -151,4 +151,15 @@ public class MapperHelper {
         return vehicleService.createVehicle(clientCarDto.getBrandName(), clientCarDto.getModelName(),
                 clientCarDto.getYear(), clientCarDto.getEngineType(), user);
     }
+//    public User createUserFromRegistrationDto(UserCreationDto registrationDto) {
+//        User user = new User();
+//        user.setFirstName(registrationDto.getFirstName());
+//        user.setLastName(registrationDto.getLastName());
+//        user.setEmail(registrationDto.getEmail());
+//        user.setPassword(registrationDto.getPassword());
+//        user.setUsername(registrationDto.getUsername());
+//        user.setRole(roleService.getRoleById(USER));
+//        user.setBlocked(false);
+//        return user;
+//    }
 }

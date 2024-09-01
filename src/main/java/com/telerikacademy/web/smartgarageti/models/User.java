@@ -66,6 +66,13 @@ public class User {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<ClientCar> clientCars;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_avatars",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "avatar_id"))
+    private Avatar avatar;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

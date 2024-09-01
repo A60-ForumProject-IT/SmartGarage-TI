@@ -5,6 +5,7 @@ import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PasswordGenerator;
 import com.telerikacademy.web.smartgarageti.helpers.PasswordHasher;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
+import com.telerikacademy.web.smartgarageti.models.Avatar;
 import com.telerikacademy.web.smartgarageti.models.FilteredUserOptions;
 import com.telerikacademy.web.smartgarageti.models.Role;
 import com.telerikacademy.web.smartgarageti.models.User;
@@ -13,6 +14,7 @@ import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.UserRepository;
+import com.telerikacademy.web.smartgarageti.services.contracts.AvatarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.RoleService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +44,15 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final EmailService emailService;
+    private final AvatarService avatarService;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, EmailService emailService) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, EmailService emailService, AvatarService avatarService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.emailService = emailService;
+        this.avatarService = avatarService;
     }
 
     @Override
@@ -168,8 +172,9 @@ public class UserServiceImpl implements UserService {
         Role role = roleService.getRoleById(1);
         String randomPassword = PasswordGenerator.generateRandomPassword();
         User user = MapperHelper.toUserEntity(userCreationDto, randomPassword, role);
+        Avatar defaultAvatar = avatarService.initializeDefaultAvatar();
+        user.setAvatar(defaultAvatar);
         userRepository.save(user);
-
         emailService.sendEmail(
                 user.getEmail(),
                 "Welcome to Smart Garage",

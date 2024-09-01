@@ -4,10 +4,12 @@ import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
+import com.telerikacademy.web.smartgarageti.models.Avatar;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.LoginDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserCreationDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserDto;
+import com.telerikacademy.web.smartgarageti.services.contracts.AvatarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -25,11 +27,13 @@ public class AuthenticationMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
     private final UserService userService;
+    private final AvatarService avatarService;
 
-    public AuthenticationMvcController(AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, UserService userService) {
+    public AuthenticationMvcController(AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, UserService userService, AvatarService avatarService) {
         this.authenticationHelper = authenticationHelper;
         this.mapperHelper = mapperHelper;
         this.userService = userService;
+        this.avatarService = avatarService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -97,10 +101,11 @@ public class AuthenticationMvcController {
             return "LoginView";
         }
         try {
-            UserDto user = userService.createCustomerProfile(userCreationDto);
+            UserDto userDto = userService.createCustomerProfile(userCreationDto);
             model.addAttribute("login", new LoginDto());
             model.addAttribute("showLogin", false);
             model.addAttribute("register", new UserCreationDto());
+
             return "redirect:/ti/auth/login";
         } catch (DuplicateEntityException e) {
             bindingResult.rejectValue("username", "registration_error", e.getMessage());
@@ -109,20 +114,4 @@ public class AuthenticationMvcController {
             return "LoginView";
         }
     }
-
-//        try {
-//            User user = mapperHelper.createUserFromRegistrationDto(registrationDto);
-//
-//            Avatar defaultAvatar = avatarService.initializeDefaultAvatar();
-//            user.setAvatar(defaultAvatar);
-//
-//            userService.create(user);
-//            return "redirect:/ti/auth/login";
-//        } catch (DuplicateEntityException e) {
-//            bindingResult.rejectValue("username", "registration_error", e.getMessage());
-//            model.addAttribute("login", new LoginDto());
-//            model.addAttribute("showLogin", false);
-//            return "AuthView";
-//        }
-
 }
