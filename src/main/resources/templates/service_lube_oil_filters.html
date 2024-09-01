@@ -111,26 +111,12 @@
 									<h3 class="box-header page-margin-top">PRICING</h3>
 									<table class="margin-top-40">
 										<tbody>
-											<tr>
-												<td>Front Brakes Repair</td>
-												<td>$49.95</td>
-											</tr>
-											<tr>
-												<td>Rear Brakes Repair</td>
-												<td>$59.95</td>
-											</tr>
-											<tr>
-												<td>Rear Brakes Shoes</td>
-												<td>$65.25</td>
-											</tr>
-											<tr>
-												<td>Axle</td>
-												<td>$149.95 Each</td>
-											</tr>
-											<tr>
-												<td>Starters / Alternators</td>
-												<td>$225.95 Plus Parts</td>
-											</tr>
+										<tr th:each="service : ${services}">
+											<td th:text="${service.name}">Service Name</td>
+											<td th:utext="'Starts from <span style=&quot;font-weight: bold;&quot;>' + ${#numbers.formatDecimal(service.price, 2, 2)} + '</span> BGN'">
+												Service Price
+											</td>
+										</tr>
 										</tbody>
 									</table>
 								</div>
