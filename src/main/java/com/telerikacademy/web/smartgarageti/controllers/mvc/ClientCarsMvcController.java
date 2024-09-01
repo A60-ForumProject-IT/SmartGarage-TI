@@ -1,9 +1,10 @@
 package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
+import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +18,12 @@ import java.util.List;
 @RequestMapping("/ti/client-cars")
 public class ClientCarsMvcController {
     private final AuthenticationHelper authenticationHelper;
+    private final ClientCarService clientCarService;
 
     @Autowired
-    public ClientCarsMvcController(AuthenticationHelper authenticationHelper) {
+    public ClientCarsMvcController(AuthenticationHelper authenticationHelper, ClientCarService clientCarService) {
         this.authenticationHelper = authenticationHelper;
+        this.clientCarService = clientCarService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -35,6 +38,11 @@ public class ClientCarsMvcController {
             return user.getRole().getName().equals("Employee");
         }
         return false;
+    }
+
+    @ModelAttribute("clientCars")
+    public List<ClientCar> populateClientCars() {
+        return clientCarService.getAllClientCars();
     }
 
     @GetMapping

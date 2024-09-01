@@ -127,21 +127,21 @@
                     <div class="custom-car-list-column">Actions</div>
                 </div>
                 <div class="custom-car-list-items">
-                    <!-- Пример за динамични данни -->
-                    <div class="custom-car-list-row">
-                        <div class="custom-car-list-column">1HGCM82633A123456</div>
-                        <div class="custom-car-list-column">CA1234AB</div>
-                        <div class="custom-car-list-column">John Doe</div>
-                        <div class="custom-car-list-column">Honda</div>
-                        <div class="custom-car-list-column">Civic</div>
-                        <div class="custom-car-list-column">Petrol</div>
-                        <div class="custom-car-list-column">2003</div>
+                    <div th:each="clientCar, iterStat : ${clientCars}"
+                         th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white custom-car-list-row' : 'vehicle-item gray custom-car-list-row'">
+                        <div class="custom-car-list-column" th:text="${clientCar.getVin()}">VIN</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.getLicensePlate()}">License Plate</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.getOwner().username}">Owner Username</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.getVehicle().brand.name}">Brand</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.getVehicle().model.name}">Make</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.getVehicle().engineType.name}">Engine Type</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.getVehicle().year.year}">Year of Creation</div>
                         <div class="custom-car-list-column">
                             <button>Edit</button>
                             <button>Delete</button>
+                            <button>Add Services</button>
                         </div>
                     </div>
-                    <!-- Повтаряй динамичните редове тук -->
                 </div>
             </div>
 

@@ -4236,7 +4236,7 @@ body.lock-position
 	flex-wrap: wrap; /* Подрежда input полетата на редове */
 	gap: 10px;
 	align-items: flex-start; /* Запазва подравняването на input полетата */
-	width: 90%; /* Задава ширина, за да се остави място за бутона */
+	width: 89%; /* Задава ширина, за да се остави място за бутона */
 }
 
 .button-container {
@@ -4446,7 +4446,7 @@ body.lock-position
 	background-color: #007bff;
 	color: white;
 	border: none;
-	padding: 5px 10px;
+	padding: px 10px;
 	border-radius: 4px;
 	cursor: pointer;
 }
