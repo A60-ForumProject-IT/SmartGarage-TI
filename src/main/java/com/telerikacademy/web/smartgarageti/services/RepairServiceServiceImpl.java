@@ -42,6 +42,11 @@ public class RepairServiceServiceImpl implements RepairServiceService {
     }
 
     @Override
+    public List<RepairService> getAllByBaseServiceId(int id) {
+        return serviceRepository.findAllByBaseServiceId(id);
+    }
+
+    @Override
     public List<RepairService> findAllServices() {
         return serviceRepository.findAllByIsDeletedFalse();
     }

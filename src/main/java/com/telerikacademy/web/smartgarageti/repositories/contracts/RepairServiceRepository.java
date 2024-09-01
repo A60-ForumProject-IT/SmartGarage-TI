@@ -19,4 +19,6 @@ public interface RepairServiceRepository extends JpaRepository<RepairService, In
             "AND (:price IS NULL OR r.price <= :price)")
     List<RepairService> findAllByNameAndPrice(@Param("name") String name,
                                               @Param("price") Double price, Sort sort);
+
+    List<RepairService> findAllByBaseServiceId(Integer baseServiceId);
 }

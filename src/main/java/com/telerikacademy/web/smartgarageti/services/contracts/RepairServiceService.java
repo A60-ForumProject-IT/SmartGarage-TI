@@ -19,4 +19,5 @@ public interface RepairServiceService {
 
     List<RepairService> filterServices(String name, Double price, Sort sort, User user);
 
+    List<RepairService> getAllByBaseServiceId(int id);
 }

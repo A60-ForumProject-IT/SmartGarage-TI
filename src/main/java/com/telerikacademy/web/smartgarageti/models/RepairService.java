@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,6 +30,10 @@ public class RepairService {
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
+
+    @ManyToOne
+    @JoinColumn(name = "base_service_id", nullable = false)
+    private BaseService baseService;
 
     @JsonIgnore
     @OneToMany(mappedBy = "service")
