@@ -149,36 +149,33 @@
                 <div class="custom-car-list-items">
                     <div th:each="clientCar, iterStat : ${clientCars}"
                          th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white custom-car-list-row' : 'vehicle-item gray custom-car-list-row'">
-                        <div class="custom-car-list-column" id="vin-${clientCar.id}" th:text="${clientCar.getVin()}"></div>
+                        <!-- VIN -->
+                        <div class="custom-car-list-column" th:id="'vin-' + ${clientCar.id}" th:text="${clientCar.vin}">VIN</div>
 
                         <!-- License Plate -->
-                        <div class="custom-car-list-column" id="licensePlate-${clientCar.id}" th:text="${clientCar.getLicensePlate()}"></div>
+                        <div class="custom-car-list-column" th:id="'licensePlate-' + ${clientCar.id}" th:text="${clientCar.licensePlate}">License Plate</div>
 
                         <!-- Owner -->
-                        <div class="custom-car-list-column" th:text="${clientCar.getOwner().username}">Owner Username</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.owner.username}">Owner Username</div>
 
                         <!-- Brand -->
-                        <div class="custom-car-list-column" th:text="${clientCar.getVehicle().brand.name}">Brand</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.brand.name}">Brand</div>
 
                         <!-- Make -->
-                        <div class="custom-car-list-column" th:text="${clientCar.getVehicle().model.name}">Make</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.model.name}">Make</div>
 
                         <!-- Engine Type -->
-                        <div class="custom-car-list-column" th:text="${clientCar.getVehicle().engineType.name}">Engine Type</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.engineType.name}">Engine Type</div>
 
                         <!-- Year of Creation -->
-                        <div class="custom-car-list-column" th:text="${clientCar.getVehicle().year.year}">Year of Creation</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.year.year}">Year of Creation</div>
 
                         <!-- Actions -->
                         <div class="custom-car-list-column">
-                            <!-- Edit button -->
-                            <button th:if="${clientCar.id != null}" id="edit-${clientCar.id}" onclick="editClientCar('${clientCar.id}')">Edit</button>
-                            <!-- Save button -->
-                            <button id="save-${clientCar.id}" style="display:none;" onclick="saveClientCar(${clientCar.id})">Save</button>
-                            <!-- Delete button -->
-                            <button id="delete-${clientCar.id}">Delete</button>
-                            <!-- Add Services button -->
-                            <button id="add-services-${clientCar.id}">Add Services</button>
+                            <button th:id="'edit-' + ${clientCar.id}" th:onclick="'editClientCar(' + ${clientCar.id} + ')'">Edit</button>
+                            <button th:id="'save-' + ${clientCar.id}" style="display:none;" th:onclick="'saveClientCar(' + ${clientCar.id} + ')'">Save</button>
+                            <button th:id="'delete-' + ${clientCar.id}">Delete</button>
+                            <button th:id="'add-services-' + ${clientCar.id}">Add Services</button>
                         </div>
                     </div>
                 </div>
@@ -264,18 +261,16 @@
 </script>
 <script>
     function editClientCar(carId) {
-        const vinElement = document.querySelector(`#vin-${carId}`);
-        const licensePlateElement = document.querySelector(`#licensePlate-${carId}`);
-        const saveButton = document.querySelector(`#save-${carId}`);
-        const editButton = document.querySelector(`#edit-${carId}`);
-        const deleteButton = document.querySelector(`#delete-${carId}`);
-        const addServicesButton = document.querySelector(`#add-services-${carId}`);
+        const vinElement = document.querySelector("#vin-" + carId);
+        const licensePlateElement = document.querySelector("#licensePlate-" + carId);
+        const saveButton = document.querySelector("#save-" + carId);
+        const editButton = document.querySelector("#edit-" + carId);
+        const deleteButton = document.querySelector("#delete-" + carId);
+        const addServicesButton = document.querySelector("#add-services-" + carId);
 
-        // Преобразуване на VIN и License Plate текст в инпут полета
         vinElement.innerHTML = `<input type="text" value="${vinElement.textContent}" id="input-vin-${carId}" />`;
         licensePlateElement.innerHTML = `<input type="text" value="${licensePlateElement.textContent}" id="input-licensePlate-${carId}" />`;
 
-        // Промяна на видимостта на бутоните
         saveButton.style.display = 'inline-block';
         editButton.style.display = 'none';
         deleteButton.style.display = 'none';
@@ -283,10 +278,9 @@
     }
 
     function saveClientCar(carId) {
-        const vinValue = document.querySelector(`#input-vin-${carId}`).value;
-        const licensePlateValue = document.querySelector(`#input-licensePlate-${carId}`).value;
+        const vinValue = document.querySelector("#input-vin-" + carId).value;
+        const licensePlateValue = document.querySelector("#input-licensePlate-" + carId).value;
 
-        // Създаване на формуляр за изпращане на обновените стойности
         const form = document.createElement('form');
         form.method = 'post';
         form.action = `/ti/client-cars/edit/${carId}`;
