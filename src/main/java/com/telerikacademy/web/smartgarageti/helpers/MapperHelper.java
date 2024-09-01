@@ -141,12 +141,12 @@ public class MapperHelper {
         return user;
     }
 
-    public ClientCar createClientCarFromDto(ClientCarDtoMvc dto, User owner, Brand brand) {
+    public ClientCar createClientCarFromDto(ClientCarDtoMvc dto, User owner, Brand brand, User loggedInUser) {
         Vehicle vehicle = vehicleService.getVehicleByDetails(brand.getName(),
                         dto.getModelName(),
                         dto.getYear(),
                         dto.getEngineType())
-                .orElseGet(() -> createNewVehicle(dto, owner, brand));
+                .orElseGet(() -> createNewVehicle(dto, brand, loggedInUser));
 
         ClientCar clientCar = new ClientCar();
         clientCar.setVin(dto.getVin());
@@ -167,7 +167,7 @@ public class MapperHelper {
                 clientCarDto.getYear(), clientCarDto.getEngineType(), user);
     }
 
-    private Vehicle createNewVehicle(ClientCarDtoMvc clientCarDtoMvc, User user, Brand brand) {
+    private Vehicle createNewVehicle(ClientCarDtoMvc clientCarDtoMvc, Brand brand, User admin) {
         Vehicle vehicle = new Vehicle();
         vehicle.setBrand(brand);
         vehicle.setModel(modelService.findOrCreateModel(clientCarDtoMvc.getModelName()));
@@ -175,6 +175,6 @@ public class MapperHelper {
         vehicle.setEngineType(engineTypeService.findOrCreateEngineType(clientCarDtoMvc.getEngineType()));
 
         return vehicleService.createVehicle(brand.getName(), clientCarDtoMvc.getModelName(),
-                clientCarDtoMvc.getYear(), clientCarDtoMvc.getEngineType(), user);
+                clientCarDtoMvc.getYear(), clientCarDtoMvc.getEngineType(), admin);
     }
 }

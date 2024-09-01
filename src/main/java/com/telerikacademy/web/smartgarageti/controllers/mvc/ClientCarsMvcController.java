@@ -3,6 +3,7 @@ package com.telerikacademy.web.smartgarageti.controllers.mvc;
 import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.models.Brand;
@@ -122,8 +123,8 @@ public class ClientCarsMvcController {
             User userToAddCar = userService.getByUsername(clientCarDtoMvc.getOwner());
             Brand brand = brandService.findBrandByName(clientCarDtoMvc.getBrandName());
 
-            ClientCar newClientCar = mapperHelper.createClientCarFromDto(clientCarDtoMvc, userToAddCar, brand);
-            clientCarService.createClientCar(newClientCar, loggedInUser);
+            ClientCar newClientCar = mapperHelper.createClientCarFromDto(clientCarDtoMvc, userToAddCar, brand, loggedInUser);
+            clientCarService.createClientCar(newClientCar);
             return "redirect:/ti/client-cars";
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -134,6 +135,12 @@ public class ClientCarsMvcController {
             model.addAttribute("totalPages", 1);
             model.addAttribute("currentPage", 0);
             return "ClientCars";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
+        } catch (AuthenticationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
         }
     }
 

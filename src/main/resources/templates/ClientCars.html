@@ -40,28 +40,24 @@
             </div>
 
             <form class="client-car-form" method="post" th:action="@{/ti/client-cars}" th:object="${clientCarDtoMvc}">
-                <!-- Поле за VIN -->
                 <div class="custom-form-row">
                     <label for="vin">VIN</label>
                     <input id="vin" type="text" th:field="*{vin}" placeholder="Put the VIN here..." required>
                     <div class="error-message" th:if="${#fields.hasErrors('vin')}" th:errors="*{vin}"></div>
                 </div>
 
-                <!-- Поле за License Plate -->
                 <div class="custom-form-row">
                     <label for="licensePlate">LICENSE PLATE</label>
                     <input id="licensePlate" type="text" th:field="*{license_plate}" placeholder="Put the license plate here..." required>
                     <div class="error-message" th:if="${#fields.hasErrors('license_plate')}" th:errors="*{license_plate}"></div>
                 </div>
 
-                <!-- Поле за Owner -->
                 <div class="custom-form-row">
                     <label for="owner">OWNER</label>
                     <input id="owner" type="text" th:field="*{owner}" placeholder="Owner..." required>
                     <div class="error-message" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></div>
                 </div>
 
-                <!-- Поле за Brand (Dropdown меню) -->
                 <div class="custom-form-row">
                     <label for="brand">BRAND</label>
                     <select id="brand" name="brand" th:field="*{brandName}" required>
@@ -71,28 +67,24 @@
                     <div class="error-message" th:if="${#fields.hasErrors('brandName')}" th:errors="*{brandName}"></div>
                 </div>
 
-                <!-- Поле за Make -->
                 <div class="custom-form-row">
                     <label for="make">MAKE</label>
                     <input id="make" type="text" th:field="*{modelName}" placeholder="Put the make here..." required>
                     <div class="error-message" th:if="${#fields.hasErrors('modelName')}" th:errors="*{modelName}"></div>
                 </div>
 
-                <!-- Поле за Engine Type -->
                 <div class="custom-form-row">
                     <label for="engineType">ENGINE TYPE</label>
                     <input id="engineType" type="text" th:field="*{engineType}" placeholder="Put the engine here..." required>
                     <div class="error-message" th:if="${#fields.hasErrors('engineType')}" th:errors="*{engineType}"></div>
                 </div>
 
-                <!-- Поле за Year of Creation -->
                 <div class="custom-form-row">
                     <label for="yearOfCreation">YEAR OF CREATION</label>
                     <input id="yearOfCreation" type="text" th:field="*{year}" placeholder="Put the year here..." required>
                     <div class="error-message" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
                 </div>
 
-                <!-- Бутон за добавяне на автомобила -->
                 <div class="button-container">
                     <div class="custom-form-row">
                         <button type="submit">ADD CLIENT CAR</button>
@@ -175,10 +167,9 @@
                         <div class="custom-car-list-column" style="display: flex; gap: 10px; align-items: center;">
                             <button th:id="'edit-' + ${clientCar.id}" th:onclick="'editClientCar(' + ${clientCar.id} + ')'">Edit</button>
                             <button th:id="'save-' + ${clientCar.id}" style="display:none;" th:onclick="'saveClientCar(' + ${clientCar.id} + ')'">Save</button>
-
                             <form th:action="@{/ti/client-cars/{clientCarId}/delete(clientCarId=${clientCar.id})}" method="get" style="margin: 0;">
-                                <button th:id="'delete-' + ${clientCar.id}" type="submit">Delete</button>
-                            </form>
+                            <button th:id="'delete-' + ${clientCar.id}" type="submit">Delete</button>
+                        </form>
 
                             <button th:id="'add-services-' + ${clientCar.id}">Add Services</button>
                         </div>

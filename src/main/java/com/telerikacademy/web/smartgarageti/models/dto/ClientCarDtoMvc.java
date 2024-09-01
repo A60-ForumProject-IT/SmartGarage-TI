@@ -36,7 +36,7 @@ public class ClientCarDtoMvc {
     private String modelName;
 
     @NotEmpty
-    @Pattern(regexp = "^\\d\\.\\d\\s[A-Za-z\\s]{1,21}$",
+    @Pattern(regexp = "^\\d\\.\\d\\s[A-Za-z0-9\\s]{1,21}$",
             message = "Engine type must be in the format 'X.X Y', where X.X is a number and Y is a string of up to 21 characters.")
     private String engineType;
 
