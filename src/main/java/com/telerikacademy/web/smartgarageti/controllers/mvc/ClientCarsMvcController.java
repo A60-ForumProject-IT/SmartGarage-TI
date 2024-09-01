@@ -198,6 +198,12 @@ public class ClientCarsMvcController {
             model.addAttribute("totalPages", 1);
             model.addAttribute("currentPage", 0);
             return "ClientCars";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
+        } catch (AuthenticationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
         }
     }
 
@@ -220,6 +226,9 @@ public class ClientCarsMvcController {
             return "404";
         } catch (IllegalArgumentException e) {
             model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
+            return "404";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             return "404";
         }
     }
