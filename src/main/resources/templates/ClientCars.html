@@ -81,7 +81,12 @@
 
                 <div class="custom-form-row">
                     <label for="yearOfCreation">YEAR OF CREATION</label>
-                    <input id="yearOfCreation" type="text" th:field="*{year}" placeholder="Put the year here..." required>
+                    <input id="yearOfCreation"
+                           type="text"
+                           name="year"
+                           th:value="${year != 0} ? ${year} : ''"
+                           placeholder="Put the year here..."
+                           required>
                     <div class="error-message" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
                 </div>
 
@@ -96,15 +101,15 @@
                 <div class="input-container-search">
                     <div class="custom-form-row-inline">
                         <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="search">SEARCH</label>
-                        <input id="search" name="searchTerm" type="text" placeholder="Search..." th:value="${searchTerm}"
-                        style="margin-top: 5px; margin-bottom: 10px; height: 15px; width: 228px; border-radius: 4px">
+                        <input id="search" name="searchTerm" type="text" placeholder="Search by username or first name..." th:value="${searchTerm}"
+                        style="margin-top: 5px; margin-bottom: 10px; height: 15px; width: 190.5px; border-radius: 4px">
                     </div>
 
                     <div class="custom-form-row-inline">
                         <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="sort-by">SORT BY</label>
                         <select id="sort-by" name="sortBy"
                                 th:value="${sortBy}"
-                                style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 258px; border-radius: 4px">
+                                style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 223px; border-radius: 4px">
                             <option value="" th:selected="${sortBy == null}">Sort By</option>
                             <option value="owner.firstName" th:selected="${sortBy == 'owner.firstName'}">Owner First Name</option>
                             <option value="owner.username" th:selected="${sortBy == 'owner.username'}">Owner Username</option>
@@ -114,19 +119,19 @@
                     <div class="custom-form-row-inline">
                         <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="order">ORDER</label>
                         <select id="order" name="order" th:value="${order}"
-                        style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 205px; border-radius: 4px">
+                        style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 177px; border-radius: 4px">
                         <option value="asc" th:selected="${order == 'asc'}">ASCENDING</option>
                         <option value="desc" th:selected="${order == 'desc'}">DESCENDING</option>
                         </select>
                     </div>
+                    <div class="custom-form-row-inline">
+                        <button type="submit" class="modern-button"
+                                style="height: 38px; width: 38px; margin-top: 45px; margin-bottom: 13px;">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="custom-form-row-inline">
-                    <button type="submit" class="modern-button"
-                            style="height: 38px; width: 38px; margin-top: 45px; margin-bottom: 13px;">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
             </form>
             <div class="custom-car-list-container">
                 <div class="custom-car-list-header" style="height: 55px; text-align: center;">

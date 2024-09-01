@@ -111,10 +111,17 @@ public class ClientCarsMvcController {
             Model model,
             HttpSession session) {
 
+        int currentPage = 0;
+        int pageSize = 10;
+        Page<ClientCar> clientCarsPage = clientCarService.getAllClientCars(PageRequest.of(currentPage, pageSize));
+
+        int totalPages = clientCarsPage.getTotalPages();
+
+        model.addAttribute("clientCars", clientCarsPage.getContent());
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", currentPage);
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("clientCars", clientCarService.getAllClientCars(PageRequest.of(0, 10)).getContent());
-            model.addAttribute("totalPages", 1);
-            model.addAttribute("currentPage", 0);
             return "ClientCars";
         }
 
@@ -131,9 +138,9 @@ public class ClientCarsMvcController {
             return "404";
         } catch (DuplicateEntityException e) {
             bindingResult.rejectValue("vin", "error.clientCarDtoMvc", e.getMessage());
-            model.addAttribute("clientCars", clientCarService.getAllClientCars(PageRequest.of(0, 10)).getContent());
-            model.addAttribute("totalPages", 1);
-            model.addAttribute("currentPage", 0);
+            model.addAttribute("clientCars", clientCarsPage.getContent());
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("currentPage", currentPage);
             return "ClientCars";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("errorMessage", e.getMessage());
