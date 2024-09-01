@@ -8,6 +8,7 @@ import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.UserEditInfoDto;
+import com.telerikacademy.web.smartgarageti.services.contracts.AvatarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -22,8 +23,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,12 +37,14 @@ public class UserMvcController {
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final BrandService brandService;
+    private final AvatarService avatarService;
 
     @Autowired
-    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper , BrandService brandService) {
+    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper , BrandService brandService, AvatarService avatarService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.brandService = brandService;
+        this.avatarService = avatarService;
     }
 
     @ModelAttribute("allVehicleBrands")
@@ -163,4 +168,21 @@ public class UserMvcController {
             return "redirect:/ti/auth/login";
         }
     }
+
+    @PostMapping("/upload-photo")
+    public String uploadPhoto(@RequestParam("avatarFile") MultipartFile avatarFile, HttpSession session, Model model) {
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            avatarService.uploadAvatar(currentUser, avatarFile);
+            return "redirect:/ti/users/" + currentUser.getId() + "/details";  // Пренасочване към метода за детайли на потребителя
+        } catch (IOException e) {
+            // Логване на грешка и пренасочване към страница с грешка
+            model.addAttribute("errorMessage", "Error while uploading the photo.");
+            return "404";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
+
+
 }

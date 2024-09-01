@@ -287,6 +287,7 @@ img.radius
 .margin-top-40
 {
 	margin-top: 40px !important;
+	margin-bottom: 40px !important;
 }
 .margin-top-58
 {
@@ -4486,4 +4487,12 @@ body.lock-position
 	height: 15px;
 }
 
+.row.button-section {
+	position: relative; /* За фиксиране на бутона */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px; /* Разстояние между бутоните */
+	margin-top: 20px;
+}
 
