@@ -97,6 +97,7 @@ public class ClientCarsMvcController {
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("order", order);
         model.addAttribute("clientCarDtoMvc", new ClientCarDtoMvc());
+        model.addAttribute("editMode", false);
 
         return "ClientCars";
     }
@@ -154,25 +155,37 @@ public class ClientCarsMvcController {
     @PostMapping("/edit/{id}")
     public String saveClientCar(
             @PathVariable int id,
-            @Valid @ModelAttribute ClientCarUpdateDto clientCarUpdateDto,
+            @Valid @ModelAttribute("clientCarUpdateDto") ClientCarUpdateDto clientCarUpdateDto,
             BindingResult bindingResult,
             Model model, HttpSession session) {
 
         if (bindingResult.hasErrors()) {
-            return "ClientCars";
+            ClientCar existingCar = clientCarService.getClientCarById(id);
+            model.addAttribute("clientCar", existingCar);
+            model.addAttribute("clientCarUpdateDto", clientCarUpdateDto);
+            model.addAttribute("clientCars", clientCarService.getAllClientCars(PageRequest.of(0, 10)).getContent());
+            model.addAttribute("totalPages", 1);
+            model.addAttribute("currentPage", 0);
+            model.addAttribute("editMode", true); // При грешка валидацията да продължи да използва editMode
+            return "ClientCars"; // Замести с името на твоя Thymeleaf шаблон
         }
 
         try {
             User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
             ClientCar updatedCar = mapperHelper.updateClientCarFromDto(clientCarUpdateDto, id);
             clientCarService.updateClientCar(updatedCar, loggedInUser);
+            model.addAttribute("editMode", false); // Връщане на нормалния режим след успешна редакция
             return "redirect:/ti/client-cars";
         } catch (DuplicateEntityException e) {
+            ClientCar existingCar = clientCarService.getClientCarById(id);
+            model.addAttribute("clientCar", existingCar);
             bindingResult.rejectValue("vin", "error.clientCarUpdateDto", e.getMessage());
-            return "ClientCars";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "404";
+            model.addAttribute("clientCarUpdateDto", clientCarUpdateDto);
+            model.addAttribute("clientCars", clientCarService.getAllClientCars(PageRequest.of(0, 10)).getContent());
+            model.addAttribute("totalPages", 1);
+            model.addAttribute("currentPage", 0);
+            model.addAttribute("editMode", true); // Поддържане на editMode при грешка
+            return "ClientCars"; // Замести с името на твоя Thymeleaf шаблон
         }
     }
 }
