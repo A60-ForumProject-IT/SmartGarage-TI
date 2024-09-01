@@ -141,6 +141,21 @@ public class MapperHelper {
         return user;
     }
 
+    public ClientCar createClientCarFromDto(ClientCarDtoMvc dto, User owner, Brand brand) {
+        Vehicle vehicle = vehicleService.getVehicleByDetails(brand.getName(),
+                        dto.getModelName(),
+                        dto.getYear(),
+                        dto.getEngineType())
+                .orElseGet(() -> createNewVehicle(dto, owner, brand));
+
+        ClientCar clientCar = new ClientCar();
+        clientCar.setVin(dto.getVin());
+        clientCar.setLicensePlate(dto.getLicense_plate());
+        clientCar.setVehicle(vehicle);
+        clientCar.setOwner(owner);
+        return clientCar;
+    }
+
     private Vehicle createNewVehicle(ClientCarDto clientCarDto, User user) {
         Vehicle vehicle = new Vehicle();
         vehicle.setBrand(brandService.findOrCreateBrand(clientCarDto.getBrandName()));
@@ -151,15 +166,15 @@ public class MapperHelper {
         return vehicleService.createVehicle(clientCarDto.getBrandName(), clientCarDto.getModelName(),
                 clientCarDto.getYear(), clientCarDto.getEngineType(), user);
     }
-//    public User createUserFromRegistrationDto(UserCreationDto registrationDto) {
-//        User user = new User();
-//        user.setFirstName(registrationDto.getFirstName());
-//        user.setLastName(registrationDto.getLastName());
-//        user.setEmail(registrationDto.getEmail());
-//        user.setPassword(registrationDto.getPassword());
-//        user.setUsername(registrationDto.getUsername());
-//        user.setRole(roleService.getRoleById(USER));
-//        user.setBlocked(false);
-//        return user;
-//    }
+
+    private Vehicle createNewVehicle(ClientCarDtoMvc clientCarDtoMvc, User user, Brand brand) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setBrand(brand);
+        vehicle.setModel(modelService.findOrCreateModel(clientCarDtoMvc.getModelName()));
+        vehicle.setYear(yearService.findOrCreateYear(clientCarDtoMvc.getYear()));
+        vehicle.setEngineType(engineTypeService.findOrCreateEngineType(clientCarDtoMvc.getEngineType()));
+
+        return vehicleService.createVehicle(brand.getName(), clientCarDtoMvc.getModelName(),
+                clientCarDtoMvc.getYear(), clientCarDtoMvc.getEngineType(), user);
+    }
 }

@@ -38,76 +38,89 @@
                 <h2 style="text-align: center; margin-bottom: 35px; font-weight: bold;">YOU WANT TO ADD CLIENT CAR? DO
                     IT!</h2>
             </div>
-            <form class="client-car-form">
-                <div class="input-container"> <!-- Нов контейнер за полетата и dropdown менюто -->
-                    <div class="custom-form-row">
-                        <label for="vin">VIN</label>
-                        <input id="vin" type="text" placeholder="Put the VIN here...">
-                    </div>
-                    <div class="custom-form-row">
-                        <label for="license-plate">LICENSE PLATE</label>
-                        <input id="license-plate" type="text" placeholder="Put the license plate here...">
-                    </div>
-                    <div class="custom-form-row">
-                        <label for="owner">OWNER</label>
-                        <input id="owner" type="text" placeholder="Owner...">
-                    </div>
-                    <div class="custom-form-row" style="width: 5%;">
-                        <label for="brand">BRAND</label>
-                        <select id="brand">
-                            <option value="">Brands</option>
-                            <!-- Add options here -->
-                        </select>
-                    </div>
-                    <div class="custom-form-row">
-                        <label for="make">MAKE</label>
-                        <input id="make" type="text" placeholder="Put the make here...">
-                    </div>
-                    <div class="custom-form-row" style="width: 5%;">
-                        <label for="engine-type" style="font-weight: bold;">ENGINE TYPE</label>
-                        <input id="engine-type" type="text" placeholder="Put the engine here..." style="width: 100%;">
-                    </div>
-                    <div class="custom-form-row" style="width: 5%;">
-                        <label for="year-of-creation" style="font-weight: bold;">YEAR OF CREATION</label>
-                        <input id="year-of-creation" type="text" placeholder="Put the year here..."
-                               style="width: 100%;">
-                    </div>
+            <form class="client-car-form" method="post" th:action="@{/ti/client-cars}" th:object="${clientCarDtoMvc}">
+                <!-- Поле за VIN -->
+                <div class="custom-form-row">
+                    <label for="vin">VIN</label>
+                    <input id="vin" type="text" th:field="*{vin}" placeholder="Put the VIN here...">
                 </div>
-                <div class="button-container"> <!-- Нов контейнер за бутона -->
+
+                <!-- Поле за License Plate -->
+                <div class="custom-form-row">
+                    <label for="licensePlate">LICENSE PLATE</label>
+                    <input id="licensePlate" type="text" th:field="*{license_plate}" placeholder="Put the license plate here...">
+                </div>
+
+                <!-- Поле за Owner -->
+                <div class="custom-form-row">
+                    <label for="owner">OWNER</label>
+                    <input id="owner" type="text" th:field="*{owner}" placeholder="Owner...">
+                </div>
+
+                <!-- Поле за Brand (Dropdown меню) -->
+                <div class="custom-form-row">
+                    <label for="brand">BRAND</label>
+                    <select id="brand" name="brand" th:field="*{brandName}">
+                        <option value="">Select Brand</option>
+                        <option th:each="brand : ${allVehicleBrands}" th:value="${brand.name}" th:text="${brand.name}"></option>
+                    </select>
+                </div>
+
+                <!-- Поле за Make -->
+                <div class="custom-form-row">
+                    <label for="make">MAKE</label>
+                    <input id="make" type="text" th:field="*{modelName}" placeholder="Put the make here...">
+                </div>
+
+                <!-- Поле за Engine Type -->
+                <div class="custom-form-row">
+                    <label for="engineType">ENGINE TYPE</label>
+                    <input id="engineType" type="text" th:field="*{engineType}" placeholder="Put the engine here...">
+                </div>
+
+                <!-- Поле за Year of Creation -->
+                <div class="custom-form-row">
+                    <label for="yearOfCreation">YEAR OF CREATION</label>
+                    <input id="yearOfCreation" type="text" th:field="*{year}" placeholder="Put the year here...">
+                </div>
+
+                <!-- Бутон за добавяне на автомобила -->
+                <div class="button-container">
                     <div class="custom-form-row">
                         <button type="submit">ADD CLIENT CAR</button>
                     </div>
                 </div>
             </form>
 
-            <form class="client-car-form-search">
+            <form class="client-car-form-search" action="#" method="get">
                 <div class="input-container-search">
                     <div class="custom-form-row-inline">
-                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;"
-                               for="search">SEARCH</label>
-                        <input id="search" type="text" placeholder="Search..."
-                               style="margin-top: 5px; margin-bottom: 10px; height: 15px; width: 228px; border-radius: 4px">
+                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="search">SEARCH</label>
+                        <input id="search" name="searchTerm" type="text" placeholder="Search..." th:value="${searchTerm}"
+                        style="margin-top: 5px; margin-bottom: 10px; height: 15px; width: 228px; border-radius: 4px">
                     </div>
+
                     <div class="custom-form-row-inline">
-                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="sort-by">SORT
-                            BY</label>
-                        <select id="sort-by"
+                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="sort-by">SORT BY</label>
+                        <select id="sort-by" name="sortBy"
+                                th:value="${sortBy}"
                                 style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 258px; border-radius: 4px">
-                            <option value="">Choose sorting option</option>
-                            <option value="owner first name">Owner First Name</option>
-                            <option value="owner username">Owner Username</option>
+                            <option value="" th:selected="${sortBy == null}">Sort By</option>
+                            <option value="owner.firstName" th:selected="${sortBy == 'owner.firstName'}">Owner First Name</option>
+                            <option value="owner.username" th:selected="${sortBy == 'owner.username'}">Owner Username</option>
                         </select>
                     </div>
+
                     <div class="custom-form-row-inline">
-                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;"
-                               for="order">ORDER</label>
-                        <select id="order"
-                                style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 205px; border-radius: 4px">
-                            <option value="asc">ASCENDING</option>
-                            <option value="desc">DESCENDING</option>
+                        <label style="font-weight: bold; margin-top: 20px; margin-bottom: 4px;" for="order">ORDER</label>
+                        <select id="order" name="order" th:value="${order}"
+                        style="margin-top: 5px; margin-bottom: 10px; height: 40px; width: 205px; border-radius: 4px">
+                        <option value="asc" th:selected="${order == 'asc'}">ASCENDING</option>
+                        <option value="desc" th:selected="${order == 'desc'}">DESCENDING</option>
                         </select>
                     </div>
                 </div>
+
                 <div class="custom-form-row-inline">
                     <button type="submit" class="modern-button"
                             style="height: 38px; width: 38px; margin-top: 45px; margin-bottom: 13px;">
@@ -143,6 +156,26 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="pagination" th:if="${totalPages > 1}">
+                <ul>
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{/ti/client-cars(page=${currentPage - 1}, searchTerm=${searchTerm}, sortBy=${sortBy}, order=${order})}">
+                            Previous
+                        </a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{/ti/client-cars(page=${i}, searchTerm=${searchTerm}, sortBy=${sortBy}, order=${order})}"
+                           th:text="${i + 1}" th:class="${i == currentPage} ? 'active' : ''">
+                        </a>
+                    </li>
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/ti/client-cars(page=${currentPage + 1}, searchTerm=${searchTerm}, sortBy=${sortBy}, order=${order})}">
+                            Next
+                        </a>
+                    </li>
+                </ul>
             </div>
 
         </div>

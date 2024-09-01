@@ -9,6 +9,8 @@ import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.ClientCarRepository;
 import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +26,13 @@ public class ClientCarServiceImpl implements ClientCarService {
     }
 
     @Override
-    public List<ClientCar> getAllClientCars() {
-        return clientCarRepository.findAll();
+    public Page<ClientCar> getAllClientCars(Pageable pageable) {
+        return clientCarRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<ClientCar> filterAndSortClientCarsByOwner(String searchTerm, Pageable pageable) {
+        return clientCarRepository.findAllByOwnerAndSort(searchTerm, pageable);
     }
 
     @Override
@@ -76,6 +83,21 @@ public class ClientCarServiceImpl implements ClientCarService {
 
     @Override
     public ClientCar createClientCar(ClientCar clientCar) {
+        clientCarRepository.findByVin(clientCar.getVin()).ifPresent(year -> {
+            throw new DuplicateEntityException("VIN", clientCar.getVin());
+        });
+
+        clientCarRepository.findByLicensePlate(clientCar.getLicensePlate()).ifPresent(year -> {
+            throw new DuplicateEntityException("License plate", clientCar.getLicensePlate());
+        });
+
+        return clientCarRepository.save(clientCar);
+    }
+
+    @Override
+    public ClientCar createClientCar(ClientCar clientCar, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't create client cars");
+
         clientCarRepository.findByVin(clientCar.getVin()).ifPresent(year -> {
             throw new DuplicateEntityException("VIN", clientCar.getVin());
         });
