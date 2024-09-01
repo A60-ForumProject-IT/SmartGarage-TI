@@ -40,6 +40,9 @@ public class ClientCar {
     @OneToMany(mappedBy = "clientCar", fetch = FetchType.EAGER)
     private List<CarServiceLog> carServices;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
     public ClientCar(String vin, String licensePlate, User owner, Vehicle vehicle) {
         this.vin = vin;
         this.licensePlate = licensePlate;

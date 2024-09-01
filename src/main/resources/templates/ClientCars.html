@@ -172,10 +172,14 @@
                         <div class="custom-car-list-column" th:text="${clientCar.vehicle.year.year}">Year of Creation</div>
 
                         <!-- Actions -->
-                        <div class="custom-car-list-column">
+                        <div class="custom-car-list-column" style="display: flex; gap: 10px; align-items: center;">
                             <button th:id="'edit-' + ${clientCar.id}" th:onclick="'editClientCar(' + ${clientCar.id} + ')'">Edit</button>
                             <button th:id="'save-' + ${clientCar.id}" style="display:none;" th:onclick="'saveClientCar(' + ${clientCar.id} + ')'">Save</button>
-                            <button th:id="'delete-' + ${clientCar.id}">Delete</button>
+
+                            <form th:action="@{/ti/client-cars/{clientCarId}/delete(clientCarId=${clientCar.id})}" method="get" style="margin: 0;">
+                                <button th:id="'delete-' + ${clientCar.id}" type="submit">Delete</button>
+                            </form>
+
                             <button th:id="'add-services-' + ${clientCar.id}">Add Services</button>
                         </div>
                     </div>

@@ -16,14 +16,17 @@ public interface ClientCarRepository extends JpaRepository<ClientCar, Integer> {
 
     Optional<ClientCar> findByLicensePlate(String licensePlate);
 
-    List<ClientCar> findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCase(String username, String firstName, Sort sort);
+    List<ClientCar> findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCaseAndIsDeletedFalse(String username, String firstName, Sort sort);
 
-    List<ClientCar> findAllByOwnerId(int userId);
+    List<ClientCar> findAllByOwnerIdAndIsDeletedFalse(int userId);
 
     @Query("SELECT c FROM ClientCar c JOIN c.owner o WHERE " +
-            "LOWER(o.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-            "LOWER(o.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+            "(LOWER(o.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            "LOWER(o.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND c.isDeleted = false")
     Page<ClientCar> findAllByOwnerAndSort(
             @Param("searchTerm") String searchTerm,
             Pageable pageable);
+
+    Page<ClientCar> findAllByIsDeletedFalse(Pageable pageable);
+
 }

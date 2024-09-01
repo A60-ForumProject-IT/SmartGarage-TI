@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
+import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -182,6 +184,29 @@ public class ClientCarsMvcController {
             model.addAttribute("totalPages", 1);
             model.addAttribute("currentPage", 0);
             return "ClientCars";
+        }
+    }
+
+    @GetMapping("/{clientCarId}/delete")
+    public String deleteClientCar(@PathVariable int clientCarId, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+
+        try {
+            ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
+            clientCarService.deleteClientCar(clientCarId, user);
+            return "redirect:/ti/client-cars";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "404";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
+            return "404";
         }
     }
 }

@@ -112,12 +112,12 @@ public class ClientCarServiceImplTests {
         User mockCarOwner = createMockUser();
         List<ClientCar> mockClientCars = List.of(createMockClientCar());
 
-        when(clientCarRepository.findAllByOwnerId(clientId)).thenReturn(mockClientCars);
+        when(clientCarRepository.findAllByOwnerIdAndIsDeletedFalse(clientId)).thenReturn(mockClientCars);
 
         List<ClientCar> result = carService.getClientCarsByClientId(clientId, mockLoggedInUser, mockCarOwner);
 
         assertEquals(mockClientCars, result);
-        verify(clientCarRepository).findAllByOwnerId(clientId);
+        verify(clientCarRepository).findAllByOwnerIdAndIsDeletedFalse(clientId);
     }
 
     @Test
@@ -130,13 +130,13 @@ public class ClientCarServiceImplTests {
 
         List<ClientCar> mockClientCars = List.of(createMockClientCar());
 
-        when(clientCarRepository.findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCase(
+        when(clientCarRepository.findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCaseAndIsDeletedFalse(
                 searchTerm, searchTerm, sort)).thenReturn(mockClientCars);
 
         List<ClientCar> result = carService.filterAndSortClientCarsByOwner(mockLoggedInUser, searchTerm, sortBy, sortDirection);
 
         assertEquals(mockClientCars, result);
-        verify(clientCarRepository).findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCase(
+        verify(clientCarRepository).findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCaseAndIsDeletedFalse(
                 searchTerm, searchTerm, sort);
     }
 
@@ -148,7 +148,7 @@ public class ClientCarServiceImplTests {
         String sortDirection = "asc";
         Sort sort = Sort.by(Sort.Direction.ASC, sortBy);
 
-        when(clientCarRepository.findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCase(
+        when(clientCarRepository.findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCaseAndIsDeletedFalse(
                 searchTerm, searchTerm, sort)).thenReturn(Collections.emptyList());
 
         assertThrows(NoResultsFoundException.class, () ->
@@ -165,13 +165,13 @@ public class ClientCarServiceImplTests {
 
         List<ClientCar> mockClientCars = List.of(createMockClientCar());
 
-        when(clientCarRepository.findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCase(
+        when(clientCarRepository.findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCaseAndIsDeletedFalse(
                 searchTerm, searchTerm, sort)).thenReturn(mockClientCars);
 
         List<ClientCar> result = carService.filterAndSortClientCarsByOwner(mockLoggedInUser, searchTerm, sortBy, sortDirection);
 
         assertEquals(mockClientCars, result);
-        verify(clientCarRepository).findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCase(
+        verify(clientCarRepository).findAllByOwnerUsernameContainingIgnoreCaseOrOwnerFirstNameContainingIgnoreCaseAndIsDeletedFalse(
                 searchTerm, searchTerm, sort);
     }
 
