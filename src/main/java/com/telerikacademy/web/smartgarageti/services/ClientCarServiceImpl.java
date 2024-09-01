@@ -95,6 +95,21 @@ public class ClientCarServiceImpl implements ClientCarService {
     }
 
     @Override
+    public ClientCar createClientCar(ClientCar clientCar, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't create client cars");
+
+        clientCarRepository.findByVin(clientCar.getVin()).ifPresent(year -> {
+            throw new DuplicateEntityException("VIN", clientCar.getVin());
+        });
+
+        clientCarRepository.findByLicensePlate(clientCar.getLicensePlate()).ifPresent(year -> {
+            throw new DuplicateEntityException("License plate", clientCar.getLicensePlate());
+        });
+
+        return clientCarRepository.save(clientCar);
+    }
+
+    @Override
     public void updateClientCar(ClientCar clientCar, User user) {
         PermissionHelper.isEmployee(user, "You are not employee and can't update client cars!");
         clientCarRepository.save(clientCar);

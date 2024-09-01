@@ -38,45 +38,53 @@
                 <h2 style="text-align: center; margin-bottom: 35px; font-weight: bold;">YOU WANT TO ADD CLIENT CAR? DO
                     IT!</h2>
             </div>
-            <form class="client-car-form">
-                <div class="input-container"> <!-- Нов контейнер за полетата и dropdown менюто -->
-                    <div class="custom-form-row">
-                        <label for="vin">VIN</label>
-                        <input id="vin" type="text" placeholder="Put the VIN here...">
-                    </div>
-                    <div class="custom-form-row">
-                        <label for="license-plate">LICENSE PLATE</label>
-                        <input id="license-plate" type="text" placeholder="Put the license plate here...">
-                    </div>
-                    <div class="custom-form-row">
-                        <label for="owner">OWNER</label>
-                        <input id="owner" type="text" placeholder="Owner...">
-                    </div>
-                    <div class="custom-form-row" style="width: 5%;">
-                        <label for="brand">BRAND</label>
-                        <select id="brand">
-                            <option value="" th:selected="${vehicleBrand == null}">All Brands</option>
-                            <option th:each="brand : ${allVehicleBrands}"
-                                    th:value="${brand.name}"
-                                    th:text="${brand.name}"
-                                    th:selected="${vehicleBrand == brand.name}">
-                            </option>
-                        </select>
-                    </div>
-                    <div class="custom-form-row">
-                        <label for="make">MAKE</label>
-                        <input id="make" type="text" placeholder="Put the make here...">
-                    </div>
-                    <div class="custom-form-row" style="width: 5%;">
-                        <label for="engine-type" style="font-weight: bold;">ENGINE TYPE</label>
-                        <input id="engine-type" type="text" placeholder="Put the engine here..." style="width: 100%;">
-                    </div>
-                    <div class="custom-form-row" style="width: 5%;">
-                        <label for="year-of-creation" style="font-weight: bold;">YEAR OF CREATION</label>
-                        <input id="year-of-creation" type="text" placeholder="Put the year here..."
-                               style="width: 100%;">
-                    </div>
+            <form class="client-car-form" method="post" th:action="@{/ti/client-cars}" th:object="${clientCarDtoMvc}">
+                <!-- Поле за VIN -->
+                <div class="custom-form-row">
+                    <label for="vin">VIN</label>
+                    <input id="vin" type="text" th:field="*{vin}" placeholder="Put the VIN here...">
                 </div>
+
+                <!-- Поле за License Plate -->
+                <div class="custom-form-row">
+                    <label for="licensePlate">LICENSE PLATE</label>
+                    <input id="licensePlate" type="text" th:field="*{license_plate}" placeholder="Put the license plate here...">
+                </div>
+
+                <!-- Поле за Owner -->
+                <div class="custom-form-row">
+                    <label for="owner">OWNER</label>
+                    <input id="owner" type="text" th:field="*{owner}" placeholder="Owner...">
+                </div>
+
+                <!-- Поле за Brand (Dropdown меню) -->
+                <div class="custom-form-row">
+                    <label for="brand">BRAND</label>
+                    <select id="brand" name="brand" th:field="*{brandName}">
+                        <option value="">Select Brand</option>
+                        <option th:each="brand : ${allVehicleBrands}" th:value="${brand.name}" th:text="${brand.name}"></option>
+                    </select>
+                </div>
+
+                <!-- Поле за Make -->
+                <div class="custom-form-row">
+                    <label for="make">MAKE</label>
+                    <input id="make" type="text" th:field="*{modelName}" placeholder="Put the make here...">
+                </div>
+
+                <!-- Поле за Engine Type -->
+                <div class="custom-form-row">
+                    <label for="engineType">ENGINE TYPE</label>
+                    <input id="engineType" type="text" th:field="*{engineType}" placeholder="Put the engine here...">
+                </div>
+
+                <!-- Поле за Year of Creation -->
+                <div class="custom-form-row">
+                    <label for="yearOfCreation">YEAR OF CREATION</label>
+                    <input id="yearOfCreation" type="text" th:field="*{year}" placeholder="Put the year here...">
+                </div>
+
+                <!-- Бутон за добавяне на автомобила -->
                 <div class="button-container">
                     <div class="custom-form-row">
                         <button type="submit">ADD CLIENT CAR</button>
@@ -113,7 +121,6 @@
                     </div>
                 </div>
 
-                <!-- Бутон за изпращане на формата -->
                 <div class="custom-form-row-inline">
                     <button type="submit" class="modern-button"
                             style="height: 38px; width: 38px; margin-top: 45px; margin-bottom: 13px;">

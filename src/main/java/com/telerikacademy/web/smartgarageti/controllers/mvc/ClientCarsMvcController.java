@@ -1,11 +1,16 @@
 package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
+import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
+import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
+import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
 import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.dto.ClientCarDtoMvc;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
+import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,10 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,12 +29,16 @@ public class ClientCarsMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final ClientCarService clientCarService;
     private final BrandService brandService;
+    private final UserService userService;
+    private final MapperHelper mapperHelper;
 
     @Autowired
-    public ClientCarsMvcController(AuthenticationHelper authenticationHelper, ClientCarService clientCarService, BrandService brandService) {
+    public ClientCarsMvcController(AuthenticationHelper authenticationHelper, ClientCarService clientCarService, BrandService brandService, UserService userService, MapperHelper mapperHelper) {
         this.authenticationHelper = authenticationHelper;
         this.clientCarService = clientCarService;
         this.brandService = brandService;
+        this.userService = userService;
+        this.mapperHelper = mapperHelper;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -79,7 +85,31 @@ public class ClientCarsMvcController {
         model.addAttribute("searchTerm", searchTerm);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("order", order);
+        model.addAttribute("clientCarDtoMvc", new ClientCarDtoMvc());
 
         return "ClientCars";
+    }
+
+    @PostMapping
+    public String addClientCar(@ModelAttribute ClientCarDtoMvc clientCarDtoMvc,
+                               Model model,
+                               HttpSession session) {
+
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            User userToAddCar = userService.getByUsername(clientCarDtoMvc.getOwner());
+            Brand brand = brandService.findBrandByName(clientCarDtoMvc.getBrandName());
+
+            ClientCar newClientCar = mapperHelper.createClientCarFromDto(clientCarDtoMvc, userToAddCar, brand);
+
+            clientCarService.createClientCar(newClientCar, loggedInUser);
+            return "redirect:/ti/client-cars";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
+        }
     }
 }
