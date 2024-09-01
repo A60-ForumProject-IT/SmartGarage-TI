@@ -76,22 +76,18 @@ public class UserMvcController {
         }
 
         try {
-            // Извличане на текущия потребител от сесията
             User employee = authenticationHelper.tryGetUserFromSession(session);
-            // Проверка дали потребителят е служител
+
             PermissionHelper.isEmployee(employee, "Only employees can access this resource.");
 
-            // Настройка на сортирането
             Sort sort = Sort.unsorted();
             if (sortBy != null && !sortBy.trim().isEmpty()) {
                 sort = Sort.by("asc".equalsIgnoreCase(sortDirection) ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
             }
             Pageable pageable = PageRequest.of(page, size, sort);
 
-            // Получаване на потребители с филтрация и пагинация
             Page<User> userPage = userService.getAllUsers(employee, username, email, phoneNumber, vehicleBrand, visitDateFrom, visitDateTo, pageable);
 
-            // Добавяне на параметри към модела за предаване към изгледа
             model.addAttribute("users", userPage.getContent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", userPage.getTotalPages());
@@ -106,7 +102,7 @@ public class UserMvcController {
             model.addAttribute("sortDirection", sortDirection);
             model.addAttribute("size", size);
 
-            return "AllUsers"; // Връщане на името на изгледа
+            return "AllUsers";
 
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
@@ -121,12 +117,11 @@ public class UserMvcController {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
             User userToDisplay = userService.getUserById(id, currentUser);
 
-            // Добавяне на потребителските данни към модела
             model.addAttribute("user", userToDisplay);
             model.addAttribute("userEditInfoDto", new UserEditInfoDto());
            // model.addAttribute("avatarUrl", userToDisplay.getAvatarUrl()); // Placeholder за Cloudinary
 
-            return "team_curtis_greene"; // Името на изгледа за детайлите на потребителя
+            return "team_curtis_greene";
         } catch (UnauthorizedOperationException | EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
