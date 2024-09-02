@@ -228,25 +228,49 @@
         var tbody = table.getElementsByTagName('tbody')[0];
         var newRow = tbody.insertRow(-1);
 
+        // Клетки за име и цена
         var nameCell = newRow.insertCell(0);
         var priceCell = newRow.insertCell(1);
 
-        nameCell.innerHTML = '<input type="text" name="serviceName" placeholder="Enter service name" required>';
-        priceCell.innerHTML = '<input type="number" name="servicePrice" placeholder="Enter price" step="0.01" required>';
+        // Добавяне на required атрибути
+        var nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.name = 'serviceName';
+        nameInput.placeholder = 'Enter service name';
+        nameInput.required = true;
 
+        var priceInput = document.createElement('input');
+        priceInput.type = 'number';
+        priceInput.name = 'servicePrice';
+        priceInput.placeholder = 'Enter price';
+        priceInput.step = '0.01';
+        priceInput.required = true;
+
+        nameCell.appendChild(nameInput);
+        priceCell.appendChild(priceInput);
+
+        // Скриване на бутона Add Service
         var addButton = document.getElementById("addServiceButton");
         addButton.style.display = "none";
 
+        // Показване на бутона Save Service
         var saveButtonContainer = document.getElementById("saveButtonContainer");
-        saveButtonContainer.innerHTML = '';
+        saveButtonContainer.innerHTML = ''; // Изчиства предишни бутони
         var saveButton = document.createElement("a");
         saveButton.href = "javascript:void(0);";
         saveButton.className = "more simple";
         saveButton.style = "padding: 5px 10px; font-size: 12px; margin-top: 20px;";
         saveButton.textContent = "Save Service";
         saveButton.onclick = function() {
-            saveService(nameCell.firstChild.value, priceCell.firstChild.value);
+            // Проверка дали полетата са попълнени
+            if (!nameInput.value || !priceInput.value) {
+                alert('Please fill in all required fields.');
+                return; // Спиране на изпращането, ако има празни полета
+            }
 
+            saveService(nameInput.value, priceInput.value);
+
+            // Скриване на Save Service и показване на Add Service след съхранение
             saveButtonContainer.innerHTML = '';
             addButton.style.display = "inline-block";
         };
