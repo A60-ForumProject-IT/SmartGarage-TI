@@ -141,10 +141,12 @@
 
                                 </tbody>
                             </table>
-                            <div style="text-align: center; margin-top: 20px;">
-                                <a href="javascript:void(0);" class="more simple"
+
+                            <div style="text-align: center;">
+                                <a href="javascript:void(0);" id="addServiceButton" class="more simple"
                                    style="padding: 5px 10px; font-size: 12px; margin-right: 10px;"
                                    onclick="addNewServiceRow()">Add Service</a>
+                                <div id="saveButtonContainer" style="display: flex; justify-content: center;"></div>
                             </div>
 
                         </div>
@@ -220,80 +222,61 @@
 <script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
-<script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function() {
-        function addNewServiceRow() {
-            var table = document.getElementById("servicesTable");
-            if (!table) {
-                console.error("Table with ID 'servicesTable' not found.");
-                return;
-            }
+<script>
+    function addNewServiceRow() {
+        var table = document.getElementById("servicesTable");
+        var tbody = table.getElementsByTagName('tbody')[0];
+        var newRow = tbody.insertRow(-1);
 
-            var tbody = table.getElementsByTagName('tbody')[0];
-            if (!tbody) {
-                console.error("Tbody element not found inside the table.");
-                return;
-            }
+        var nameCell = newRow.insertCell(0);
+        var priceCell = newRow.insertCell(1);
 
-            var newRow = tbody.insertRow(-1); // Добавяне на нов ред в края на таблицата
+        nameCell.innerHTML = '<input type="text" name="serviceName" placeholder="Enter service name" required>';
+        priceCell.innerHTML = '<input type="number" name="servicePrice" placeholder="Enter price" step="0.01" required>';
 
-            // Създаване на клетка за името на услугата
-            var nameCell = newRow.insertCell(0);
-            var nameInput = document.createElement("input");
-            nameInput.type = "text";
-            nameInput.name = "serviceName";
-            nameInput.placeholder = "Enter service name";
-            nameCell.appendChild(nameInput);
+        var addButton = document.getElementById("addServiceButton");
+        addButton.style.display = "none";
 
-            // Създаване на клетка за цената на услугата
-            var priceCell = newRow.insertCell(1);
-            var priceInput = document.createElement("input");
-            priceInput.type = "number";
-            priceInput.name = "servicePrice";
-            priceInput.placeholder = "Enter price";
-            priceInput.step = "0.01"; // За да може да се въведе цена с десетични числа
-            priceCell.appendChild(priceInput);
+        var saveButtonContainer = document.getElementById("saveButtonContainer");
+        saveButtonContainer.innerHTML = '';
+        var saveButton = document.createElement("a");
+        saveButton.href = "javascript:void(0);";
+        saveButton.className = "more simple";
+        saveButton.style = "padding: 5px 10px; font-size: 12px; margin-top: 20px;";
+        saveButton.textContent = "Save Service";
+        saveButton.onclick = function() {
+            saveService(nameCell.firstChild.value, priceCell.firstChild.value);
 
-            // Създаване на бутон за съхраняване на новата услуга
-            var saveCell = newRow.insertCell(2);
-            var saveButton = document.createElement("a");
-            saveButton.href = "javascript:void(0);";
-            saveButton.className = "more simple";
-            saveButton.style = "padding: 5px 10px; font-size: 12px; margin-left: 10px;";
-            saveButton.textContent = "Save";
-            saveButton.onclick = function() {
-                saveService(nameInput.value, priceInput.value);
-            };
-            saveCell.appendChild(saveButton);
-        }
+            saveButtonContainer.innerHTML = '';
+            addButton.style.display = "inline-block";
+        };
 
-        function saveService(name, price) {
-            var pathParts = window.location.pathname.split('/');
-            var slug = pathParts[pathParts.length - 1]; // Извличане на slug от URL-a
+        saveButtonContainer.appendChild(saveButton);
+    }
 
-            fetch('/ti/services/' + slug + '/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: name,
-                    price: price
-                })
+    function saveService(name, price) {
+        var pathParts = window.location.pathname.split('/');
+        var slug = pathParts[pathParts.length - 1];
+
+        fetch('/ti/services/' + slug + '/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                price: price
             })
-                .then(response => {
-                    if (response.ok) {
-                        location.reload(); // Презареждане на страницата след успешно съхраняване
-                    } else {
-                        return response.text().then(text => { throw new Error(text); });
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        // Сега можете да свържете функцията към бутона
-        document.querySelector("a.more.simple").onclick = addNewServiceRow;
-    });
+        })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
 </script>
 </body>
 </html>
