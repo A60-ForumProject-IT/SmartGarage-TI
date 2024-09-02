@@ -28,4 +28,10 @@ public class BaseServiceServiceImpl implements BaseServiceService {
         return baseServiceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Base Service", id));
     }
+
+    @Override
+    public BaseService findByName(String name) {
+        return baseServiceRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Base Service", "name", name));
+    }
 }
