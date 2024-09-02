@@ -21,4 +21,7 @@ public interface RepairServiceRepository extends JpaRepository<RepairService, In
                                               @Param("price") Double price, Sort sort);
 
     List<RepairService> findAllByBaseServiceId(Integer baseServiceId);
+
+    List<RepairService> findAllByBaseService_IdAndIsDeletedFalse(int baseServiceId);
+
 }

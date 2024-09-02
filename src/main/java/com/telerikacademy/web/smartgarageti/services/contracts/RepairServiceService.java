@@ -22,4 +22,7 @@ public interface RepairServiceService {
     List<RepairService> getAllByBaseServiceId(int id);
 
     boolean isServiceNameTaken(String serviceName, int baseServiceId);
+
+    List<RepairService> findAllByBaseService_IdAndIsDeletedFalse(int baseServiceId);
+
 }

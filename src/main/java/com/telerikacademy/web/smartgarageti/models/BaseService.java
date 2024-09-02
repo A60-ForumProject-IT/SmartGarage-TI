@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,7 +24,7 @@ public class BaseService {
     private String name;
 
     @OneToMany(mappedBy = "baseService")
-    private List<RepairService> services;
+    private Set<RepairService> services;
 
     public BaseService(String name) {
         this.name = name;

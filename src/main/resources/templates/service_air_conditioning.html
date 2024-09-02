@@ -133,17 +133,25 @@
                             <table class="margin-top-40" id="servicesTable">
                                 <tbody>
                                 <tr th:each="service : ${services}" th:data-service-id="${service.id}">
-                                    <td th:id="'service-name-' + ${service.id}" th:text="${service.name}">Service Name</td>
-                                    <td th:id="'service-price-' + ${service.id}" th:utext="'Starts from <span style=&quot;font-weight: bold;&quot;>' + ${#numbers.formatDecimal(service.price, 2, 2)} + '</span> BGN'">
+                                    <td th:id="'service-name-' + ${service.id}" th:text="${service.name}">Service Name
+                                    </td>
+                                    <td th:id="'service-price-' + ${service.id}"
+                                        th:utext="'Starts from <span style=&quot;font-weight: bold;&quot;>' + ${#numbers.formatDecimal(service.price, 2, 2)} + '</span> BGN'">
                                         Service Price
                                     </td>
                                     <td style="text-align: right;">
                                         <!-- Edit и Save бутони -->
-                                        <button th:id="'edit-' + ${service.id}" th:onclick="'editService(' + ${service.id} + ', \'' + ${slug} + '\')'">Edit</button>
-                                        <button th:id="'save-' + ${service.id}" style="display:none;" th:onclick="'saveEditedService(' + ${service.id} + ', \'' + ${slug} + '\')'">Save</button>
+                                        <button th:id="'edit-' + ${service.id}"
+                                                th:onclick="'editService(' + ${service.id} + ', \'' + ${slug} + '\')'">
+                                            Edit
+                                        </button>
+                                        <button th:id="'save-' + ${service.id}" style="display:none;"
+                                                th:onclick="'saveEditedService(' + ${service.id} + ', \'' + ${slug} + '\')'">
+                                            Save
+                                        </button>
 
                                         <!-- Delete бутон -->
-                                        <form th:action="@{/ti/services/{slug}/delete(slug=${slug})}" method="post" style="display:inline;">
+                                        <form th:action="@{/ti/services/air-conditioning/delete}" method="post" style="display:inline;">
                                             <input type="hidden" th:name="serviceId" th:value="${service.id}">
                                             <button th:id="'delete-' + ${service.id}" type="submit">Delete</button>
                                         </form>
@@ -312,7 +320,6 @@
     function editService(serviceId, slug) {
         console.log(`Editing service with ID: ${serviceId}, for slug: ${slug}`);
 
-        // Намиране на реда (tr) с конкретния serviceId
         const rowElement = document.querySelector(`tr[data-service-id="${serviceId}"]`);
 
         if (!rowElement) {
@@ -320,7 +327,6 @@
             return;
         }
 
-        // Намиране на клетките за име и цена
         const nameElement = rowElement.querySelector(`td[id="service-name-${serviceId}"]`);
         const priceElement = rowElement.querySelector(`td[id="service-price-${serviceId}"]`);
 
@@ -329,11 +335,9 @@
             return;
         }
 
-        // Превръщане на клетките в input полета за редактиране
         nameElement.innerHTML = `<input type="text" value="${nameElement.textContent.trim()}" id="input-name-${serviceId}">`;
         priceElement.innerHTML = `<input type="number" value="${priceElement.textContent.replace(/[^0-9.-]+/g, '').trim()}" step="0.01" id="input-price-${serviceId}">`;
 
-        // Покажи бутона Save и скрий другите бутони
         const saveButton = rowElement.querySelector(`#save-${serviceId}`);
         const editButton = rowElement.querySelector(`#edit-${serviceId}`);
         const deleteButton = rowElement.querySelector(`#delete-${serviceId}`);
@@ -354,7 +358,7 @@
 
         console.log(`Saving service with ID: ${serviceId}, for slug: ${slug}`);
 
-        fetch(`/ti/services/${slug}/edit?serviceId=${serviceId}`, {  // serviceId като част от заявката
+        fetch(`/ti/services/${slug}/edit?serviceId=${serviceId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -366,34 +370,42 @@
         })
             .then(response => {
                 if (response.ok) {
-                    location.reload(); // Презареди страницата след успешно редактиране
+                    location.reload();
                 } else {
-                    return response.text().then(text => { throw new Error(text); });
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
                 }
             })
             .catch(error => console.error('Error:', error));
     }
-    // Функция за изтриване на услуга
-    function deleteService(element) {
-        const serviceId = element.getAttribute('data-id');
 
-        if (confirm('Are you sure you want to delete this service?')) {
-            fetch(`/ti/services/delete`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: new URLSearchParams({ serviceId: serviceId })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        location.reload();
-                    } else {
-                        return response.text().then(text => { throw new Error(text); });
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+    function deleteService(serviceId, slug) {
+        if (!confirm("Are you sure you want to delete this service?")) {
+            return;
         }
+
+        console.log(`Deleting service with ID: ${serviceId}, for slug: ${slug}`);
+
+        fetch(`/ti/services/${slug}/delete?serviceId=${serviceId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this service?");
     }
 </script>
 </body>

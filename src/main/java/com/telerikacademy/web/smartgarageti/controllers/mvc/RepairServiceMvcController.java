@@ -3,6 +3,7 @@ package com.telerikacademy.web.smartgarageti.controllers.mvc;
 import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
 import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.models.BaseService;
 import com.telerikacademy.web.smartgarageti.models.RepairService;
@@ -67,7 +68,7 @@ public class RepairServiceMvcController {
     public String showAirConditioning(Model model) {
         try {
             BaseService baseService = baseServiceService.getBaseServiceById(AIR_CONDITIONING_ID);
-            List<RepairService> services = repairServiceService.getAllByBaseServiceId(baseService.getId());
+            List<RepairService> services = repairServiceService.findAllByBaseService_IdAndIsDeletedFalse(baseService.getId());
             model.addAttribute("services", services);
             return "service_air_conditioning";
         } catch (EntityNotFoundException e) {
@@ -181,7 +182,7 @@ public class RepairServiceMvcController {
     }
 
     @PostMapping("/{slug}/delete")
-    public ResponseEntity<?> deleteService(
+    public String deleteService(
             @PathVariable String slug,
             @RequestParam int serviceId,
             HttpSession session,
@@ -192,12 +193,16 @@ public class RepairServiceMvcController {
             repairServiceService.deleteService(serviceId, loggedInUser);
         } catch (AuthenticationException e) {
             model.addAttribute("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return "404"; //ddd
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return "404";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "404"; //aaa
         }
-        return ResponseEntity.ok().build();
+
+        return "redirect:/ti/services/" + slug;
     }
 
     @PostMapping("/{slug}/edit")
