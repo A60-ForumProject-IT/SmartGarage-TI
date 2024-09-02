@@ -165,6 +165,7 @@ public class UserMvcController {
         model.addAttribute("isEditing", true);
         if (bindingResult.hasErrors()) {
             model.addAttribute("userEditInfoDto", userEditInfoDto);
+            model.addAttribute("user", userService.getUserById(id));
             return "UserDetails";
         }
 
