@@ -134,11 +134,16 @@ public class UserMvcController {
     public String showUserDetails(@PathVariable int id, Model model, HttpSession session) {
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            if (currentUser == null) {
+                throw new AuthenticationException("Current user is not authenticated.");
+            }
             User userToDisplay = userService.getUserById(id, currentUser);
 
             model.addAttribute("user", userToDisplay);
             model.addAttribute("userEditInfoDto", new UserEditInfoDto());
             model.addAttribute("avatarUrl", userToDisplay.getAvatar().getAvatar());
+            model.addAttribute("isEditing", false);
+            model.addAttribute("isAuthenticated", true);
 
             return "UserDetails";
         } catch (UnauthorizedOperationException | EntityNotFoundException e) {
@@ -149,6 +154,7 @@ public class UserMvcController {
             return "redirect:/ti/auth/login";
         }
     }
+
 
     @PostMapping("/{id}/edit")
     public String editUser(@PathVariable int id,
@@ -156,7 +162,9 @@ public class UserMvcController {
                            BindingResult bindingResult,
                            Model model,
                            HttpSession session) {
+        model.addAttribute("isEditing", true);
         if (bindingResult.hasErrors()) {
+            model.addAttribute("userEditInfoDto", userEditInfoDto);
             return "UserDetails";
         }
 
@@ -164,8 +172,15 @@ public class UserMvcController {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
             User userToEdit = userService.getUserById(id, currentUser);
 
+            model.addAttribute("user", userService.getUserById(id));
+            // Преобразуване от DTO към User
+            userToEdit.setFirstName(userEditInfoDto.getFirstName());
+            userToEdit.setLastName(userEditInfoDto.getLastName());
+            userToEdit.setPhoneNumber(userEditInfoDto.getPhoneNumber());
+            userToEdit.setEmail(userEditInfoDto.getEmail());
+
             userService.updateUser(currentUser, userToEdit);
-            return "UserDetails";
+            return "redirect:/ti/users/" + id + "/details"; // Пренасочване след успешна промяна
         } catch (UnauthorizedOperationException | EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -174,6 +189,7 @@ public class UserMvcController {
             return "redirect:/ti/auth/login";
         }
     }
+
 
     @PostMapping("/upload-photo")
     public String uploadPhoto(@RequestParam("avatarFile") MultipartFile avatarFile, HttpSession session, Model model) {

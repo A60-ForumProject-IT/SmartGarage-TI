@@ -37,7 +37,7 @@
                     <div class="team-box single">
                         <a th:href="@{/ti/users/{id}/details(id=${user.id})}"
                            th:title="${user.firstName} + ' ' + ${user.lastName}">
-                            <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="380" height="0"/>
+                            <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="380"/>
                         </a>
                         <div class="team-content">
                             <h4>
@@ -59,40 +59,41 @@
                 </div>
                 <div class="column column-1-3">
                     <h3 class="box-header">RESUME</h3>
-                    <table class="margin-top-40 align-left">
-                        <tbody>
-                        <tr>
-                            <td>
-                                <span id="full-name-text" th:text="'Full name: ' + ${user.firstName} + ' ' + ${user.lastName}"></span>
-                                <input type="text" id="full-name-input" th:value="${user.firstName} + ' ' + ${user.lastName}" style="display:none;"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span id="username-text" th:text="'Username: ' + ${user.username}"></span>
-                                <input type="text" id="username-input" th:value="${user.username}" style="display:none;"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span id="email-text" th:text="'Email: ' + ${user.email}"></span>
-                                <input type="email" id="email-input" th:value="${user.email}" style="display:none;"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span id="phone-text" th:text="'Phone: ' + ${user.phoneNumber}"></span>
-                                <input type="text" id="phone-input" th:value="${user.phoneNumber}" style="display:none;"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span id="role-text" th:text="'Role: ' + ${user.role.name}"></span>
-                                <input type="text" id="role-input" th:value="${user.role.name}" style="display:none;" readonly/>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <form method="post" th:action="@{/ti/users/{id}/edit(id=${user.id})}" id="edit-info-form">
+                        <table class="margin-top-40 align-left">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <span id="full-name-text" th:text="'Full name: ' + ${user.firstName} + ' ' + ${user.lastName}"></span>
+                                    <input type="text" name="firstName" id="first-name-input" th:value="${user.firstName}" style="display:none;" placeholder="First Name"/>
+                                    <input type="text" name="lastName" id="last-name-input" th:value="${user.lastName}" style="display:none;" placeholder="Last Name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span id="username-text" th:text="'Username: ' + ${user.username}"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span id="email-text" th:text="'Email: ' + ${user.email}"></span>
+                                    <input type="email" name="email" id="email-input" th:value="${user.email}" style="display:none;" placeholder="Email"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span id="phone-text" th:text="'Phone: ' + ${user.phoneNumber}"></span>
+                                    <input type="text" name="phoneNumber" id="phone-input" th:value="${user.phoneNumber}" style="display:none;" placeholder="Phone Number"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span id="role-text" th:text="'Role: ' + ${user.role.name}"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
                 <div class="column column-1-3">
                     <h3 class="box-header">PROFILE</h3>
@@ -105,25 +106,23 @@
                         leaving our car shop.</p>
                 </div>
                 <div class="row button-section align-center margin-top-40">
-                    <!-- Форма за качване на нова снимка -->
                     <form method="post" enctype="multipart/form-data" th:action="@{/ti/users/upload-photo}">
                         <label for="avatarFile" class="custom-button">Choose Photo</label>
                         <input type="file" id="avatarFile" name="avatarFile" style="display: none;"
                                onchange="this.form.submit()"/>
                     </form>
-                    <!-- Форма за редактиране на информацията -->
                     <div th:if="${isAuthenticated}">
                         <button id="edit-info-button" class="custom-button" onclick="toggleEditForm()">Edit Info</button>
+                        <button id="save-info-button" class="custom-button" onclick="saveChanges()" style="display:none;">Save</button>
                         <button class="custom-button">Change Password</button>
-                        <!-- JavaScript за показване и скриване на формата -->
                         <script>
                             function toggleEditForm() {
                                 const isEditing = document.getElementById('edit-info-button').style.display !== 'none';
 
                                 // Toggle visibility of text spans and input fields
                                 document.getElementById('full-name-text').style.display = isEditing ? 'none' : 'inline';
-                                document.getElementById('full-name-input').style.display = isEditing ? 'inline' : 'none';
-
+                                document.getElementById('first-name-input').style.display = isEditing ? 'inline' : 'none';
+                                document.getElementById('last-name-input').style.display = isEditing ? 'inline' : 'none';
 
                                 document.getElementById('email-text').style.display = isEditing ? 'none' : 'inline';
                                 document.getElementById('email-input').style.display = isEditing ? 'inline' : 'none';
@@ -131,9 +130,13 @@
                                 document.getElementById('phone-text').style.display = isEditing ? 'none' : 'inline';
                                 document.getElementById('phone-input').style.display = isEditing ? 'inline' : 'none';
 
-
                                 // Toggle edit button and save button
                                 document.getElementById('edit-info-button').style.display = isEditing ? 'none' : 'inline-block';
+                                document.getElementById('save-info-button').style.display = isEditing ? 'inline-block' : 'none';
+                            }
+
+                            function saveChanges() {
+                                document.getElementById('edit-info-form').submit();
                             }
                         </script>
                     </div>
@@ -145,9 +148,7 @@
 </div>
 <a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
 <div class="background-overlay"></div>
-<!--js-->
 <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
-<!--slider revolution-->
 <script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
