@@ -78,17 +78,16 @@
                 </div>
                 <h3 class="box-header page-margin-top">DROP US A LINE</h3>
 
-                <!-- Contact Form -->
-                <form class="contact-form page-margin-top" id="contact-form" method="post"
-                      th:action="@{/ti/contact}">
+                <!-- Оригинална форма за контакт -->
+                <form class="contact-form page-margin-top" id="contact-form" method="post" th:action="@{/ti/contact}">
                     <div class="row">
                         <fieldset class="column column-1-2">
-                            <input class="text-input" name="name" type="text" th:value="${name}" placeholder="Your Name *">
-                            <input class="text-input" name="email" type="text" th:value="${email}" placeholder="Your Email *">
-                            <input class="text-input" name="phone" type="text" th:value="${phone}" placeholder="Your Phone">
+                            <input class="text-input" name="name" type="text" placeholder="Your Name *" th:value="${name}" required>
+                            <input class="text-input" name="email" type="email" placeholder="Your Email *" th:value="${email}" required>
+                            <input class="text-input" name="phone" type="text" placeholder="Your Phone" th:value="${phone}">
                         </fieldset>
                         <fieldset class="column column-1-2">
-                            <textarea name="message" placeholder="Message *" th:text="${message}"></textarea>
+                            <textarea name="message" placeholder="Message *" th:text="${message}" required></textarea>
                         </fieldset>
                     </div>
                     <div class="row margin-top-30">
@@ -96,19 +95,15 @@
                             <p>We will contact you within one business day.</p>
                         </div>
                         <div class="column column-1-2 align-right">
-                            <input type="hidden" name="action" value="contact_form"/>
-                            <div class="row margin-top-20 padding-bottom-20">
-                                <button type="submit" class="more submit-contact-form" title="SEND MESSAGE"><span>SEND MESSAGE</span></button>
-                            </div>
+                            <button type="submit" class="more submit-contact-form" title="SEND MESSAGE"><span>SEND MESSAGE</span></button>
                         </div>
                     </div>
                 </form>
 
-                <!-- Success/Error Messages -->
-                <div class="row margin-top-20">
-                    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-                </div>
+                <!-- Съобщения за успех и грешка -->
+                <div class="alert" id="successMessage" th:if="${successMessage}" th:text="${successMessage}"></div>
+                <div class="alert error" id="errorMessage" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
             </div>
             <div class="column column-1-4 re-smart-column">
                 <div class="re-smart-column-wrapper">
@@ -118,7 +113,8 @@
                         </div>
                         <h4 class="margin-top-58">ONLINE APPOINTMENT</h4>
                         <p class="description">Book your appointment now!</p>
-                        <a class="more" th:href="@{/ti/appointment}" title="MAKE APPOINTMENT"><span>MAKE APPOINTMENT</span></a>
+                        <a class="more" th:href="@{/ti/appointment}"
+                           title="MAKE APPOINTMENT"><span>MAKE APPOINTMENT</span></a>
                     </div>
                 </div>
             </div>
@@ -166,6 +162,29 @@
     }
 
     google.maps.event.addDomListener(window, 'load', initMap);
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#contact-form").submit(function(event) {
+            event.preventDefault();
+
+            alert("Form is being submitted");
+
+            $.post($(this).attr("action"), $(this).serialize())
+                .done(function(data) {
+                    alert("Form submission successful!");
+                    $("#successMessage").show();
+                    $("#errorMessage").hide();
+                    $("#contact-form")[0].reset();
+                })
+                .fail(function() {
+                    alert("Form submission failed!");
+                    $("#successMessage").hide();
+                    $("#errorMessage").show();
+                });
+        });
+    });
 </script>
 </body>
 

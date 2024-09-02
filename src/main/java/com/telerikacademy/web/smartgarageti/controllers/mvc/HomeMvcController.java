@@ -6,9 +6,14 @@ import com.telerikacademy.web.smartgarageti.services.EmailService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/ti")
@@ -78,33 +83,36 @@ public class HomeMvcController {
     }
 
     @PostMapping("/contact")
-    public String handleContactForm(
+    public ResponseEntity<Map<String, Object>> handleContactForm(
             @RequestParam("name") String name,
             @RequestParam("email") String email,
             @RequestParam("phone") String phone,
             @RequestParam("message") String message,
             Model model) {
 
+        model.addAttribute("name", name);
+        model.addAttribute("email", email);
+        model.addAttribute("phone", phone);
+        model.addAttribute("message", message);
         String subject = "New Contact Request";
         String text = "Name: " + name + "\n" +
                 "Email: " + email + "\n" +
                 "Phone: " + phone + "\n" +
                 "Message: " + message;
 
+        Map<String, Object> response = new HashMap<>();
+
         try {
             emailService.sendEmail(defaultFromEmail, subject, text);
             model.addAttribute("successMessage", "Thank you for contacting us.");
+            response.put("isOk", true);
+            response.put("successMessage", "Your contact was sent successfully!");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Sorry, we can't send this message.");
+            response.put("isOk", false);
+            response.put("errorMessage", "There was a problem sending your message. Please try again.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
-        // Препращаме празни стойности обратно в модела, за да не светят полетата
-        model.addAttribute("name", name);
-        model.addAttribute("email", email);
-        model.addAttribute("phone", phone);
-        model.addAttribute("message", message);
-
-        return "contact_2";  // Връща към страницата contact.html с актуализиран модел
     }
 
     @PostMapping("/appointment")
