@@ -149,7 +149,7 @@ public class RepairServiceMvcController {
         slugToNameMap.put("belts-hoses", "Belts and Hoses");
         slugToNameMap.put("air-conditioning", "Air Conditioning");
         slugToNameMap.put("brake-repair", "Brake Repair");
-        slugToNameMap.put("tire-wheel-services", "Tire and Wheel Services");
+        slugToNameMap.put("tire-wheel", "Tire and Wheel Services");
 
         User user = null;
         try {

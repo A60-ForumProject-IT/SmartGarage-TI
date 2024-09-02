@@ -249,28 +249,24 @@
         nameCell.appendChild(nameInput);
         priceCell.appendChild(priceInput);
 
-        // Скриване на бутона Add Service
         var addButton = document.getElementById("addServiceButton");
         addButton.style.display = "none";
 
-        // Показване на бутона Save Service
         var saveButtonContainer = document.getElementById("saveButtonContainer");
-        saveButtonContainer.innerHTML = ''; // Изчиства предишни бутони
+        saveButtonContainer.innerHTML = '';
         var saveButton = document.createElement("a");
         saveButton.href = "javascript:void(0);";
         saveButton.className = "more simple";
         saveButton.style = "padding: 5px 10px; font-size: 12px; margin-top: 20px;";
         saveButton.textContent = "Save Service";
         saveButton.onclick = function() {
-            // Проверка дали полетата са попълнени
             if (!nameInput.value || !priceInput.value) {
                 alert('Please fill in all required fields.');
-                return; // Спиране на изпращането, ако има празни полета
+                return;
             }
 
             saveService(nameInput.value, priceInput.value);
 
-            // Скриване на Save Service и показване на Add Service след съхранение
             saveButtonContainer.innerHTML = '';
             addButton.style.display = "inline-block";
         };

@@ -130,7 +130,7 @@
                                 passenger car or medium sized truck or SUV, our mechanics strive to ensure that your
                                 vehicle will be performing at its best.</p>
                             <h3 class="box-header page-margin-top">PRICING</h3>
-                            <table class="margin-top-40">
+                            <table class="margin-top-40" id="servicesTable">
                                 <tbody>
                                 <tr th:each="service : ${services}">
                                     <td th:text="${service.name}">Service Name</td>
@@ -138,8 +138,16 @@
                                         Service Price
                                     </td>
                                 </tr>
+
                                 </tbody>
                             </table>
+
+                            <div style="text-align: center;">
+                                <a href="javascript:void(0);" id="addServiceButton" class="more simple"
+                                   style="padding: 5px 10px; font-size: 12px; margin-right: 10px;"
+                                   onclick="addNewServiceRow()">Add Service</a>
+                                <div id="saveButtonContainer" style="display: flex; justify-content: center;"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="row page-margin-top padding-bottom-70">
@@ -213,5 +221,81 @@
 <script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
+<script th:fragment="add-services-button">
+    function addNewServiceRow() {
+        var table = document.getElementById("servicesTable");
+        var tbody = table.getElementsByTagName('tbody')[0];
+        var newRow = tbody.insertRow(-1);
+
+        var nameCell = newRow.insertCell(0);
+        var priceCell = newRow.insertCell(1);
+
+        var nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.name = 'serviceName';
+        nameInput.placeholder = 'Enter service name';
+        nameInput.required = true;
+
+        var priceInput = document.createElement('input');
+        priceInput.type = 'number';
+        priceInput.name = 'servicePrice';
+        priceInput.placeholder = 'Enter price';
+        priceInput.step = '0.01';
+        priceInput.required = true;
+
+        nameCell.appendChild(nameInput);
+        priceCell.appendChild(priceInput);
+
+        var addButton = document.getElementById("addServiceButton");
+        addButton.style.display = "none";
+
+        var saveButtonContainer = document.getElementById("saveButtonContainer");
+        saveButtonContainer.innerHTML = '';
+        var saveButton = document.createElement("a");
+        saveButton.href = "javascript:void(0);";
+        saveButton.className = "more simple";
+        saveButton.style = "padding: 5px 10px; font-size: 12px; margin-top: 20px;";
+        saveButton.textContent = "Save Service";
+        saveButton.onclick = function () {
+            if (!nameInput.value || !priceInput.value) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            saveService(nameInput.value, priceInput.value);
+
+            saveButtonContainer.innerHTML = '';
+            addButton.style.display = "inline-block";
+        };
+
+        saveButtonContainer.appendChild(saveButton);
+    }
+
+    function saveService(name, price) {
+        var pathParts = window.location.pathname.split('/');
+        var slug = pathParts[pathParts.length - 1];
+
+        fetch('/ti/services/' + slug + '/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                price: price
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
 </body>
 </html>

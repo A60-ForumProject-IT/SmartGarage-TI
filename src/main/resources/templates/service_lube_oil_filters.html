@@ -1,190 +1,301 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-	<form th:replace="~{FragmentForm.html :: head}"></form>
-	<body>
-		<div class="site-container">
-			<form th:replace="~{FragmentForm.html :: header-icons-info}"></form>
-			<form th:replace="~{FragmentForm.html :: header-container}"></form>
-			<div class="theme-page">
-				<div class="row gray full-width page-header vertical-align-table">
-					<div class="row full-width padding-top-bottom-50 vertical-align-cell">
-						<div class="row">
-							<div class="page-header-left">
-								<h1>LUBE, OIL AND FILTERS</h1>
-							</div>
-							<div class="page-header-right">
-								<div class="bread-crumb-container">
-									<label>YOU ARE HERE:</label>
-									<ul class="bread-crumb">
-										<li>
-											<a title="HOME" th:href="@{/ti}" href="index.html">
-												HOME
-											</a>
-										</li>
-										<li class="separator">
-											&#47;
-										</li>
-										<li>
-											<a title="Our Services" th:href="@{/ti/services}" href="services.html">
-												OUR SERVICES
-											</a>
-										</li>
-										<li class="separator">
-											&#47;
-										</li>
-										<li>
-											LUBE, OIL AND FILTERS
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="clearfix">
-					<div class="row margin-top-70">
-						<div class="column column-1-4">
-							<ul class="vertical-menu">
-								<li>
-									<a href="service_engine_diagnostics.html" th:href="@{/ti/services/engine-diagnostics}" title="Engine Diagnostics">
-										Engine Diagnostics
-										<span class="template-arrow-menu"></span>
-									</a>
-								</li>
-								<li>
-									<a href="service_lube_oil_filters.html" th:href="@{/ti/services/lube-oil-filters}" title="Lube, Oil and Filters">
-										Lube, Oil and Filters
-										<span class="template-arrow-menu"></span>
-									</a>
-								</li>
-								<li>
-									<a href="service_belts_hoses.html" th:href="@{/ti/services/belts-hoses}" title="Belts and Hoses">
-										Belts and Hoses
-										<span class="template-arrow-menu"></span>
-									</a>
-								</li>
-								<li class="selected">
-									<a href="service_air_conditioning.html" th:href="@{/ti/services/air-conditioning}" title="Air Conditioning">
-										Air Conditioning
-										<span class="template-arrow-menu"></span>
-									</a>
-								</li>
-								<li>
-									<a href="service_brake_repair.html" th:href="@{/ti/services/brake-repair}" title="Brake Repair">
-										Brake Repair
-										<span class="template-arrow-menu"></span>
-									</a>
-								</li>
-								<li>
-									<a href="service_tire_wheel.html" th:href="@{/ti/services/tire-wheel}" title="Tire and Wheel Services">
-										Tire and Wheel Services
-										<span class="template-arrow-menu"></span>
-									</a>
-								</li>
-							</ul>
-							<div class="call-to-action page-margin-top">
-								<div class="hexagon small"><div class="sl-small-percent"></div></div>
-								<h4 class="margin-top-58">ONLINE APPOINTMENT</h4>
-								<p class="description">Book your appointment now!</p>
-								<a class="more" href="appointment.html" th:href="@{/ti/appointment}" title="MAKE APPOINTMENT"><span>MAKE APPOINTMENT</span></a>
-							</div>
-						</div>
-						<div class="column column-3-4">
-							<div class="row">
-								<div class="column column-1-2">
-									<a href="images/samples/870x580/image_02.jpg" th:href="@{/images/samples/870x580/image_02.jpg}" class="prettyPhoto re-preload" title="Lube, Oil and Filters">
-										<img src='images/samples/480x320/image_02.jpg' th:src="@{/images/samples/480x320/image_02.jpg}" alt='img'>
-									</a>
-								</div>
-								<div class="column column-1-2">
-									<a href="images/samples/870x580/image_08.jpg" th:href="@{/images/samples/870x580/image_08.jpg}" class="prettyPhoto re-preload" title="Lube, Oil and Filters">
-										<img src='images/samples/480x320/image_08.jpg' th:src="@{/images/samples/480x320/image_08.jpg}" alt='img'>
-									</a>
-								</div>
-							</div>
-							<div class="row page-margin-top">
-								<div class="column-1-1">
-									<h3 class="box-header">SERVICE OVERVIEW</h3>
-									<p class="margin-top-20">We offer a full range of garage services to vehicle owners in Tucson. Our professionals know how to handle a wide range of car services. Whether you drive a passenger car or medium sized truck or SUV, our mechanics strive to ensure that your vehicle will be performing at its best before leaving our car shop. We can help you with everything from an oil change to an engine change.
-									We can handle any problem on both foreign and domestic vehicles.</p>
-									<p>Our professionals know how to handle a wide range of car services. Whether you drive a passenger car or medium sized truck or SUV, our mechanics strive to ensure that your vehicle will be performing at its best.</p>
-									<h3 class="box-header page-margin-top">PRICING</h3>
-									<table class="margin-top-40">
-										<tbody>
-										<tr th:each="service : ${services}">
-											<td th:text="${service.name}">Service Name</td>
-											<td th:utext="'Starts from <span style=&quot;font-weight: bold;&quot;>' + ${#numbers.formatDecimal(service.price, 2, 2)} + '</span> BGN'">
-												Service Price
-											</td>
-										</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-							<div class="row page-margin-top padding-bottom-70">
-								<div class="column column-1-2">
-									<h4 class="box-header">WHY CHOOSE US</h4>
-									<p class="margin-top-20">We offer a full range of garage services to vehicle owners in Tucson. We can help you with everything from an oil change to an engine change. We can handle any problem on both foreign and domestic vehicles.</p>
-									<ul class="list margin-top-20">
-										<li class="template-bullet">We make auto repair more convenient for you</li>
-										<li class="template-bullet">We are a friendly and professional <a href="#">group of people</a></li>
-										<li class="template-bullet">We handle a wide range of <a href="#">car services</a></li>
-										<li class="template-bullet">Same day service for most repairs and maintenance</li>
-										<li class="template-bullet">We get the job done right — the first time</li>
-									</ul>
-								</div>
-								<div class="column column-1-2">
-									<h4 class="box-header">POPULAR QUESTIONS</h4>
-									<ul class="accordion margin-top-40 clearfix">
-										<li>
-											<div id="accordion-using-synthetic">
-												<h4>Should I consider using synthetic oil?</h4>
-											</div>
-											<p>Synthetic engine oils are produced through a synthesis process that takes very small molecules and assembles them into larger ones.</p>
-										</li>
-										<li>
-											<div id="accordion-parts-replacements">
-												<h4>What parts should be replaced?</h4>
-											</div>
-											<p>Synthetic engine oils are produced through a synthesis process that takes very small molecules and assembles them into larger ones.</p>
-										</li>
-										<li>
-											<div id="accordion-track-routine">
-												<h4>How do I keep track of routine?</h4>
-											</div>
-											<p>Synthetic engine oils are produced through a synthesis process that takes very small molecules and assembles them into larger ones.</p>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<form th:replace="~{FragmentForm.html :: footer-and-copyright}"></form>
-		</div>
-		<a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
-		<div class="background-overlay"></div>
-		<!--js-->
-		<script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
-		<!--slider revolution-->
-		<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
-		<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery-ui-1.12.1.custom.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.isotope.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.easing.1.4.1.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.touchSwipe.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.transit.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.hint.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.costCalculator.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.prettyPhoto.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.qtip.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.blockUI.min.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
-		<script type="text/javascript" th:src="@{/js/main.js}"></script>
-		<script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
-	</body>
+<form th:replace="~{FragmentForm.html :: head}"></form>
+<body>
+<div class="site-container">
+    <form th:replace="~{FragmentForm.html :: header-icons-info}"></form>
+    <form th:replace="~{FragmentForm.html :: header-container}"></form>
+    <div class="theme-page">
+        <div class="row gray full-width page-header vertical-align-table">
+            <div class="row full-width padding-top-bottom-50 vertical-align-cell">
+                <div class="row">
+                    <div class="page-header-left">
+                        <h1>LUBE, OIL AND FILTERS</h1>
+                    </div>
+                    <div class="page-header-right">
+                        <div class="bread-crumb-container">
+                            <label>YOU ARE HERE:</label>
+                            <ul class="bread-crumb">
+                                <li>
+                                    <a title="HOME" th:href="@{/ti}" href="index.html">
+                                        HOME
+                                    </a>
+                                </li>
+                                <li class="separator">
+                                    &#47;
+                                </li>
+                                <li>
+                                    <a title="Our Services" th:href="@{/ti/services}" href="services.html">
+                                        OUR SERVICES
+                                    </a>
+                                </li>
+                                <li class="separator">
+                                    &#47;
+                                </li>
+                                <li>
+                                    LUBE, OIL AND FILTERS
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="row margin-top-70">
+                <div class="column column-1-4">
+                    <ul class="vertical-menu">
+                        <li>
+                            <a href="service_engine_diagnostics.html" th:href="@{/ti/services/engine-diagnostics}"
+                               title="Engine Diagnostics">
+                                Engine Diagnostics
+                                <span class="template-arrow-menu"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="service_lube_oil_filters.html" th:href="@{/ti/services/lube-oil-filters}"
+                               title="Lube, Oil and Filters">
+                                Lube, Oil and Filters
+                                <span class="template-arrow-menu"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="service_belts_hoses.html" th:href="@{/ti/services/belts-hoses}"
+                               title="Belts and Hoses">
+                                Belts and Hoses
+                                <span class="template-arrow-menu"></span>
+                            </a>
+                        </li>
+                        <li class="selected">
+                            <a href="service_air_conditioning.html" th:href="@{/ti/services/air-conditioning}"
+                               title="Air Conditioning">
+                                Air Conditioning
+                                <span class="template-arrow-menu"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="service_brake_repair.html" th:href="@{/ti/services/brake-repair}"
+                               title="Brake Repair">
+                                Brake Repair
+                                <span class="template-arrow-menu"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="service_tire_wheel.html" th:href="@{/ti/services/tire-wheel}"
+                               title="Tire and Wheel Services">
+                                Tire and Wheel Services
+                                <span class="template-arrow-menu"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="call-to-action page-margin-top">
+                        <div class="hexagon small">
+                            <div class="sl-small-percent"></div>
+                        </div>
+                        <h4 class="margin-top-58">ONLINE APPOINTMENT</h4>
+                        <p class="description">Book your appointment now!</p>
+                        <a class="more" href="appointment.html" th:href="@{/ti/appointment}"
+                           title="MAKE APPOINTMENT"><span>MAKE APPOINTMENT</span></a>
+                    </div>
+                </div>
+                <div class="column column-3-4">
+                    <div class="row">
+                        <div class="column column-1-2">
+                            <a href="images/samples/870x580/image_02.jpg"
+                               th:href="@{/images/samples/870x580/image_02.jpg}" class="prettyPhoto re-preload"
+                               title="Lube, Oil and Filters">
+                                <img src='images/samples/480x320/image_02.jpg'
+                                     th:src="@{/images/samples/480x320/image_02.jpg}" alt='img'>
+                            </a>
+                        </div>
+                        <div class="column column-1-2">
+                            <a href="images/samples/870x580/image_08.jpg"
+                               th:href="@{/images/samples/870x580/image_08.jpg}" class="prettyPhoto re-preload"
+                               title="Lube, Oil and Filters">
+                                <img src='images/samples/480x320/image_08.jpg'
+                                     th:src="@{/images/samples/480x320/image_08.jpg}" alt='img'>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row page-margin-top">
+                        <div class="column-1-1">
+                            <h3 class="box-header">SERVICE OVERVIEW</h3>
+                            <p class="margin-top-20">We offer a full range of garage services to vehicle owners in
+                                Tucson. Our professionals know how to handle a wide range of car services. Whether you
+                                drive a passenger car or medium sized truck or SUV, our mechanics strive to ensure that
+                                your vehicle will be performing at its best before leaving our car shop. We can help you
+                                with everything from an oil change to an engine change.
+                                We can handle any problem on both foreign and domestic vehicles.</p>
+                            <p>Our professionals know how to handle a wide range of car services. Whether you drive a
+                                passenger car or medium sized truck or SUV, our mechanics strive to ensure that your
+                                vehicle will be performing at its best.</p>
+                            <h3 class="box-header page-margin-top">PRICING</h3>
+                            <table class="margin-top-40" id="servicesTable">
+                                <tbody>
+                                <tr th:each="service : ${services}">
+                                    <td th:text="${service.name}">Service Name</td>
+                                    <td th:utext="'Starts from <span style=&quot;font-weight: bold;&quot;>' + ${#numbers.formatDecimal(service.price, 2, 2)} + '</span> BGN'">
+                                        Service Price
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+                            <div style="text-align: center;">
+                                <a href="javascript:void(0);" id="addServiceButton" class="more simple"
+                                   style="padding: 5px 10px; font-size: 12px; margin-right: 10px;"
+                                   onclick="addNewServiceRow()">Add Service</a>
+                                <div id="saveButtonContainer" style="display: flex; justify-content: center;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row page-margin-top padding-bottom-70">
+                        <div class="column column-1-2">
+                            <h4 class="box-header">WHY CHOOSE US</h4>
+                            <p class="margin-top-20">We offer a full range of garage services to vehicle owners in
+                                Tucson. We can help you with everything from an oil change to an engine change. We can
+                                handle any problem on both foreign and domestic vehicles.</p>
+                            <ul class="list margin-top-20">
+                                <li class="template-bullet">We make auto repair more convenient for you</li>
+                                <li class="template-bullet">We are a friendly and professional <a href="#">group of
+                                    people</a></li>
+                                <li class="template-bullet">We handle a wide range of <a href="#">car services</a></li>
+                                <li class="template-bullet">Same day service for most repairs and maintenance</li>
+                                <li class="template-bullet">We get the job done right — the first time</li>
+                            </ul>
+                        </div>
+                        <div class="column column-1-2">
+                            <h4 class="box-header">POPULAR QUESTIONS</h4>
+                            <ul class="accordion margin-top-40 clearfix">
+                                <li>
+                                    <div id="accordion-using-synthetic">
+                                        <h4>Should I consider using synthetic oil?</h4>
+                                    </div>
+                                    <p>Synthetic engine oils are produced through a synthesis process that takes very
+                                        small molecules and assembles them into larger ones.</p>
+                                </li>
+                                <li>
+                                    <div id="accordion-parts-replacements">
+                                        <h4>What parts should be replaced?</h4>
+                                    </div>
+                                    <p>Synthetic engine oils are produced through a synthesis process that takes very
+                                        small molecules and assembles them into larger ones.</p>
+                                </li>
+                                <li>
+                                    <div id="accordion-track-routine">
+                                        <h4>How do I keep track of routine?</h4>
+                                    </div>
+                                    <p>Synthetic engine oils are produced through a synthesis process that takes very
+                                        small molecules and assembles them into larger ones.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form th:replace="~{FragmentForm.html :: footer-and-copyright}"></form>
+</div>
+<a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
+<div class="background-overlay"></div>
+<!--js-->
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<!--slider revolution-->
+<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-ui-1.12.1.custom.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.isotope.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.easing.1.4.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.touchSwipe.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.transit.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.hint.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.costCalculator.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.prettyPhoto.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.qtip.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.blockUI.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
+<script th:fragment="add-services-button">
+    function addNewServiceRow() {
+        var table = document.getElementById("servicesTable");
+        var tbody = table.getElementsByTagName('tbody')[0];
+        var newRow = tbody.insertRow(-1);
+
+        var nameCell = newRow.insertCell(0);
+        var priceCell = newRow.insertCell(1);
+
+        var nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.name = 'serviceName';
+        nameInput.placeholder = 'Enter service name';
+        nameInput.required = true;
+
+        var priceInput = document.createElement('input');
+        priceInput.type = 'number';
+        priceInput.name = 'servicePrice';
+        priceInput.placeholder = 'Enter price';
+        priceInput.step = '0.01';
+        priceInput.required = true;
+
+        nameCell.appendChild(nameInput);
+        priceCell.appendChild(priceInput);
+
+        var addButton = document.getElementById("addServiceButton");
+        addButton.style.display = "none";
+
+        var saveButtonContainer = document.getElementById("saveButtonContainer");
+        saveButtonContainer.innerHTML = '';
+        var saveButton = document.createElement("a");
+        saveButton.href = "javascript:void(0);";
+        saveButton.className = "more simple";
+        saveButton.style = "padding: 5px 10px; font-size: 12px; margin-top: 20px;";
+        saveButton.textContent = "Save Service";
+        saveButton.onclick = function () {
+            if (!nameInput.value || !priceInput.value) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            saveService(nameInput.value, priceInput.value);
+
+            saveButtonContainer.innerHTML = '';
+            addButton.style.display = "inline-block";
+        };
+
+        saveButtonContainer.appendChild(saveButton);
+    }
+
+    function saveService(name, price) {
+        var pathParts = window.location.pathname.split('/');
+        var slug = pathParts[pathParts.length - 1];
+
+        fetch('/ti/services/' + slug + '/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                price: price
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+</body>
 </html>
