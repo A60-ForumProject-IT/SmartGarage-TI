@@ -4,9 +4,11 @@ import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
+import com.telerikacademy.web.smartgarageti.models.BaseService;
 import com.telerikacademy.web.smartgarageti.models.RepairService;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.RepairServiceRepository;
+import com.telerikacademy.web.smartgarageti.services.contracts.BaseServiceService;
 import com.telerikacademy.web.smartgarageti.services.contracts.RepairServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -17,10 +19,13 @@ import java.util.List;
 @Service
 public class RepairServiceServiceImpl implements RepairServiceService {
     private final RepairServiceRepository serviceRepository;
+    private final BaseServiceService baseServiceService;
 
     @Autowired
-    public RepairServiceServiceImpl(RepairServiceRepository serviceRepository) {
+    public RepairServiceServiceImpl(RepairServiceRepository serviceRepository, BaseServiceService baseServiceService) {
         this.serviceRepository = serviceRepository;
+
+        this.baseServiceService = baseServiceService;
     }
 
     @Override
@@ -47,6 +52,12 @@ public class RepairServiceServiceImpl implements RepairServiceService {
     }
 
     @Override
+    public boolean isServiceNameTaken(String serviceName, int baseServiceId) {
+        List<RepairService> services = getAllByBaseServiceId(baseServiceId);
+        return services.stream().anyMatch(service -> service.getName().equalsIgnoreCase(serviceName));
+    }
+
+    @Override
     public List<RepairService> findAllServices() {
         return serviceRepository.findAllByIsDeletedFalse();
     }
@@ -61,8 +72,10 @@ public class RepairServiceServiceImpl implements RepairServiceService {
     public RepairService createService(RepairService service, User user) {
         PermissionHelper.isEmployee(user, "You are not employee and can't create or update services!");
 
-        serviceRepository.findByName(service.getName()).ifPresent(year -> {
-            throw new DuplicateEntityException("Service", service.getName());
+        serviceRepository.findByName(service.getName()).ifPresent(existingService -> {
+            if (!existingService.getId().equals(service.getId())) {
+                throw new DuplicateEntityException("Service", service.getName());
+            }
         });
 
         return serviceRepository.save(service);

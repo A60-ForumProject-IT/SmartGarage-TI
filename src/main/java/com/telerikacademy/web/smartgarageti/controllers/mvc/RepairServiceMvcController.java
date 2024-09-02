@@ -1,6 +1,7 @@
 package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
 import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
+import com.telerikacademy.web.smartgarageti.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.models.BaseService;
@@ -173,8 +174,70 @@ public class RepairServiceMvcController {
         service.setPrice(serviceDto.getPrice());
         service.setBaseService(baseService);
 
+        model.addAttribute("slug", slug);
         repairServiceService.createService(service, user);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{slug}/delete")
+    public ResponseEntity<?> deleteService(
+            @PathVariable String slug,
+            @RequestParam int serviceId,
+            HttpSession session,
+            Model model) {
+
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            repairServiceService.deleteService(serviceId, loggedInUser);
+        } catch (AuthenticationException e) {
+            model.addAttribute("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{slug}/edit")
+    public ResponseEntity<?> editService(
+            @PathVariable String slug,
+            @RequestParam int serviceId,
+            @Valid @RequestBody RepairServiceDto serviceDto,
+            HttpSession session,
+            Model model) {
+
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            RepairService service = repairServiceService.findServiceById(serviceId);
+
+            if (service == null) {
+                throw new EntityNotFoundException("Service not found");
+            }
+
+            String currentName = service.getName().trim().toLowerCase();
+            String newName = serviceDto.getName().trim().toLowerCase();
+
+            if (!currentName.equals(newName)) {
+                boolean nameExists = repairServiceService.isServiceNameTaken(newName, service.getBaseService().getId());
+                if (nameExists) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Service with name " + serviceDto.getName() + " already exists!");
+                }
+            }
+
+            service.setName(serviceDto.getName());
+            service.setPrice(serviceDto.getPrice());
+            repairServiceService.createService(service, loggedInUser);
+
+            return ResponseEntity.ok().build();
+        } catch (AuthenticationException e) {
+            model.addAttribute("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (DuplicateEntityException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }
