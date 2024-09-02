@@ -139,28 +139,26 @@
                                         th:utext="'Starts from <span style=&quot;font-weight: bold;&quot;>' + ${#numbers.formatDecimal(service.price, 2, 2)} + '</span> BGN'">
                                         Service Price
                                     </td>
-                                    <td style="text-align: right;">
-                                        <!-- Edit и Save бутони -->
-                                        <button th:id="'edit-' + ${service.id}"
+                                    <td th:if="${isEmployee}" style="text-align: right;">
+                                        <button class="more simple" th:id="'edit-' + ${service.id}" style="padding: 5px 10px; font-size: 12px; margin-right: 10px;"
                                                 th:onclick="'editService(' + ${service.id} + ', \'' + ${slug} + '\')'">
                                             Edit
                                         </button>
-                                        <button th:id="'save-' + ${service.id}" style="display:none;"
+                                        <button class="more simple" th:id="'save-' + ${service.id}" style="display:none; padding: 5px 10px; font-size: 12px; margin-right: 10px;"
                                                 th:onclick="'saveEditedService(' + ${service.id} + ', \'' + ${slug} + '\')'">
                                             Save
                                         </button>
 
-                                        <!-- Delete бутон -->
                                         <form th:action="@{/ti/services/air-conditioning/delete}" method="post" style="display:inline;">
                                             <input type="hidden" th:name="serviceId" th:value="${service.id}">
-                                            <button th:id="'delete-' + ${service.id}" type="submit">Delete</button>
+                                            <button class="more simple" th:id="'delete-' + ${service.id}" style="padding: 5px 10px; font-size: 12px; margin-right: 10px;" type="submit">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
 
-                            <div style="text-align: center;">
+                            <div th:if="${isEmployee}" style="text-align: center;">
                                 <a href="javascript:void(0);" id="addServiceButton" class="more simple"
                                    style="padding: 5px 10px; font-size: 12px; margin-right: 10px;"
                                    onclick="addNewServiceRow()">Add Service</a>

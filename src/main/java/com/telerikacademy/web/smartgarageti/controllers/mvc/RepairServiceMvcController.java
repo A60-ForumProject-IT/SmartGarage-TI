@@ -81,7 +81,7 @@ public class RepairServiceMvcController {
     public String showBeltsAndHoses(Model model) {
         try {
             BaseService baseService = baseServiceService.getBaseServiceById(BELTS_HOSES_ID);
-            List<RepairService> services = repairServiceService.getAllByBaseServiceId(baseService.getId());
+            List<RepairService> services = repairServiceService.findAllByBaseService_IdAndIsDeletedFalse(baseService.getId());
             model.addAttribute("services", services);
             return "service_belts_hoses";
         } catch (EntityNotFoundException e) {
@@ -94,7 +94,7 @@ public class RepairServiceMvcController {
     public String showBrakeRepair(Model model) {
         try {
             BaseService baseService = baseServiceService.getBaseServiceById(BRAKE_REPAIR_ID);
-            List<RepairService> services = repairServiceService.getAllByBaseServiceId(baseService.getId());
+            List<RepairService> services = repairServiceService.findAllByBaseService_IdAndIsDeletedFalse(baseService.getId());
             model.addAttribute("services", services);
             return "service_brake_repair";
         } catch (EntityNotFoundException e) {
@@ -107,7 +107,7 @@ public class RepairServiceMvcController {
     public String showEngineDiagnostics(Model model) {
         try {
             BaseService baseService = baseServiceService.getBaseServiceById(ENGINE_DIAGNOSTICS_ID);
-            List<RepairService> services = repairServiceService.getAllByBaseServiceId(baseService.getId());
+            List<RepairService> services = repairServiceService.findAllByBaseService_IdAndIsDeletedFalse(baseService.getId());
             model.addAttribute("services", services);
             return "service_engine_diagnostics";
         } catch (EntityNotFoundException e) {
@@ -120,7 +120,7 @@ public class RepairServiceMvcController {
     public String showLubeOilFilters(Model model) {
         try {
             BaseService baseService = baseServiceService.getBaseServiceById(LUBE_OIL_FILTERS_ID);
-            List<RepairService> services = repairServiceService.getAllByBaseServiceId(baseService.getId());
+            List<RepairService> services = repairServiceService.findAllByBaseService_IdAndIsDeletedFalse(baseService.getId());
             model.addAttribute("services", services);
             return "service_lube_oil_filters";
         } catch (EntityNotFoundException e) {
@@ -133,7 +133,7 @@ public class RepairServiceMvcController {
     public String showTireWheel(Model model) {
         try {
             BaseService baseService = baseServiceService.getBaseServiceById(TIRE_WHEEL_ID);
-            List<RepairService> services = repairServiceService.getAllByBaseServiceId(baseService.getId());
+            List<RepairService> services = repairServiceService.findAllByBaseService_IdAndIsDeletedFalse(baseService.getId());
             model.addAttribute("services", services);
             return "service_tire_wheel";
         } catch (EntityNotFoundException e) {
