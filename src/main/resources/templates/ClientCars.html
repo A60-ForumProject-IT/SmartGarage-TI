@@ -147,28 +147,20 @@
                 <div class="custom-car-list-items">
                     <div th:each="clientCar, iterStat : ${clientCars}"
                          th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white custom-car-list-row' : 'vehicle-item gray custom-car-list-row'">
-                        <!-- VIN -->
                         <div class="custom-car-list-column" th:id="'vin-' + ${clientCar.id}" th:text="${clientCar.vin}" style="height: 20px !important;">VIN</div>
 
-                        <!-- License Plate -->
                         <div class="custom-car-list-column" th:id="'licensePlate-' + ${clientCar.id}" th:text="${clientCar.licensePlate}" style="height: 20px !important;">License Plate</div>
 
-                        <!-- Owner -->
                         <div class="custom-car-list-column" th:text="${clientCar.owner.username}">Owner Username</div>
 
-                        <!-- Brand -->
                         <div class="custom-car-list-column" th:text="${clientCar.vehicle.brand.name}">Brand</div>
 
-                        <!-- Make -->
                         <div class="custom-car-list-column" th:text="${clientCar.vehicle.model.name}">Make</div>
 
-                        <!-- Engine Type -->
                         <div class="custom-car-list-column" th:text="${clientCar.vehicle.engineType.name}">Engine Type</div>
 
-                        <!-- Year of Creation -->
                         <div class="custom-car-list-column" th:text="${clientCar.vehicle.year.year}">Year of Creation</div>
 
-                        <!-- Actions -->
                         <div class="custom-car-list-column" style="display: flex; gap: 10px; align-items: center;">
                             <button th:id="'edit-' + ${clientCar.id}" th:onclick="'editClientCar(' + ${clientCar.id} + ')'">Edit</button>
                             <button th:id="'save-' + ${clientCar.id}" style="display:none;" th:onclick="'saveClientCar(' + ${clientCar.id} + ')'">Save</button>
@@ -176,7 +168,7 @@
                             <button th:id="'delete-' + ${clientCar.id}" type="submit">Delete</button>
                         </form>
 
-                            <button th:id="'add-services-' + ${clientCar.id}">Add Services</button>
+                            <a th:href="@{'/ti/client-cars/' + ${clientCar.id} + '/services'}" class="btn btn-primary">Add Services</a>
                         </div>
                     </div>
                 </div>

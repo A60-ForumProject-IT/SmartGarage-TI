@@ -154,7 +154,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="appointment.html" title="Orders" th:href="@{/ti/orders}">
+                            <a href="appointment.html" title="Orders" th:if="${isAuthenticated && isEmployee}" th:href="@{/ti/orders}">
                                 Orders
                             </a>
                         </li>
