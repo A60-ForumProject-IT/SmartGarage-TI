@@ -8,6 +8,8 @@ import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.ChangePasswordDto;
+import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
+import com.telerikacademy.web.smartgarageti.models.dto.LoginDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserEditInfoDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.AvatarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
@@ -26,6 +28,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -277,4 +280,25 @@ public class UserMvcController {
         }
     }
 
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordForm(Model model) {
+        model.addAttribute("forgottenPasswordDto", new ForgottenPasswordDto());
+        return "forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String handleForgotPassword(
+            @ModelAttribute("forgottenPasswordDto") ForgottenPasswordDto forgottenPasswordDto,
+            Model model, RedirectAttributes redirectAttributes) {
+        try {
+            userService.resetPassword(forgottenPasswordDto); // Сървис метод, който изпраща нова парола
+            model.addAttribute("successMessage", "A new password has been sent to your email.");
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", "No account found with that email.");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "An error occurred while trying to reset your password.");
+        }
+        redirectAttributes.addFlashAttribute("login", new LoginDto());
+        return "redirect:/ti/auth/login";
+    }
 }

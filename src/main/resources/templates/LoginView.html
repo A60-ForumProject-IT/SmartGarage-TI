@@ -223,7 +223,8 @@
                                 <input type="password" id="login-password" th:field="*{password}" class="text-input" required>
                             </div>
                             <button type="submit" class="more">Login</button>
-                            <p><a href="/forgot-password" class="nounderline">Forgot Password?</a></p>
+                            <p><a th:href="@{/ti/users/forgot-password}" class="nounderline">Forgot Password?</a></p>
+
                         </form>
                     </div>
 
