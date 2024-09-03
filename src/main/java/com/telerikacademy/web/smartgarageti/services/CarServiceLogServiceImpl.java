@@ -1,5 +1,6 @@
 package com.telerikacademy.web.smartgarageti.services;
 
+import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.*;
@@ -88,6 +89,18 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
         PermissionHelper.isEmployee(user, "You are not employee and can't see these details!");
 
         return carServiceRepository.findAllByClientCarIdAndOrderStatus(clientCarId, "NOT_STARTED");
+    }
+
+    @Override
+    public void deleteServiceFromOrder(int orderId, int clientCarId, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't delete service from order!");
+        CarServiceLog carServiceLog = carServiceRepository.findByOrderIdAndClientCarId(orderId, clientCarId);
+
+        if (carServiceLog == null) {
+            throw new EntityNotFoundException("CarServiceLog not found for this order and car.");
+        }
+
+        carServiceRepository.delete(carServiceLog);
     }
 
     private Order createNewOrder(int clientCarId) {

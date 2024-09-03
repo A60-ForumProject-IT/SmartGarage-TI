@@ -14,4 +14,8 @@ public interface CarServiceLogRepository extends JpaRepository<CarServiceLog, In
     List<CarServiceLog> findAllByClientCarIn(List<ClientCar> clientCars);
 
     List<CarServiceLog> findAllByClientCarIdAndOrderStatus(int clientCarId, String status);
+
+    CarServiceLog findByOrderIdAndClientCarId(int orderId, int clientCarId);
+
+    void deleteByOrderIdAndClientCarId(int orderId, int clientCarId);
 }

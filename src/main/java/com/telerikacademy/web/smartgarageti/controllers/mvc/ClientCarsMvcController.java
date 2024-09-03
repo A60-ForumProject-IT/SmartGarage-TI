@@ -290,12 +290,53 @@ public class ClientCarsMvcController {
 
             RepairService repairService = repairServiceService.findServiceByName(repairServiceName);
 
+            ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
+            if (clientCar == null) {
+                model.addAttribute("errorMessage", "Car was not found!");
+                return "AddServiceToClientCar";
+            }
+
+            List<CarServiceLog> existingServices = carServiceLogService.findNotStartedOrdersByClientCarId(clientCarId, user);
+
+            model.addAttribute("clientCarOrders", existingServices);
+
+            boolean serviceAlreadyAdded = existingServices.stream()
+                    .anyMatch(service -> service.getService().getName().equals(repairServiceName));
+
+            if (serviceAlreadyAdded) {
+                model.addAttribute("errorMessage", "This service is already in this order.");
+                model.addAttribute("clientCar", clientCar);
+                return "AddServiceToClientCar";
+            }
+
             carServiceLogService.addServiceToOrder(clientCarId, repairService, user);
 
             return "redirect:/ti/client-cars/" + clientCarId + "/services";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "404";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "AddServiceToClientCar";
+        }
+    }
+
+    @PostMapping("/{clientCarId}/services/delete")
+    public String deleteServiceFromOrder(
+            @PathVariable int clientCarId,
+            @RequestParam("orderId") int orderId,
+            HttpSession session,
+            Model model) {
+
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+
+            carServiceLogService.deleteServiceFromOrder(orderId, clientCarId, user);
+
+            return "redirect:/ti/client-cars/" + clientCarId + "/services";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Deletion failure.");
+            return "AddServiceToClientCar";
         }
     }
 }

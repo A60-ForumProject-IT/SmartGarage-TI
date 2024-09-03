@@ -20,4 +20,6 @@ public interface CarServiceLogService {
     List<CarServiceLog> getServiceHistoryForClientCars(List<ClientCar> clientCars, User loggedInUser, User carOwner);
 
     List<CarServiceLog> findNotStartedOrdersByClientCarId(int clientCarId, User user);
+
+    void deleteServiceFromOrder(int orderId, int clientCarId, User user);
 }
