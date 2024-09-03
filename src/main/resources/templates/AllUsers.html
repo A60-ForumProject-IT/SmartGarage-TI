@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="FragmentForm.html :: head"></form>
+<form th:replace="~{FragmentForm.html :: head}"></form>
 <body>
 <div class="site-container">
-    <form th:replace="FragmentForm.html :: header-icons-info"></form>
-    <form th:replace="FragmentForm.html :: header-container"></form>
+    <form th:replace="~{FragmentForm.html :: header-icons-info}"></form>
+    <form th:replace="~{FragmentForm.html :: header-container}"></form>
     <div class="theme-page padding-bottom-66">
         <div class="clearfix">
             <div class="row page-margin-top">
@@ -153,7 +153,7 @@
 
         </div>
     </div>
-    <form th:replace="FragmentForm.html :: footer-and-copyright"></form>
+    <form th:replace="~{FragmentForm.html :: footer-and-copyright}"></form>
 </div>
 <a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
 <div class="background-overlay"></div>
