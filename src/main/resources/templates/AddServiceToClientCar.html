@@ -101,27 +101,28 @@
             <div class="row page-margin-top">
                 <div class="column column-1-1">
                     <h2 class="box-header" style="margin-bottom: 25px; font-size: 25px">ACTIVE ORDER SERVICES</h2>
-                    <div class="vehicle-list">
+                    <div class="user-list">
                         <!-- Пример за редове със сив и бял фон -->
-                        <div class="row vehicle-item gray">
-                            <div class="column column-1-4" style="font-weight: bold; font-size: 14px;">Order Number
-                            </div>
-                            <div class="column column-1-4" style="font-weight: bold; font-size: 14px;">Date of Service
-                            </div>
-                            <div class="column column-1-4" style="font-weight: bold; font-size: 14px;">Order Status
-                            </div>
-                            <div class="column column-1-4" style="font-weight: bold; font-size: 14px;">Service Name
+                        <div class="user-list">
+                            <!-- Пример за редове със сив и бял фон -->
+                            <div class="row vehicle-item gray">
+                                <div class="column column-1-5" style="font-weight: bold; font-size: 14px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;">Order Number</div>
+                                <div class="column column-1-5" style="font-weight: bold; font-size: 14px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;">Date of Service</div>
+                                <div class="column column-1-5" style="font-weight: bold; font-size: 14px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;">Order Status</div>
+                                <div class="column column-1-5" style="font-weight: bold; font-size: 14px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;">Service Name</div>
+                                <div class="column column-1-5" style="font-weight: bold; font-size: 14px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;">Service Price BGN</div>
                             </div>
                         </div>
 
                     </div>
-                    <div class="vehicle-list" style="border: 1px solid #f5f5f5">
+                    <div class="user-list" style="border: 1px solid #f5f5f5">
                         <div th:each="order, iterStat : ${clientCarOrders}"
                              th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
-                            <div class="column column-1-4" th:text="${order.getOrder().id}">Order ID</div>
-                            <div class="column column-1-4" th:text="${order.serviceDate}">Service Date</div>
-                            <div class="column column-1-4" th:text="${order.getOrder().getStatus()}">Order Status</div>
-                            <div class="column column-1-4" th:text="${order.getService().name}">Year</div>
+                            <div class="column column-1-5" style="font-size: 13px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;" th:text="${order.getOrder().id}">Order ID</div>
+                            <div class="column column-1-5" style="font-size: 13px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;" th:text="${order.serviceDate}">Service Date</div>
+                            <div class="column column-1-5" style="font-size: 13px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;" th:text="${order.getOrder().getStatus()}">Order Status</div>
+                            <div class="column column-1-5" style="font-size: 13px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;" th:text="${order.getService().name}">Service Name</div>
+                            <div class="column column-1-5" style="font-size: 13px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;" th:text="${order.getCalculatedPrice()}">Service Price BGN</div>
                         </div>
                     </div>
 
@@ -134,7 +135,7 @@
                             </div>
                             <div class="button-container">
                                 <div class="custom-form-row" style="margin-top: 8px">
-                                    <button type="submit">Add Service</button>
+                                    <button style="font-size: 14px" type="submit">Add Service</button>
                                 </div>
                             </div>
                         </div>

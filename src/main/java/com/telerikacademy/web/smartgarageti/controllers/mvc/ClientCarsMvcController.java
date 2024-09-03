@@ -292,7 +292,6 @@ public class ClientCarsMvcController {
 
             carServiceLogService.addServiceToOrder(clientCarId, repairService, user);
 
-            // Redirect to the same page to refresh the data
             return "redirect:/ti/client-cars/" + clientCarId + "/services";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("errorMessage", e.getMessage());

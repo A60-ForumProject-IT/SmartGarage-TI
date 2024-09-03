@@ -18,4 +18,6 @@ public interface OrderService {
     double calculateOrderTotalInCurrency(Order order, String currency);
 
     List<Order> getOrdersByClientCarIdExcludingNotStarted(int clientCarId, User user);
+
+    double calculateOrderTotalInBgn(Order order);
 }

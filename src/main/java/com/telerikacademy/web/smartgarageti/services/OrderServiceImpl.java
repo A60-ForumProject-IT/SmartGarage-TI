@@ -96,6 +96,17 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findByClientCar_IdAndStatusNot(clientCarId, "NOT_STARTED");
     }
 
+    @Override
+    public double calculateOrderTotalInBgn(Order order) {
+        double totalBGN = 0.0;
+
+        for (CarServiceLog serviceLog : order.getClientCar().getCarServices()) {
+            totalBGN += serviceLog.getCalculatedPrice();
+        }
+
+        return totalBGN;
+    }
+
     private boolean isValidStatus(String status) {
         return status.equals("NOT_STARTED") || status.equals("IN_PROGRESS") || status.equals("READY_FOR_PICKUP");
     }
