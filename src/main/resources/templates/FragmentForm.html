@@ -101,6 +101,11 @@
                                 All Users
                             </a>
                         <li>
+                        <a href="UserDetails.html" th:if="${isAuthenticated}" th:href="@{/ti/users/{id}/details(id=${user.id})}">
+                            My Details
+                        </a>
+                        <li>
+
                             <a href="services.html" th:href="@{/ti/services}" title="Services">
                                 Services
                             </a>

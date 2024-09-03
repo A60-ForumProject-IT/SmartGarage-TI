@@ -7,6 +7,7 @@ import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.dto.ChangePasswordDto;
 import com.telerikacademy.web.smartgarageti.models.dto.UserEditInfoDto;
 import com.telerikacademy.web.smartgarageti.services.contracts.AvatarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
@@ -40,7 +41,7 @@ public class UserMvcController {
     private final AvatarService avatarService;
 
     @Autowired
-    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper , BrandService brandService, AvatarService avatarService) {
+    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, BrandService brandService, AvatarService avatarService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.brandService = brandService;
@@ -52,6 +53,7 @@ public class UserMvcController {
         // Получаване на списъка с всички брандове на коли от VehicleService
         return brandService.findAllBrands();
     }
+
     @ModelAttribute("isAuthenticated")
     public boolean isAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
@@ -72,6 +74,13 @@ public class UserMvcController {
         return new UserEditInfoDto();
     }
 
+    @ModelAttribute("user")
+    public User populateUser(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            return authenticationHelper.tryGetUserFromSession(session);
+        }
+        return null;
+    }
 
     @GetMapping
     public String getAllUsers(HttpSession session,
@@ -206,5 +215,65 @@ public class UserMvcController {
         }
     }
 
+    @GetMapping("/{id}/password-change")
+    public String showChangePasswordForm(@PathVariable int id, Model model, HttpSession session) {
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            User userToChangePassword = userService.getUserById(id, currentUser);
+
+            model.addAttribute("user", userToChangePassword); // Добавяне на user към модела
+            model.addAttribute("changePasswordDto", new ChangePasswordDto());
+            return "change-password";
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "change-password";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
+
+    @PostMapping("/{id}/password-change")
+    public String changePassword(@PathVariable int id,
+                                 @Valid @ModelAttribute("changePasswordDto") ChangePasswordDto changePasswordDto,
+                                 BindingResult bindingResult,
+                                 HttpSession session,
+                                 Model model) {
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            User userToChangePassword = userService.getUserById(id, currentUser);
+
+            // Добави 'user' обекта в модела, за да бъде достъпен в Thymeleaf шаблона
+            model.addAttribute("user", userToChangePassword);
+
+            if (bindingResult.hasErrors()) {
+                return "change-password";
+            }
+
+            if (!changePasswordDto.getOldPassword().equals(userToChangePassword.getPassword())) {
+                bindingResult.rejectValue("oldPassword", "error.changePasswordDto", "Old password is incorrect.");
+                return "change-password";
+            }
+            // Проверка дали новата парола съвпада със старата парола
+            if (changePasswordDto.getNewPassword().equals(changePasswordDto.getOldPassword())) {
+                bindingResult.rejectValue("newPassword", "error.changePasswordDto", "New password must be different from the old password.");
+                return "change-password";
+            }
+
+            // Проверка дали новата парола съвпада с потвърждението
+            if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword())) {
+                bindingResult.rejectValue("confirmPassword", "error.changePasswordDto", "New password and confirm password must match.");
+                return "change-password";
+            }
+
+            userService.changePassword(currentUser, userToChangePassword, changePasswordDto);
+            model.addAttribute("successMessage", "Password changed successfully.");
+            return "redirect:/ti/users/" + id + "/details";
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "change-password";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
 
 }

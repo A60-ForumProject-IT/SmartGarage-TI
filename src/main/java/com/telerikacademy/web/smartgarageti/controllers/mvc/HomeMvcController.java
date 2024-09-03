@@ -53,6 +53,14 @@ public class HomeMvcController {
         return null;
     }
 
+    @ModelAttribute("user")
+    public User populateUser(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            return authenticationHelper.tryGetUserFromSession(session);
+        }
+        return null;
+    }
+
     @GetMapping
     public String showHomePage() {
         return "home";

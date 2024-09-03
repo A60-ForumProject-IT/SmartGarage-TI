@@ -114,7 +114,7 @@
                     <div th:if="${isAuthenticated}">
                         <button id="edit-info-button" class="custom-button" onclick="toggleEditForm()">Edit Info</button>
                         <button id="save-info-button" class="custom-button" onclick="saveChanges()" style="display:none;">Save</button>
-                        <button class="custom-button">Change Password</button>
+                        <a th:href="@{/ti/users/{id}/password-change(id=${user.id})}" class="custom-button">Change Password</a>
                         <script>
                             function toggleEditForm() {
                                 const isEditing = document.getElementById('edit-info-button').style.display !== 'none';

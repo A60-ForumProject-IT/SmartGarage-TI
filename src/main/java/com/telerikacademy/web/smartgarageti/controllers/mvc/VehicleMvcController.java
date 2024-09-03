@@ -37,6 +37,14 @@ public class VehicleMvcController {
         return session.getAttribute("currentUser") !=null;
     }
 
+    @ModelAttribute("user")
+    public User populateUser(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            return authenticationHelper.tryGetUserFromSession(session);
+        }
+        return null;
+    }
+
     @ModelAttribute("isEmployee")
     public boolean populateIsEmployee(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {

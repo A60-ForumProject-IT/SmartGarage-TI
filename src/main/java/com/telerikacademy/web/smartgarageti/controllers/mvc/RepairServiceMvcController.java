@@ -59,6 +59,14 @@ public class RepairServiceMvcController {
         return false;
     }
 
+    @ModelAttribute("user")
+    public User populateUser(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            return authenticationHelper.tryGetUserFromSession(session);
+        }
+        return null;
+    }
+
     @GetMapping
     public String showRepairServices() {
         return "services";
