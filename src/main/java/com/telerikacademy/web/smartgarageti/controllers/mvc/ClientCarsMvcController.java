@@ -252,7 +252,7 @@ public class ClientCarsMvcController {
     }
 
     @GetMapping("/{clientCarId}/services")
-    public String addServiceToClientCar(@PathVariable int clientCarId, Model model, HttpSession session) {
+    public String showSpecificClientCarServiceLogs(@PathVariable int clientCarId, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
             ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
@@ -276,5 +276,27 @@ public class ClientCarsMvcController {
         }
 
         return "AddServiceToClientCar";
+    }
+
+    @PostMapping("/{clientCarId}/services")
+    public String addServiceToClientCar(
+            @PathVariable int clientCarId,
+            @RequestParam("repairService") String repairServiceName,
+            HttpSession session,
+            Model model) {
+
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+
+            RepairService repairService = repairServiceService.findServiceByName(repairServiceName);
+
+            carServiceLogService.addServiceToOrder(clientCarId, repairService, user);
+
+            // Redirect to the same page to refresh the data
+            return "redirect:/ti/client-cars/" + clientCarId + "/services";
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
+        }
     }
 }
