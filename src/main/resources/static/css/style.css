@@ -4070,18 +4070,17 @@ body.lock-position {
 
 #login-username,
 #login-password {
-    font-size: 14px; /* Пример за по-малък шрифт */
+    font-size: 14px;
     padding: 5px;
-    margin-top: 5px !important; /* Пример за по-малки padding */
+    margin-top: 5px !important;
 }
 
-/* За registration формата */
 #reg-username,
 #reg-email,
 #reg-first-name,
 #reg-last-name,
 #reg-phone {
-    font-size: 14px; /* Пример за по-малък шрифт */
+    font-size: 14px;
     padding: 5px;
     margin-top: 5px !important;
 }
@@ -4121,7 +4120,7 @@ body.lock-position {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px; /* Няма нужда от auto, тъй като Flexbox ще го центрира */
+    margin-top: 20px;
     float: none;
 }
 
@@ -4144,7 +4143,7 @@ body.lock-position {
     text-decoration: none;
     color: #333;
     text-align: center;
-    min-width: 40px; /* Задаване на минимална ширина на бутоните, за да изглеждат последователни */
+    min-width: 40px;
 }
 
 .pagination ul li a.active {
@@ -4154,7 +4153,7 @@ body.lock-position {
 }
 
 .pagination ul li:first-child a, .pagination ul li:last-child a {
-    min-width: 80px; /* Увеличаване на ширината на бутоните "Previous" и "Next", за да бъдат по-лесно разпознаваеми */
+    min-width: 80px;
 }
 
 .header-row {
@@ -4169,21 +4168,18 @@ body.lock-position {
     padding: 10px 5px;
 }
 
-/* Основни стилове за таблицата */
 .user-list {
     width: 100%;
     margin: 0 auto;
-    border-collapse: collapse; /* За премахване на двойни граници */
+    border-collapse: collapse;
 }
 
-/* Стилове за заглавната част */
 .user-list .vehicle-item {
-    display: flex; /* Използване на Flexbox за подравняване на колоните */
+    display: flex;
     padding: 10px 0;
-    border-bottom: 1px solid #ddd; /* Добавяне на долна граница */
+    border-bottom: 1px solid #ddd;
 }
 
-/* Стилове за заглавната лента */
 .user-list .vehicle-item.gray {
     background-color: #f9f9f9;
 }
@@ -4192,36 +4188,32 @@ body.lock-position {
     background-color: #ffffff;
 }
 
-/* Колоните са със същата ширина */
 .user-list .column {
-    flex: 1; /* Flexbox расте еднакво за всички колони */
+    flex: 1;
     padding: 10px;
     text-align: left;
     font-size: 16px;
-    overflow: hidden; /* Скриване на текст, който излиза извън рамката */
-    white-space: nowrap; /* Премахване на автоматичния нов ред */
-    text-overflow: ellipsis; /* Добавяне на три точки за изрязан текст */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-/* Стилове за текста в заглавната лента */
 .user-list .column.header {
     font-weight: bold;
     font-size: 18px;
     text-align: center;
 }
 
-/* Разделяне на датите на нов ред */
 .user-list ul {
     padding-left: 0;
-    list-style-type: none; /* Без маркери за списъците */
+    list-style-type: none;
     margin: 0;
 }
 
 .user-list ul li {
-    margin-bottom: 5px; /* Разстояние между датите */
+    margin-bottom: 5px;
 }
 
-/* Стилове за навигационните бутони */
 .pagination ul {
     display: flex;
     justify-content: center;
@@ -4244,10 +4236,9 @@ body.lock-position {
     color: white;
 }
 
-/* Custom styles for the client car form */
 .client-car-form {
     display: flex;
-    justify-content: space-between; /* Подрежда контейнерите на един ред */
+    justify-content: space-between;
     gap: 10px;
     align-items: center;
     padding: 0 4%;
@@ -4256,16 +4247,16 @@ body.lock-position {
 
 .input-container {
     display: flex;
-    flex-wrap: wrap; /* Подрежда input полетата на редове */
+    flex-wrap: wrap;
     gap: 10px;
-    align-items: flex-start; /* Запазва подравняването на input полетата */
-    width: 89%; /* Задава ширина, за да се остави място за бутона */
+    align-items: flex-start;
+    width: 89%;
 }
 
 .button-container {
     display: flex;
     align-items: flex-start;
-    margin-top: 15px /* Позиционира бутона по-надолу */
+    margin-top: 15px
 }
 
 .custom-form-row {
@@ -4307,7 +4298,6 @@ body.lock-position {
     margin-bottom: 5px;
 }
 
-/* Стил за бутоните */
 .modern-button {
     background-color: #007bff;
     color: #ffffff;
@@ -4341,8 +4331,8 @@ body.lock-position {
 
 .client-car-form-search {
     display: flex;
-    justify-content: flex-start; /* Подравнява полетата вляво */
-    gap: 10px; /* Запазва малко разстояние между полетата */
+    justify-content: flex-start;
+    gap: 10px;
     align-items: center;
     padding: 0 4%;
 }
@@ -4350,8 +4340,8 @@ body.lock-position {
 .client-car-form-search .custom-form-row input,
 .client-car-form-search .custom-form-row select,
 .client-car-form-search .custom-form-row button {
-    width: 285px; /* Задава фиксирана ширина само за елементите в долния ред */
-    height: 40px; /* Задава фиксирана височина за елементите */
+    width: 285px;
+    height: 40px;
     margin-top: 5px;
     margin-bottom: 10px;
     border-radius: 4px;
@@ -4366,9 +4356,9 @@ body.lock-position {
 
 .input-container-search {
     display: flex;
-    flex-wrap: wrap; /* Подрежда input полетата на редове */
+    flex-wrap: wrap;
     gap: 10px;
-    align-items: flex-start; /* Запазва подравняването на input полетата */
+    align-items: flex-start;
     width: 42.5%;
 }
 
@@ -4378,7 +4368,6 @@ body.lock-position {
     box-sizing: border-box;
 }
 
-/* Media Queries за респонсив дизайн */
 @media (max-width: 1024px) {
     .client-car-form, .client-car-form-search {
         flex-direction: column;
@@ -4432,37 +4421,37 @@ body.lock-position {
 }
 
 .custom-car-list-container {
-    width: 92%; /* Задава на контейнера да заема цялата ширина */
-    padding: 0 4%; /* Добавя малко отстояние от краищата */
+    width: 92%;
+    padding: 0 4%;
     background-color: #ffffff;
-    overflow-x: hidden; /* Светъл фон, за да се отличава */
+    overflow-x: hidden;
 }
 
 .custom-car-list-header,
 .custom-car-list-row {
-    display: flex; /* Подравнява елементите в редове */
-    justify-content: space-between; /* Разпределя колоните равномерно */
-    padding: 10px 0; /* Малко разстояние между редовете */
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
 }
 
 .custom-car-list-column {
-    flex: 1; /* Всяка колона ще заема равномерно място */
-    text-align: left; /* Подравняване на текста вляво */
+    flex: 1;
+    text-align: left;
     padding: 10px;
     box-sizing: border-box;
 }
 
 .custom-car-list-header .custom-car-list-column {
-    font-weight: bold; /* Удебелява заглавията на колоните */
-    background-color: #e1e1e1; /* Светло сив фон за заглавията */
+    font-weight: bold;
+    background-color: #e1e1e1;
 }
 
 .custom-car-list-row:nth-child(even) {
-    background-color: #f1f1f1; /* Светло сив фон за четните редове */
+    background-color: #f1f1f1;
 }
 
 .custom-car-list-row:nth-child(odd) {
-    background-color: #ffffff; /* Бял фон за нечетните редове */
+    background-color: #ffffff;
 }
 
 .custom-car-list-row button {
@@ -4478,7 +4467,6 @@ body.lock-position {
     background-color: #0056b3;
 }
 
-/* New CSS for buttons */
 .button-section {
     display: flex;
     justify-content: center;
@@ -4511,11 +4499,11 @@ body.lock-position {
 }
 
 .row.button-section {
-    position: relative; /* За фиксиране на бутона */
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Разстояние между бутоните */
+    gap: 10px;
     margin-top: 20px;
 }
 
@@ -4530,16 +4518,15 @@ body.lock-position {
 }
 
 .alert.success {
-    background-color: #28a745; /* Зелен фон за успех */
+    background-color: #28a745;
     color: #fff;
 }
 
 .alert.error {
-    background-color: #dc3545; /* Червен фон за грешка */
+    background-color: #dc3545;
     color: #fff;
 }
 
-/* Показване на съобщенията */
 .alert.show {
     display: block;
     opacity: 1;

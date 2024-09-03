@@ -232,4 +232,24 @@ public class ClientCarsMvcController {
             return "404";
         }
     }
+
+    @GetMapping("/{clientCarId}/services")
+    public String services(@PathVariable int clientCarId, Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
+            model.addAttribute("clientCar", clientCar);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+        } catch (AuthenticationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage()); //dd
+        }
+
+        return "AddServiceToClientCar";
+    }
 }

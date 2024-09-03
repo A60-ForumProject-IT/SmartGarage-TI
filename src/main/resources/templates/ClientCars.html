@@ -168,7 +168,7 @@
                             <button th:id="'delete-' + ${clientCar.id}" type="submit">Delete</button>
                         </form>
 
-                            <a th:href="@{'/ti/client-cars/' + ${clientCar.id} + '/services'}" class="btn btn-primary">Add Services</a>
+                            <a th:id="'add-services-' + ${clientCar.id}" th:href="@{'/ti/client-cars/' + ${clientCar.id} + '/services'}" class="btn btn-primary">Add Services</a>
                         </div>
                     </div>
                 </div>
