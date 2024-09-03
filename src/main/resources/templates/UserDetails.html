@@ -37,7 +37,7 @@
                     <div class="team-box single">
                         <a th:href="@{/ti/users/{id}/details(id=${user.id})}"
                            th:title="${user.firstName} + ' ' + ${user.lastName}">
-                            <img th:src="${user.avatar.avatar}" alt="Profile Picture" width="380"/>
+                            <img th:src="${user.avatar.avatar}" alt="Profile Picture" style="max-width: 380px; max-height: 400px ;min-width: 380px; min-height: 400px"/>
                         </a>
                         <div class="team-content">
                             <h4>
@@ -105,16 +105,17 @@
                         SUV, our mechanics strive to ensure that your vehicle will be performing at its best before
                         leaving our car shop.</p>
                 </div>
-                <div class="row button-section align-center margin-top-40">
+                <div class="row button-section align-center margin-top-40"
+                     th:if="${currentUser != null} and (${currentUser.id} == ${user.id})">
                     <form method="post" enctype="multipart/form-data" th:action="@{/ti/users/upload-photo}">
                         <label for="avatarFile" class="custom-button">Choose Photo</label>
                         <input type="file" id="avatarFile" name="avatarFile" style="display: none;"
                                onchange="this.form.submit()"/>
                     </form>
                     <div th:if="${isAuthenticated}">
-                        <button id="edit-info-button" class="custom-button" onclick="toggleEditForm()">Edit Info</button>
-                        <button id="save-info-button" class="custom-button" onclick="saveChanges()" style="display:none;">Save</button>
-                        <a th:href="@{/ti/users/{id}/password-change(id=${user.id})}" class="custom-button">Change Password</a>
+                        <button id="edit-info-button" class="custom-button" onclick="toggleEditForm()" style="padding: 12px 12px ; margin-right: 7px;">Edit Info</button>
+                        <button id="save-info-button" class="custom-button" onclick="saveChanges()" style="display:none; padding: 12px 12px ; margin-right: 7px;">Save</button>
+                        <a th:href="@{/ti/users/{id}/password-change(id=${user.id})}" class="custom-button" style="text-decoration: none; padding-bottom: 11px">Change Password</a>
                         <script>
                             function toggleEditForm() {
                                 const isEditing = document.getElementById('edit-info-button').style.display !== 'none';

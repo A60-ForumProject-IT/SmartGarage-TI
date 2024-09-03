@@ -149,6 +149,7 @@ public class UserMvcController {
             User userToDisplay = userService.getUserById(id, currentUser);
 
             model.addAttribute("user", userToDisplay);
+            model.addAttribute("currentUser", currentUser);
             model.addAttribute("userEditInfoDto", new UserEditInfoDto());
             model.addAttribute("avatarUrl", userToDisplay.getAvatar().getAvatar());
             model.addAttribute("isEditing", false);
