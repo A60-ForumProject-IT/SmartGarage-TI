@@ -4070,9 +4070,9 @@ body.lock-position {
 
 #login-username,
 #login-password {
-    font-size: 14px;
+    font-size: 14px; /* Пример за по-малък шрифт */
     padding: 5px;
-    margin-top: 5px !important;
+    margin-top: 5px !important; /* Пример за по-малки padding */
 }
 
 #reg-username,
@@ -4547,3 +4547,8 @@ body.lock-position {
     background-color: #003d80;
 }
 
+.inline-form-row {
+    display: flex;
+    text-align: left;
+    justify-content: flex-start;
+}

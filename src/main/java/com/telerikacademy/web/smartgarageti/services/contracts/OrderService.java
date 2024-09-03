@@ -16,4 +16,6 @@ public interface OrderService {
     List<Order> getOrdersByUserId(User orderOwner, User loggedInUser);
 
     double calculateOrderTotalInCurrency(Order order, String currency);
+
+    List<Order> getOrdersByClientCarIdExcludingNotStarted(int clientCarId, User user);
 }

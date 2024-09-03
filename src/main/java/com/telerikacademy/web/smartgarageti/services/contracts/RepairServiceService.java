@@ -25,4 +25,5 @@ public interface RepairServiceService {
 
     List<RepairService> findAllByBaseService_IdAndIsDeletedFalse(int baseServiceId);
 
+    List<String> findRepairServicesByTerm(String term);
 }

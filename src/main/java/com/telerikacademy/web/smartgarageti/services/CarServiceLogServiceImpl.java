@@ -83,6 +83,13 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
         return carServiceLogs;
     }
 
+    @Override
+    public List<CarServiceLog> findNotStartedOrdersByClientCarId(int clientCarId, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't see these details!");
+
+        return carServiceRepository.findAllByClientCarIdAndOrderStatus(clientCarId, "NOT_STARTED");
+    }
+
     private Order createNewOrder(int clientCarId) {
         Order newOrder = new Order();
         newOrder.setClientCar(clientCarService.getClientCarById(clientCarId));

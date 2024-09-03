@@ -6,14 +6,10 @@ import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.MapperHelper;
-import com.telerikacademy.web.smartgarageti.models.Brand;
-import com.telerikacademy.web.smartgarageti.models.ClientCar;
-import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.models.dto.ClientCarDtoMvc;
 import com.telerikacademy.web.smartgarageti.models.dto.ClientCarUpdateDto;
-import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
-import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
-import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
+import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +33,20 @@ public class ClientCarsMvcController {
     private final BrandService brandService;
     private final UserService userService;
     private final MapperHelper mapperHelper;
+    private final OrderService orderService;
+    private final CarServiceLogService carServiceLogService;
+    private final RepairServiceService repairServiceService;
 
     @Autowired
-    public ClientCarsMvcController(AuthenticationHelper authenticationHelper, ClientCarService clientCarService, BrandService brandService, UserService userService, MapperHelper mapperHelper) {
+    public ClientCarsMvcController(AuthenticationHelper authenticationHelper, ClientCarService clientCarService, BrandService brandService, UserService userService, MapperHelper mapperHelper, OrderService orderService, CarServiceLogService carServiceLogService, RepairServiceService repairServiceService) {
         this.authenticationHelper = authenticationHelper;
         this.clientCarService = clientCarService;
         this.brandService = brandService;
         this.userService = userService;
         this.mapperHelper = mapperHelper;
+        this.orderService = orderService;
+        this.carServiceLogService = carServiceLogService;
+        this.repairServiceService = repairServiceService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -72,6 +74,14 @@ public class ClientCarsMvcController {
         List<String> usernames = userService.findUsernamesByTerm(term);
         System.out.println("Usernames found: " + usernames);
         return usernames;
+    }
+
+    @GetMapping("/repairservices")
+    @ResponseBody
+    public List<String> findRepairServices(@RequestParam("term") String term) {
+        List<String> repairServices = repairServiceService.findRepairServicesByTerm(term);
+        System.out.println("Repair Services found: " + repairServices);
+        return repairServices;
     }
 
     @GetMapping
@@ -234,11 +244,18 @@ public class ClientCarsMvcController {
     }
 
     @GetMapping("/{clientCarId}/services")
-    public String services(@PathVariable int clientCarId, Model model, HttpSession session) {
+    public String addServiceToClientCar(@PathVariable int clientCarId, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
             ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
+            List<CarServiceLog> carServiceLogs = carServiceLogService.findNotStartedOrdersByClientCarId(clientCarId, user);
+
+            List<String> allRepairServices = repairServiceService.findRepairServicesByTerm("");
+
             model.addAttribute("clientCar", clientCar);
+            model.addAttribute("clientCarOrders", carServiceLogs);
+            model.addAttribute("repairServices", allRepairServices);
+
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -247,7 +264,7 @@ public class ClientCarsMvcController {
             model.addAttribute("error", e.getMessage());
         } catch (AuthenticationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-            model.addAttribute("error", e.getMessage()); //dd
+            model.addAttribute("error", e.getMessage());//d
         }
 
         return "AddServiceToClientCar";

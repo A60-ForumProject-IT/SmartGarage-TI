@@ -35,39 +35,110 @@
         </div>
         <div class="custom-form-container margin-top-70" style="margin-top: 35px !important;">
             <div class="custom-form-header">
-                <h2 style="text-align: center; margin-bottom: 35px; font-weight: bold;">ADD SERVICE TO CLIENT CAR</h2>
+                <h2 class="box-header" style="text-align: center; margin-bottom: 35px; font-weight: bold;">ADD SERVICE
+                    TO CLIENT CAR</h2>
             </div>
 
             <div class="custom-car-list-container">
                 <div class="custom-car-list-header" style="height: 55px; text-align: center;">
-                    <div class="custom-car-list-column" style="display: grid;justify-content: center;align-content: center;">VIN</div>
-                    <div class="custom-car-list-column" style="display: grid;justify-content: center;align-content: center;">License Plate</div>
-                    <div class="custom-car-list-column" style="display: grid;justify-content: center;align-content: center;">Owner</div>
-                    <div class="custom-car-list-column" style="display: grid;justify-content: center;align-content: center;">Brand</div>
-                    <div class="custom-car-list-column" style="display: grid;justify-content: center;align-content: center;">Make</div>
-                    <div class="custom-car-list-column" style="display: grid;justify-content: center;align-content: center;">Engine Type</div>
-                    <div class="custom-car-list-column" style="display: grid;justify-content: center;align-content: center;">Year of Creation</div>
+                    <div class="custom-car-list-column"
+                         style="display: grid;justify-content: center;align-content: center;">VIN
+                    </div>
+                    <div class="custom-car-list-column"
+                         style="display: grid;justify-content: center;align-content: center;">License Plate
+                    </div>
+                    <div class="custom-car-list-column"
+                         style="display: grid;justify-content: center;align-content: center;">Owner
+                    </div>
+                    <div class="custom-car-list-column"
+                         style="display: grid;justify-content: center;align-content: center;">Brand
+                    </div>
+                    <div class="custom-car-list-column"
+                         style="display: grid;justify-content: center;align-content: center;">Make
+                    </div>
+                    <div class="custom-car-list-column"
+                         style="display: grid;justify-content: center;align-content: center;">Engine Type
+                    </div>
+                    <div class="custom-car-list-column"
+                         style="display: grid;justify-content: center;align-content: center;">Year of Creation
+                    </div>
                 </div>
 
-                <div class="custom-car-list-items">
+                <div class="custom-car-list-items" style="border: 1px solid #f5f5f5">
                     <div class="vehicle-item white custom-car-list-row">
-                        <div class="custom-car-list-column" th:id="'vin-' + ${clientCar.id}" th:text="${clientCar.vin}" style="height: 20px !important; text-align: center">VIN</div>
+                        <div class="custom-car-list-column" th:id="'vin-' + ${clientCar.id}" th:text="${clientCar.vin}"
+                             style="height: 20px !important; text-align: center">VIN
+                        </div>
 
-                        <div class="custom-car-list-column" th:id="'licensePlate-' + ${clientCar.id}" th:text="${clientCar.licensePlate}" style="height: 20px !important; text-align: center">License Plate</div>
+                        <div class="custom-car-list-column" th:id="'licensePlate-' + ${clientCar.id}"
+                             th:text="${clientCar.licensePlate}" style="height: 20px !important; text-align: center">
+                            License Plate
+                        </div>
 
-                        <div class="custom-car-list-column" th:text="${clientCar.owner.username}" style="text-align: center">Owner Username</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.owner.username}"
+                             style="text-align: center">Owner Username
+                        </div>
 
-                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.brand.name}" style="text-align: center">Brand</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.brand.name}"
+                             style="text-align: center">Brand
+                        </div>
 
-                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.model.name}" style="text-align: center">Make</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.model.name}"
+                             style="text-align: center">Make
+                        </div>
 
-                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.engineType.name}" style="text-align: center">Engine Type</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.engineType.name}"
+                             style="text-align: center">Engine Type
+                        </div>
 
-                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.year.year}" style="text-align: center">Year of Creation</div>
+                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.year.year}"
+                             style="text-align: center">Year of Creation
+                        </div>
                     </div>
                 </div>
             </div>
-<!--            СЛАГАМЕ ТУК ORDER LIST-->
+            <!--            СЛАГАМЕ ТУК ORDER LIST-->
+            <div class="row page-margin-top">
+                <div class="column column-1-1">
+                    <h2 class="box-header" style="margin-bottom: 25px; font-size: 25px">ACTIVE ORDER SERVICES</h2>
+                    <div class="vehicle-list">
+                        <!-- Пример за редове със сив и бял фон -->
+                        <div class="row vehicle-item gray">
+                            <div class="column column-1-4" style="font-weight: bold; font-size: 14px;">Order Number
+                            </div>
+                            <div class="column column-1-4" style="font-weight: bold; font-size: 14px;">Date of Service
+                            </div>
+                            <div class="column column-1-4" style="font-weight: bold; font-size: 14px;">Order Status
+                            </div>
+                            <div class="column column-1-4" style="font-weight: bold; font-size: 14px;">Service Name
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="vehicle-list" style="border: 1px solid #f5f5f5">
+                        <div th:each="order, iterStat : ${clientCarOrders}"
+                             th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
+                            <div class="column column-1-4" th:text="${order.getId()}">Order ID</div>
+                            <div class="column column-1-4" th:text="${order.serviceDate}">Service Date</div>
+                            <div class="column column-1-4" th:text="${order.getOrder().getStatus()}">Order Status</div>
+                            <div class="column column-1-4" th:text="${order.getService().name}">Year</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: flex-start; max-width: 100%; margin-top: 30px">
+                        <div style="display: flex; align-items: flex-start; margin-right: 20px; flex-direction: column">
+                            <label for="repairService" style="margin-bottom: 10px; font-weight: bold">REPAIR SERVICE</label>
+                            <input id="repairService" type="text" name="repairService" placeholder="Repair Service..." required
+                                   style="width: 300px; border-radius: 4px; height: 15px">
+                        </div>
+                        <div class="button-container">
+                            <div class="custom-form-row" style="margin-top: 8px">
+                                <button type="submit">Add Service</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -101,24 +172,21 @@
 <script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         console.log("Document is ready!");
 
-        $("#owner").autocomplete({
-            source: function(request, response) {
-                console.log("Autocomplete triggered with term: ", request.term);
-
+        $("#repairService").autocomplete({
+            source: function (request, response) {
                 $.ajax({
-                    url: "/ti/client-cars/usernames",
+                    url: "/ti/client-cars/repairservices",
                     type: "GET",
                     data: {
                         term: request.term
                     },
-                    success: function(data) {
-                        console.log("Autocomplete data received: ", data);
+                    success: function (data) {
                         response(data);
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         console.error("Autocomplete error: ", xhr);
                     }
                 });

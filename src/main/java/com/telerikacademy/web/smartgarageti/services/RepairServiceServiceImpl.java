@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RepairServiceServiceImpl implements RepairServiceService {
@@ -60,6 +61,14 @@ public class RepairServiceServiceImpl implements RepairServiceService {
     @Override
     public List<RepairService> findAllByBaseService_IdAndIsDeletedFalse(int baseServiceId) {
         return serviceRepository.findAllByBaseService_IdAndIsDeletedFalse(baseServiceId);
+    }
+
+    @Override
+    public List<String> findRepairServicesByTerm(String term) {
+        return serviceRepository.findByNameContainingIgnoreCase(term)
+                .stream()
+                .map(RepairService::getName)
+                .collect(Collectors.toList());
     }
 
     @Override

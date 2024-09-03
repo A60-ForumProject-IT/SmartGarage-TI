@@ -18,4 +18,6 @@ public interface CarServiceLogService {
     CarServiceLog addServiceToOrder(int clientCarId, RepairService repairService, User user);
 
     List<CarServiceLog> getServiceHistoryForClientCars(List<ClientCar> clientCars, User loggedInUser, User carOwner);
+
+    List<CarServiceLog> findNotStartedOrdersByClientCarId(int clientCarId, User user);
 }

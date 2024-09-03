@@ -11,6 +11,7 @@ import com.telerikacademy.web.smartgarageti.services.contracts.CurrencyConversio
 import com.telerikacademy.web.smartgarageti.services.contracts.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -86,6 +87,13 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return totalBGN;
+    }
+
+    @Override
+    @Transactional
+    public List<Order> getOrdersByClientCarIdExcludingNotStarted(int clientCarId, User user) {
+        PermissionHelper.isEmployee(user, "You are not employee and can't see all orders");
+        return orderRepository.findByClientCar_IdAndStatusNot(clientCarId, "NOT_STARTED");
     }
 
     private boolean isValidStatus(String status) {

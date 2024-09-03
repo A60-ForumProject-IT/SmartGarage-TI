@@ -24,4 +24,5 @@ public interface RepairServiceRepository extends JpaRepository<RepairService, In
 
     List<RepairService> findAllByBaseService_IdAndIsDeletedFalse(int baseServiceId);
 
+    List<RepairService> findByNameContainingIgnoreCase(String term);
 }

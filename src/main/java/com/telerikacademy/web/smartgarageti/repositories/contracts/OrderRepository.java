@@ -15,4 +15,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findAllByClientCarOwnerId(int userId);
 
+    List<Order> findByClientCar_IdAndStatusNot(int clientCarId, String status);
+
 }
