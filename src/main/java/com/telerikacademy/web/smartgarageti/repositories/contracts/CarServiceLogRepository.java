@@ -5,6 +5,7 @@ import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarServiceLogRepository extends JpaRepository<CarServiceLog, Integer> {
     List<CarServiceLog> findAllByClientCarOwnerId(int ownerId);
@@ -18,4 +19,7 @@ public interface CarServiceLogRepository extends JpaRepository<CarServiceLog, In
     CarServiceLog findByOrderIdAndClientCarId(int orderId, int clientCarId);
 
     void deleteByOrderIdAndClientCarId(int orderId, int clientCarId);
+
+    Optional<CarServiceLog> findByIdAndClientCarId(int clientServiceLogId, int clientCarId);
+
 }

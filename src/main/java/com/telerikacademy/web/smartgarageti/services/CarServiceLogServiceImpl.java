@@ -92,9 +92,10 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
     }
 
     @Override
-    public void deleteServiceFromOrder(int orderId, int clientCarId, User user) {
+    public void deleteServiceFromOrder(int clientServiceLogId, int clientCarId, User user) {
         PermissionHelper.isEmployee(user, "You are not employee and can't delete service from order!");
-        CarServiceLog carServiceLog = carServiceRepository.findByOrderIdAndClientCarId(orderId, clientCarId);
+        CarServiceLog carServiceLog = carServiceRepository.findByIdAndClientCarId(clientServiceLogId, clientCarId)
+                .orElseThrow(() -> new EntityNotFoundException("CarServiceLog not found for this ID and car."));
 
         if (carServiceLog == null) {
             throw new EntityNotFoundException("CarServiceLog not found for this order and car.");

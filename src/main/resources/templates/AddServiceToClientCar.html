@@ -120,9 +120,12 @@
                             <div class="column column-1-6" style="font-size: 13px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;" th:text="${order.getOrder().getStatus()}">Order Status</div>
                             <div class="column column-1-6" style="font-size: 13px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;" th:text="${order.getService().name}">Service Name</div>
                             <div class="column column-1-6" style="font-size: 13px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;" th:text="${order.getCalculatedPrice()}">Service Price BGN</div>
-                            <div class="column column-1-6" style="text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;">
-                                <form th:action="@{/ti/client-cars/{clientCarId}/services/delete(clientCarId=${clientCar.id}, orderId=${order.getOrder().id})}" method="post">
-                                    <button type="submit" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">Delete</button>
+                            <div class="column column-1-6" style="font-size: 13px; text-align: center; vertical-align: middle; display: flex; align-items: center; justify-content: center;">
+                                <form th:action="@{/ti/client-cars/{clientCarId}/services/delete(clientCarId=${clientCar.id})}" method="post">
+                                    <input type="hidden" name="serviceLogId" th:value="${order.id}" />
+                                    <button type="submit" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                                        Delete
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -246,6 +249,27 @@
         document.body.appendChild(form);
         form.submit();
     }
+
+    $(document).ready(function() {
+        $('.delete-service-btn').on('click', function(e) {
+            e.preventDefault();
+
+            let serviceLogId = $(this).data('service-id');
+            let clientCarId = $(this).data('client-car-id');
+
+            $.ajax({
+                url: `/ti/client-cars/${clientCarId}/services/delete`,
+                type: 'POST',
+                data: { serviceLogId: serviceLogId },
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error occurred while deleting the service log.');
+                }
+            });
+        });
+    });
 </script>
 
 </body>

@@ -292,7 +292,7 @@ public class ClientCarsMvcController {
 
             ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
             if (clientCar == null) {
-                model.addAttribute("errorMessage", "Car was not found!");
+                model.addAttribute("errorMessage", "Car was not found");
                 return "AddServiceToClientCar";
             }
 
@@ -322,21 +322,25 @@ public class ClientCarsMvcController {
     }
 
     @PostMapping("/{clientCarId}/services/delete")
-    public String deleteServiceFromOrder(
+    public String deleteServiceLog(
             @PathVariable int clientCarId,
-            @RequestParam("orderId") int orderId,
-            HttpSession session,
-            Model model) {
+            @RequestParam("serviceLogId") int serviceLogId,
+            Model model,
+            HttpSession session) {
 
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-
-            carServiceLogService.deleteServiceFromOrder(orderId, clientCarId, user);
-
+            carServiceLogService.deleteServiceFromOrder(serviceLogId, clientCarId, user);
             return "redirect:/ti/client-cars/" + clientCarId + "/services";
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "Deletion failure.");
-            return "AddServiceToClientCar";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
+        } catch (AuthenticationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
         }
     }
 }
