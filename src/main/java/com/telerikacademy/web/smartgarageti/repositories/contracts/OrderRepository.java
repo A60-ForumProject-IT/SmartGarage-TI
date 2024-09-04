@@ -17,4 +17,15 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findByClientCar_IdAndStatusNot(int clientCarId, String status);
 
+    @Query("SELECT o FROM Order o WHERE " +
+            "(:orderId IS NULL OR o.id = :orderId) AND " +
+            "(:ownerUsername IS NULL OR o.clientCar.owner.username = :ownerUsername) AND " +
+            "(:licensePlate IS NULL OR o.clientCar.licensePlate = :licensePlate) AND " +
+            "(:status IS NULL OR o.status = :status)")
+    List<Order> findAllOrdersByCriteria(
+            @Param("orderId") Integer orderId,
+            @Param("ownerUsername") String ownerUsername,
+            @Param("licensePlate") String licensePlate,
+            @Param("status") String status
+    );
 }

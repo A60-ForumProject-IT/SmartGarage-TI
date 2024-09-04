@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,4 +24,7 @@ public class Order {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    @Column(name = "order_date")
+    private LocalDate orderDate;
 }

@@ -107,6 +107,11 @@ public class OrderServiceImpl implements OrderService {
         return totalBGN;
     }
 
+    @Override
+    public List<Order> findAllOrdersByCriteria(Integer orderId, String ownerUsername, String licensePlate, String status) {
+        return orderRepository.findAllOrdersByCriteria(orderId, ownerUsername, licensePlate, status);
+    }
+
     private boolean isValidStatus(String status) {
         return status.equals("NOT_STARTED") || status.equals("IN_PROGRESS") || status.equals("READY_FOR_PICKUP");
     }

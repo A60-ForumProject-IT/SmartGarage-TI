@@ -20,4 +20,6 @@ public interface OrderService {
     List<Order> getOrdersByClientCarIdExcludingNotStarted(int clientCarId, User user);
 
     double calculateOrderTotalInBgn(Order order);
+
+    List<Order> findAllOrdersByCriteria(Integer orderId, String ownerUsername, String licensePlate, String status);
 }
