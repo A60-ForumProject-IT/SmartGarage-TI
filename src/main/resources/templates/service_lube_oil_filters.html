@@ -149,7 +149,7 @@
                                             Save
                                         </button>
 
-                                        <form th:action="@{/ti/services/lube-oil-filters/delete}" method="post" style="display:inline;">
+                                        <form th:action="@{/ti/services/lube-oil-filters/delete}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
                                             <input type="hidden" th:name="serviceId" th:value="${service.id}">
                                             <button class="more simple" th:id="'delete-' + ${service.id}" style="padding: 5px 10px; font-size: 12px; margin-right: 10px;" type="submit">Delete</button>
                                         </form>
