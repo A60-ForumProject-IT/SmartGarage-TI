@@ -99,8 +99,13 @@ public class ClientCarsMvcController {
             @RequestParam(value = "searchTerm", required = false) String searchTerm,
             @RequestParam(value = "sortBy", defaultValue = "") String sortBy,
             @RequestParam(value = "order", defaultValue = "asc") String order,
-            Model model) {
+            Model model, HttpSession session) {
 
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+        } catch (AuthenticationException e) {
+            return "redirect: /ti/auth/login";
+        }
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(order), sortBy.isEmpty() ? "owner.username" : sortBy);
 
         Page<ClientCar> clientCarPage;
@@ -161,17 +166,17 @@ public class ClientCarsMvcController {
             model.addAttribute("currentPage", currentPage);
             return "ClientCars";
         } catch (UnauthorizedOperationException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage()); //dd
             return "404";
         } catch (AuthenticationException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "404";
+            return "redirect: /ti/auth/login";
         }
     }
 
     @GetMapping("/edit/{id}")
-    public String editClientCar(@PathVariable int id, Model model) {
+    public String editClientCar(@PathVariable int id, Model model, HttpSession session) {
         try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
             ClientCar clientCar = clientCarService.getClientCarById(id);
             ClientCarUpdateDto clientCarUpdateDto = new ClientCarUpdateDto();
             clientCarUpdateDto.setVin(clientCar.getVin());
@@ -182,6 +187,8 @@ public class ClientCarsMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "404";
+        } catch (AuthenticationException e) {
+            return "redirect: /ti/auth/login";
         }
     }
 
@@ -221,7 +228,7 @@ public class ClientCarsMvcController {
             return "404";
         } catch (AuthenticationException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "404";
+            return "redirect: /ti/auth/login";
         }
     }
 
@@ -318,6 +325,9 @@ public class ClientCarsMvcController {
         } catch (DuplicateEntityException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "AddServiceToClientCar";
+        } catch (AuthenticationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "redirect: /ti/auth/login";
         }
     }
 
@@ -340,7 +350,7 @@ public class ClientCarsMvcController {
             return "404";
         } catch (AuthenticationException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "404";
+            return "redirect: /ti/auth/login";
         }
     }
 }
