@@ -100,8 +100,8 @@
                         <div class="user-list" style="text-align: center">
                             <div th:each="user, iterStat : ${users}"
                                  th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
-                                <div class="column column-1-6" style="text-align: center" th:text="${user.username}">
-                                    Username
+                                <div class="column column-1-6" style="text-align: center" >
+                                    <a href="#" th:href="@{/ti/users/__${user.id}__/details}" th:text="${user.username}" > </a>
                                 </div>
                                 <div class="column column-1-6" th:text="${user.email}">Email</div>
                                 <div class="column column-1-6" style="text-align: center" th:text="${user.phoneNumber}">
