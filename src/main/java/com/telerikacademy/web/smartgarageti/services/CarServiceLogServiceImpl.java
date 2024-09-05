@@ -12,6 +12,7 @@ import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -108,6 +109,7 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
         Order newOrder = new Order();
         newOrder.setClientCar(clientCarService.getClientCarById(clientCarId));
         newOrder.setStatus("NOT_STARTED");
+        newOrder.setOrderDate(LocalDate.now());
 
         return orderRepository.save(newOrder);
     }

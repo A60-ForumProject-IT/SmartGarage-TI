@@ -39,12 +39,39 @@
                     MANAGEMENT</h2>
             </div>
 
-            <!--            СЛАГАМЕ ТУК ORDER LIST-->
             <div class="row page-margin-top" style="width: 90%; max-width: 1400px; margin: 0 auto; padding: 0 15px;">
                 <div class="column column-1-1">
+                    <form action="#" th:action="@{/ti/orders}" method="get" class="filter-form" style="margin-bottom: 20px; display: flex; justify-content: center;">
+                        <div class="filter-container" style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                            <input type="text" id="orderId" name="orderId" th:value="${orderId}" placeholder="Order ID" class="filter-input"
+                                   style="width: 150px;"/>
+
+                            <input type="text" id="ownerUsername" name="ownerUsername" th:value="${ownerUsername}" placeholder="Owner Username"
+                                   class="filter-input" style="width: 150px;"/>
+
+                            <input type="text" id="licensePlate" name="licensePlate" th:value="${licensePlate}" placeholder="License Plate"
+                                   class="filter-input" style="width: 150px;"/>
+
+                            <select id="status" name="status" class="filter-input filter-select" style="width: 177px; height: 38px;">
+                                <option value="">All</option>
+                                <option value="NOT_STARTED" th:selected="${status == 'NOT_STARTED'}">Not Started</option>
+                                <option value="IN_PROGRESS" th:selected="${status == 'IN_PROGRESS'}">In Progress</option>
+                                <option value="READY_FOR_PICKUP" th:selected="${status == 'READY_FOR_PICKUP'}">Ready For Pickup</option>
+                            </select>
+
+                            <input type="date" id="visitedBefore" name="visitedBefore" th:value="${visitedBefore}" placeholder="Visited Before"
+                                   class="filter-input" style="width: 150px;"/>
+
+                            <input type="date" id="visitedAfter" name="visitedAfter" th:value="${visitedAfter}" placeholder="Visited After"
+                                   class="filter-input" style="width: 150px;"/>
+
+                            <button type="submit" class="modern-button" style="height: 38px; width: 38px;">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
                     <h2 class="box-header" style="margin-bottom: 25px; font-size: 25px">ACTIVE ORDERS</h2>
 
-                    <!-- Заглавната част на таблицата и съдържанието остават същите -->
                     <div class="user-list">
                         <div class="row vehicle-item gray">
                             <div class="column column-1-6" style="font-weight: bold; font-size: 14px; text-align: center;">Order Number</div>
@@ -56,7 +83,6 @@
                         </div>
                     </div>
 
-                    <!-- Данни за поръчките -->
                     <div class="user-list" style="border: 1px solid #f5f5f5;">
                         <div th:each="order, iterStat : ${orders}"
                              th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
@@ -79,6 +105,35 @@
                             </div>
                         </div>
                     </div>
+
+                    <div th:if="${orders.size() > 0}">
+                        <div class="pagination" style="text-align: center; margin-top: 20px;">
+                            <ul style="list-style: none; padding-left: 0; display: inline-block;">
+                                <li th:if="${currentPage > 0}" style="display: inline;">
+                                    <a th:href="@{/ti/orders(page=${currentPage - 1}, size=${pageSize}, orderId=${orderId}, ownerUsername=${ownerUsername}, licensePlate=${licensePlate}, status=${status}, visitedBefore=${visitedBefore}, visitedAfter=${visitedAfter})}"
+                                       style="padding: 10px 15px; text-decoration: none;">Previous</a>
+                                </li>
+
+                                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" style="display: inline;">
+                                    <a th:href="@{/ti/orders(page=${i}, size=${pageSize}, orderId=${orderId}, ownerUsername=${ownerUsername}, licensePlate=${licensePlate}, status=${status}, visitedBefore=${visitedBefore}, visitedAfter=${visitedAfter})}"
+                                       th:classappend="${i == currentPage} ? 'active' : ''"
+                                       th:text="${i + 1}"
+                                       style="padding: 10px 15px; text-decoration: none;"></a>
+                                </li>
+
+                                <li th:if="${currentPage < totalPages - 1}" style="display: inline;">
+                                    <a th:href="@{/ti/orders(page=${currentPage + 1}, size=${pageSize}, orderId=${orderId}, ownerUsername=${ownerUsername}, licensePlate=${licensePlate}, status=${status}, visitedBefore=${visitedBefore}, visitedAfter=${visitedAfter})}"
+                                       style="padding: 10px 15px; text-decoration: none;">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div th:if="${orders.size() == 0}">
+                        <p>No orders found.</p>
+                    </div>
+
+
                 </div>
             </div>
 

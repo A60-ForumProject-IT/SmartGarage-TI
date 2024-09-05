@@ -2,7 +2,10 @@ package com.telerikacademy.web.smartgarageti.services.contracts;
 
 import com.telerikacademy.web.smartgarageti.models.Order;
 import com.telerikacademy.web.smartgarageti.models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
@@ -21,5 +24,11 @@ public interface OrderService {
 
     double calculateOrderTotalInBgn(Order order);
 
-    List<Order> findAllOrdersByCriteria(Integer orderId, String ownerUsername, String licensePlate, String status);
+    Page<Order> findAllOrdersByCriteria(Integer orderId,
+                                        String ownerUsername,
+                                        String licensePlate,
+                                        String status,
+                                        LocalDate visitedBefore,
+                                        LocalDate visitedAfter,
+                                        Pageable pageable);
 }

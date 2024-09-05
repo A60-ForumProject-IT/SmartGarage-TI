@@ -7,10 +7,15 @@ import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.services.contracts.OrderService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -53,18 +58,44 @@ public class OrderMvcController {
             @RequestParam(required = false) String ownerUsername,
             @RequestParam(required = false) String licensePlate,
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate visitedBefore,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate visitedAfter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             Model model,
             HttpSession session
     ) {
-
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
         }
-        List<Order> orders = orderService.findAllOrdersByCriteria(orderId, ownerUsername, licensePlate, status);
 
-        model.addAttribute("orders", orders);
+        if (ownerUsername != null && ownerUsername.trim().isEmpty()) {
+            ownerUsername = null;
+        }
+        if (licensePlate != null && licensePlate.trim().isEmpty()) {
+            licensePlate = null;
+        }
+        if (status != null && status.trim().isEmpty()) {
+            status = null;
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Order> ordersPage = orderService.findAllOrdersByCriteria(
+                orderId, ownerUsername, licensePlate, status, visitedBefore, visitedAfter, pageable);
+
+        model.addAttribute("orders", ordersPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", ordersPage.getTotalPages());
+
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("ownerUsername", ownerUsername);
+        model.addAttribute("licensePlate", licensePlate);
+        model.addAttribute("status", status);
+        model.addAttribute("visitedBefore", visitedBefore);
+        model.addAttribute("visitedAfter", visitedAfter);
 
         return "Orders";
     }

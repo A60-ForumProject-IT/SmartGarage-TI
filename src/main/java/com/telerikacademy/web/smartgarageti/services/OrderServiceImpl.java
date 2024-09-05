@@ -10,9 +10,12 @@ import com.telerikacademy.web.smartgarageti.repositories.contracts.OrderReposito
 import com.telerikacademy.web.smartgarageti.services.contracts.CurrencyConversionService;
 import com.telerikacademy.web.smartgarageti.services.contracts.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -108,8 +111,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAllOrdersByCriteria(Integer orderId, String ownerUsername, String licensePlate, String status) {
-        return orderRepository.findAllOrdersByCriteria(orderId, ownerUsername, licensePlate, status);
+    public Page<Order> findAllOrdersByCriteria(Integer orderId, String ownerUsername,
+                                               String licensePlate, String status,
+                                               LocalDate visitedBefore, LocalDate visitedAfter, Pageable pageable) {
+        return orderRepository.findAllByCriteria(orderId, ownerUsername, licensePlate, status, visitedBefore, visitedAfter, pageable);
     }
 
     private boolean isValidStatus(String status) {
