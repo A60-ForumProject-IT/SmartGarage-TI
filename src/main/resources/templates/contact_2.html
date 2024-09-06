@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{FragmentForm.html :: head}"></form>
+
+    <form th:replace="~{FragmentForm.html :: head}"></form>
 <body>
 <div class="site-container">
     <form th:replace="~{FragmentForm.html :: header-icons-info}"></form>
@@ -79,15 +80,15 @@
                 <h3 class="box-header page-margin-top">DROP US A LINE</h3>
 
                 <!-- Оригинална форма за контакт -->
-                <form class="contact-form page-margin-top" id="contact-form" method="post" th:action="@{/ti/contact}">
+                <form class="contact-form page-margin-top" id="contact-form" method="post" th:action="@{/ti/contact}" th:object="${contactRequest}">
                     <div class="row">
                         <fieldset class="column column-1-2">
-                            <input class="text-input" name="name" type="text" placeholder="Your Name *" th:value="${name}" required>
-                            <input class="text-input" name="email" type="email" placeholder="Your Email *" th:value="${email}" required>
-                            <input class="text-input" name="phone" type="text" placeholder="Your Phone" th:value="${phone}">
+                            <input class="text-input" name="name" type="text" placeholder="Your Name *" th:field="*{name}" required>
+                            <input class="text-input" name="email" type="email" placeholder="Your Email *" th:field="*{email}" required>
+                            <input class="text-input" name="phone" type="text" placeholder="Your Phone" th:field="*{phone}">
                         </fieldset>
                         <fieldset class="column column-1-2">
-                            <textarea name="message" placeholder="Message *" th:text="${message}" required></textarea>
+                            <textarea name="message" placeholder="Message *" th:field="*{message}" required></textarea>
                         </fieldset>
                     </div>
                     <div class="row margin-top-30">
@@ -100,9 +101,8 @@
                     </div>
                 </form>
 
-                <!-- Съобщения за успех и грешка -->
-                <div class="alert" id="successMessage" th:if="${successMessage}" th:text="${successMessage}"></div>
-                <div class="alert error" id="errorMessage" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+                <!-- Показване на съобщения за грешка или успех -->
+                <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 
             </div>
             <div class="column column-1-4 re-smart-column">
@@ -124,9 +124,8 @@
 </div>
 <a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
 <div class="background-overlay"></div>
-<!--js-->
+<!-- JavaScript libraries -->
 <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
-<!--slider revolution-->
 <script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
@@ -145,8 +144,7 @@
 <script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
-<script type="text/javascript"
-        th:src="@{'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZbvntbc4pL_sGoiAAUTv7EhTgNJLl3Z8'}"></script>
+<script type="text/javascript" th:src="@{'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZbvntbc4pL_sGoiAAUTv7EhTgNJLl3Z8'}"></script>
 <script>
     function initMap() {
         var location = {lat: 42.704136, lng: 23.305625}
@@ -163,29 +161,5 @@
 
     google.maps.event.addDomListener(window, 'load', initMap);
 </script>
-
-<script>
-    $(document).ready(function() {
-        $("#contact-form").submit(function(event) {
-            event.preventDefault();
-
-            alert("Form is being submitted");
-
-            $.post($(this).attr("action"), $(this).serialize())
-                .done(function(data) {
-                    alert("Form submission successful!");
-                    $("#successMessage").show();
-                    $("#errorMessage").hide();
-                    $("#contact-form")[0].reset();
-                })
-                .fail(function() {
-                    alert("Form submission failed!");
-                    $("#successMessage").hide();
-                    $("#errorMessage").show();
-                });
-        });
-    });
-</script>
 </body>
-
 </html>

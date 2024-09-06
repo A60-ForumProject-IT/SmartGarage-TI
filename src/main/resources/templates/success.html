@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{FragmentForm.html::head}"></head>
+<body>
+<div class="site-container">
+    <!-- Вмъкване на хедъра и иконките за информация -->
+    <header th:replace="~{FragmentForm.html::header-icons-info}"></header>
+    <header th:replace="~{FragmentForm.html::header-container}"></header>
+
+    <!-- Основно съдържание на страницата -->
+    <div class="theme-page padding-bottom-70">
+        <div class="row gray full-width page-header vertical-align-table">
+            <div class="row full-width padding-top-bottom-50 vertical-align-cell">
+                <div class="row">
+                    <div class="page-header-left">
+                        <h1>Contact Confirmation</h1>
+                    </div>
+                    <div class="page-header-right">
+                        <div class="bread-crumb-container">
+                            <label>YOU ARE HERE:</label>
+                            <ul class="bread-crumb">
+                                <li>
+                                    <a title="HOME" th:href="@{/ti}">
+                                        HOME
+                                    </a>
+                                </li>
+                                <li class="separator">
+                                    &#47;
+                                </li>
+                                <li>
+                                    Contact Confirmation
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Съобщение за успешно изпращане -->
+        <div class="row margin-top-70">
+            <div class="column column-1-1 align-center">
+                <h2>Your application for working with us is sent successfully!</h2>
+                <p>You will receive a reply from us between 7-10 working days. Enjoy your day!</p>
+                <a class="more" th:href="@{/ti}" title="Go back to Home">
+                    <span>Go back to Home</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вмъкване на футъра -->
+    <footer th:replace="~{FragmentForm.html::footer-and-copyright}"></footer>
+</div>
+<a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
+<div class="background-overlay"></div>
+<!-- Включване на всички JS скриптове -->
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-ui-1.12.1.custom.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.isotope.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.easing.1.4.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.touchSwipe.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.transit.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.hint.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.costCalculator.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.prettyPhoto.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.qtip.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.blockUI.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
+</body>
+</html>

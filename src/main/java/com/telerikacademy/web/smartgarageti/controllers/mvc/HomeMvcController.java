@@ -2,15 +2,19 @@ package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.dto.ContactRequestDto;
 import com.telerikacademy.web.smartgarageti.services.EmailService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,45 +87,43 @@ public class HomeMvcController {
 
     @GetMapping("/contact")
     public String showContactPage(Model model) {
-        model.addAttribute("name", "");
-        model.addAttribute("email", "");
-        model.addAttribute("phone", "");
-        model.addAttribute("message", "");
+        model.addAttribute("contactRequest", new ContactRequestDto());
         return "contact_2";
     }
 
+    @GetMapping("/contact/success")
+    public String showSuccessPage() {
+        return "success";
+    }
+
     @PostMapping("/contact")
-    public ResponseEntity<Map<String, Object>> handleContactForm(
-            @RequestParam("name") String name,
-            @RequestParam("email") String email,
-            @RequestParam("phone") String phone,
-            @RequestParam("message") String message,
+    public ModelAndView handleContactForm(
+            @Valid @ModelAttribute("contactRequest") ContactRequestDto contactRequestDto,
+            BindingResult bindingResult,
             Model model) {
 
-        model.addAttribute("name", name);
-        model.addAttribute("email", email);
-        model.addAttribute("phone", phone);
-        model.addAttribute("message", message);
-        String subject = "New Contact Request";
-        String text = "Name: " + name + "\n" +
-                "Email: " + email + "\n" +
-                "Phone: " + phone + "\n" +
-                "Message: " + message;
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "There are errors in the form. Please correct them.");
+            return new ModelAndView("contact_2");
+        }
 
-        Map<String, Object> response = new HashMap<>();
+        String subject = "New Contact Request";
+        String text = "Name: " + contactRequestDto.getName() + "<br>" +
+                "Email: " + contactRequestDto.getEmail() + "<br>" +
+                "Phone: " + contactRequestDto.getPhone() + "<br>" +
+                "Message: " + contactRequestDto.getMessage();
 
         try {
-            emailService.sendEmail(defaultFromEmail, subject, text);
-            model.addAttribute("successMessage", "Thank you for contacting us.");
-            response.put("isOk", true);
-            response.put("successMessage", "Your contact was sent successfully!");
-            return ResponseEntity.ok(response);
+            emailService.sendEmail(defaultFromEmail, subject, text, contactRequestDto.getEmail());
+            return new ModelAndView("redirect:/ti/contact/success");
         } catch (Exception e) {
-            response.put("isOk", false);
-            response.put("errorMessage", "There was a problem sending your message. Please try again.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            model.addAttribute("errorMessage", "There was a problem sending your message. Please try again.");
         }
+
+        return new ModelAndView("contact_2");
     }
+
+
 
     @PostMapping("/appointment")
     public String handleAppointmentForm(
