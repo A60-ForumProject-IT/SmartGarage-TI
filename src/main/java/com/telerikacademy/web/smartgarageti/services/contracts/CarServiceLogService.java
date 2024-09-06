@@ -11,7 +11,7 @@ public interface CarServiceLogService {
 
     List<CarServiceLog> findAllCarsServiceLogs(User user);
 
-    List<CarServiceLog> findCarServicesByClientCarId(int clientId, User user);
+    List<CarServiceLog> findCarServicesByClientCarId(int clientId, User user, User owner);
 
     List<CarServiceLog> findAllServicesByOwnerId(int clientCarId);
 

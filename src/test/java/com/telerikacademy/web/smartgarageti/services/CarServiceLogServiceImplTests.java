@@ -67,7 +67,7 @@ public class CarServiceLogServiceImplTests {
 
         when(carServiceLogRepository.findAllByClientCarId(clientCarId)).thenReturn(mockLogs);
 
-        List<CarServiceLog> result = carServiceLogService.findCarServicesByClientCarId(clientCarId, createMockUserEmployee());
+        List<CarServiceLog> result = carServiceLogService.findCarServicesByClientCarId(clientCarId, createMockUserEmployee(), createMockUser());
 
         assertEquals(mockLogs, result);
         verify(carServiceLogRepository).findAllByClientCarId(clientCarId);
@@ -80,7 +80,7 @@ public class CarServiceLogServiceImplTests {
         when(carServiceLogRepository.findAllByClientCarId(clientCarId)).thenReturn(List.of());
 
         assertThrows(NoResultsFoundException.class, () ->
-                carServiceLogService.findCarServicesByClientCarId(clientCarId, createMockUserEmployee()));
+                carServiceLogService.findCarServicesByClientCarId(clientCarId, createMockUserEmployee(), createMockUser()));
 
         verify(carServiceLogRepository).findAllByClientCarId(clientCarId);
     }

@@ -130,7 +130,11 @@ public class ClientCarRestController {
     public List<CarServiceLog> getClientCarServicesByClientCarId(@PathVariable int clientCarId, @RequestHeader HttpHeaders headers) {
         try {
             User loggedInUser = authenticationHelper.tryGetUser(headers);
-            return carServiceService.findCarServicesByClientCarId(clientCarId, loggedInUser);
+            ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
+
+            User owner = userService.getUserById(clientCar.getOwner().getId());
+
+            return carServiceService.findCarServicesByClientCarId(clientCarId, loggedInUser, owner);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {
