@@ -93,7 +93,6 @@
                             <div class="column column-1-6" style="font-size: 13px; margin-left: 1px;  text-align: center;" th:text="${order.orderDate}">Order Date</div>
                             <div class="column column-1-6" style="font-size: 13px; margin-left: 1px; text-align: center; display: flex; align-items: center; justify-content: center; width: 300px;">
                                 <form th:action="@{/ti/orders/update}" method="post" style="display: flex; gap: 10px;">
-                                    <!-- Dropdown за нов статус -->
                                     <select name="newStatus" style="font-size: 13px; padding: 3px 5px;">
                                         <option value="NOT_STARTED" th:selected="${order.status == 'NOT_STARTED'}">Not Started</option>
                                         <option value="IN_PROGRESS" th:selected="${order.status == 'IN_PROGRESS'}">In Progress</option>
@@ -129,7 +128,7 @@
                         </div>
                     </div>
 
-                    <div th:if="${orders.size() == 0}">
+                    <div th:if="${orders.size() == 0}" style="text-align: center">
                         <p>No orders found.</p>
                     </div>
 
