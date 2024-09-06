@@ -96,14 +96,13 @@
                                 Home
                             </a>
                         </li>
+
                         <li>
-                            <a href="AllUsers.html" th:if="${isEmployee}" th:href="@{/ti/users}" title="All Users">
-                                All Users
+                            <a href="UserDetails.html" th:if="${isAuthenticated}"
+                               th:href="@{/ti/users/{id}/details(id=${user.id})}">
+                                My Details
                             </a>
-                        <li>
-                        <a href="UserDetails.html" th:if="${isAuthenticated}" th:href="@{/ti/users/{id}/details(id=${user.id})}">
-                            My Details
-                        </a>
+                        </li>
                         <li>
 
                             <a href="services.html" th:href="@{/ti/services}" title="Services">
@@ -111,33 +110,39 @@
                             </a>
                             <ul>
                                 <li>
-                                    <a href="service_engine_diagnostics.html" th:href="@{/ti/services/engine-diagnostics}" title="Engine Diagnostics">
+                                    <a href="service_engine_diagnostics.html"
+                                       th:href="@{/ti/services/engine-diagnostics}" title="Engine Diagnostics">
                                         Engine Diagnostics
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="service_lube_oil_filters.html" th:href="@{/ti/services/lube-oil-filters}" title="Lube, Oil and Filters">
+                                    <a href="service_lube_oil_filters.html" th:href="@{/ti/services/lube-oil-filters}"
+                                       title="Lube, Oil and Filters">
                                         Lube, Oil and Filters
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a href="service_air_conditioning.html" th:href="@{/ti/services/air-conditioning}" title="Air Conditioning">
+                                    <a href="service_air_conditioning.html" th:href="@{/ti/services/air-conditioning}"
+                                       title="Air Conditioning">
                                         Air Conditioning
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="service_brake_repair.html" th:href="@{/ti/services/brake-repair}" title="Brake Repair">
+                                    <a href="service_brake_repair.html" th:href="@{/ti/services/brake-repair}"
+                                       title="Brake Repair">
                                         Brake Repair
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="service_tire_wheel.html" th:href="@{/ti/services/tire-wheel}" title="Tire and Wheel Services">
+                                    <a href="service_tire_wheel.html" th:href="@{/ti/services/tire-wheel}"
+                                       title="Tire and Wheel Services">
                                         Tire and Wheel Services
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="service_tire_wheel.html" th:href="@{/ti/services/belts-hoses}" title="Belts and Hoses">
+                                    <a href="service_tire_wheel.html" th:href="@{/ti/services/belts-hoses}"
+                                       title="Belts and Hoses">
                                         Belts And Hoses
                                     </a>
                                 </li>
@@ -148,19 +153,16 @@
                                 Vehicles
                             </a>
                         </li>
-                        <li>
-                            <a href="ClientCars.html" title="Client Cars" th:if="${isAuthenticated && isEmployee}" th:href="@{/ti/client-cars}">
-                                Client Cars
-                            </a>
-                        </li>
+
                         <li>
                             <a href="galleries.html" title="Gallery" th:href="@{/ti/gallery}">
                                 Gallery
                             </a>
                         </li>
                         <li>
-                            <a href="appointment.html" title="Orders" th:if="${isAuthenticated && isEmployee}" th:href="@{/ti/orders}">
-                                Orders
+                            <a href="AdminPanel.html" title="Admin Panel" th:if="${isAuthenticated && isEmployee}"
+                               th:href="@{/ti/admin-panel}">
+                                Admin Panel
                             </a>
                         </li>
                         <li class="left-flyout">
@@ -185,33 +187,39 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="service_engine_diagnostics.html" th:href="@{/ti/services/engine-diagnostics}" title="Engine Diagnostics">
+                                        <a href="service_engine_diagnostics.html"
+                                           th:href="@{/ti/services/engine-diagnostics}" title="Engine Diagnostics">
                                             Engine Diagnostics
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="service_lube_oil_filters.html" th:href="@{/ti/services/lube-oil-filters}" title="Lube, Oil and Filters">
+                                        <a href="service_lube_oil_filters.html"
+                                           th:href="@{/ti/services/lube-oil-filters}" title="Lube, Oil and Filters">
                                             Lube, Oil and Filters
                                         </a>
                                     </li>
 
                                     <li>
-                                        <a href="service_air_conditioning.html" th:href="@{/ti/services/air-conditioning}" title="Air Conditioning">
+                                        <a href="service_air_conditioning.html"
+                                           th:href="@{/ti/services/air-conditioning}" title="Air Conditioning">
                                             Air Conditioning
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="service_brake_repair.html" th:href="@{/ti/services/brake-repair}" title="Brake Repair">
+                                        <a href="service_brake_repair.html" th:href="@{/ti/services/brake-repair}"
+                                           title="Brake Repair">
                                             Brake Repair
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="service_tire_wheel.html" th:href="@{/ti/services/tire-wheel}" title="Tire and Wheel Services">
+                                        <a href="service_tire_wheel.html" th:href="@{/ti/services/tire-wheel}"
+                                           title="Tire and Wheel Services">
                                             Tire and Wheel Services
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="service_tire_wheel.html" th:href="@{/ti/services/belts-hoses}" title="Belts and Hoses">
+                                        <a href="service_tire_wheel.html" th:href="@{/ti/services/belts-hoses}"
+                                           title="Belts and Hoses">
                                             Belts And Hoses
                                         </a>
                                     </li>

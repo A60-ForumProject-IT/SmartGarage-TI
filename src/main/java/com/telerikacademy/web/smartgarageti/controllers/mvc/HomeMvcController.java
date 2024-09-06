@@ -161,7 +161,12 @@ public class HomeMvcController {
             model.addAttribute("errorMessage", "Failed to send appointment request.");
         }
 
-        return "appointment";  // Връща към страницата за запазване на час (или друга страница)
+        return "appointment";
+    }
+
+    @GetMapping("/admin-panel")
+    public String showAdminPanel() {
+        return "AdminPanel";
     }
 }
 
