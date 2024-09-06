@@ -100,4 +100,22 @@ public class VehicleServiceImpl implements VehicleService {
             return vehicleRepository.save(newVehicle);
         }
     }
+
+    @Override
+    public Page<Vehicle> searchVehicles(String brand, String model, String year, String engineType, Pageable pageable) {
+        Integer yearInt = null;
+        if (year != null && !year.isEmpty()) {
+            try {
+                yearInt = Integer.parseInt(year);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Year must be a valid integer.");
+            }
+        }
+
+        if (brand == null || brand.isEmpty()) {
+            brand = null;
+        }
+
+        return vehicleRepository.searchVehicles(brand, model, yearInt, engineType, pageable);
+    }
 }

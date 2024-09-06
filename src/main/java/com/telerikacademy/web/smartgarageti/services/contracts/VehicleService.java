@@ -22,4 +22,7 @@ public interface VehicleService {
     Optional<Vehicle> getVehicleByDetails(String brandName, String modelName, int year, String engineType);
 
     Page<Vehicle> getAllVehicles(Pageable pageable);
+
+    Page<Vehicle> searchVehicles(String brand, String model, String year, String engineType, Pageable pageable);
+
 }

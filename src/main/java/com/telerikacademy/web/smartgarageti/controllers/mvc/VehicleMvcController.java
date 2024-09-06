@@ -62,15 +62,30 @@ public class VehicleMvcController {
     public String showVehicles(
             Model model,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String modelName,
+            @RequestParam(required = false) String year,
+            @RequestParam(required = false) String engineType
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Vehicle> vehiclePage = vehicleService.getAllVehicles(pageable);
+
+        if (modelName == null || modelName.isEmpty()) modelName = null;
+        if (year == null || year.isEmpty()) year = null;
+        if (engineType == null || engineType.isEmpty()) engineType = null;
+        if (brand == null || brand.isEmpty()) brand = null;
+
+        Page<Vehicle> vehiclePage = vehicleService.searchVehicles(brand, modelName, year, engineType, pageable);
 
         model.addAttribute("vehicles", vehiclePage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", vehiclePage.getTotalPages());
         model.addAttribute("size", size);
+        model.addAttribute("brand", brand);
+        model.addAttribute("modelName", modelName);
+        model.addAttribute("year", year);
+        model.addAttribute("engineType", engineType);
+
         return "Vehicles";
     }
 }
