@@ -42,8 +42,8 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
     }
 
     @Override
-    public List<CarServiceLog> findCarServicesByClientCarId(int clientCarId, User user) {
-        PermissionHelper.isEmployee(user, "You are not employee and can't see these details!");
+    public List<CarServiceLog> findCarServicesByClientCarId(int clientCarId, User user, User owner) {
+        PermissionHelper.isEmployeeOrSameUser(user, owner,"You are not employee or same user and can't see these details!");
         List<CarServiceLog> carServiceLogs = carServiceRepository.findAllByClientCarId(clientCarId);
 
         if (carServiceLogs.isEmpty()) {

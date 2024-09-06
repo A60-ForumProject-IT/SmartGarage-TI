@@ -1,10 +1,16 @@
 package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
 import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
+import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
+import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
+import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import com.telerikacademy.web.smartgarageti.models.Order;
 import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.services.contracts.CarServiceLogService;
+import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.OrderService;
+import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,6 +30,9 @@ import java.util.List;
 public class OrderMvcController {
     private final OrderService orderService;
     private final AuthenticationHelper authenticationHelper;
+    private final ClientCarService clientCarService;
+    private final UserService userService;
+    private final CarServiceLogService carServiceLogService;
 
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
@@ -47,9 +57,12 @@ public class OrderMvcController {
     }
 
     @Autowired
-    public OrderMvcController(OrderService orderService, AuthenticationHelper authenticationHelper) {
+    public OrderMvcController(OrderService orderService, AuthenticationHelper authenticationHelper, ClientCarService clientCarService, UserService userService, CarServiceLogService carServiceLogService) {
         this.orderService = orderService;
         this.authenticationHelper = authenticationHelper;
+        this.clientCarService = clientCarService;
+        this.userService = userService;
+        this.carServiceLogService = carServiceLogService;
     }
 
     @GetMapping
@@ -114,5 +127,55 @@ public class OrderMvcController {
         }
 
         return "redirect:/ti/orders";
+    }
+
+    @GetMapping("/{orderId}")
+    public String getOrderDetails(@PathVariable int orderId, Model model, HttpSession session) {
+        User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+
+        Order order = orderService.getOrderById(orderId, loggedInUser);
+
+        ClientCar clientCar = clientCarService.getClientCarById(order.getClientCar().getId());
+
+        User owner = userService.getUserById(clientCar.getOwner().getId());
+
+        List<CarServiceLog> orderServices = carServiceLogService.findCarServicesByClientCarId(clientCar.getId(), loggedInUser, owner);
+
+        BigDecimal totalPrice = orderServices.stream()
+                .map(serviceLog -> BigDecimal.valueOf(serviceLog.getCalculatedPrice()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("owner", owner);
+        model.addAttribute("clientCar", clientCar);
+        model.addAttribute("order", order);
+        model.addAttribute("orderServices", orderServices);
+        model.addAttribute("totalPrice", totalPrice);
+
+        return "SingleOrderView";
+    }
+
+    @GetMapping("/{orderId}/download-pdf")
+    public String downloadOrderPdf(@PathVariable int orderId, @RequestParam("currency") String currency,
+                                   Model model, HttpSession session) {
+
+        try {
+            User user = authenticationHelper.tryGetUserFromSession(session);
+            Order order = orderService.getOrderById(orderId, user);
+
+            double totalInCurrency = orderService.calculateOrderTotalInCurrency(order, currency);
+
+            model.addAttribute("order", order);
+            model.addAttribute("totalPrice", totalInCurrency);
+            model.addAttribute("currency", currency);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "404";
+        }
+
+        // TODO: Implement PDF generation and return file as response
+        return "OrderPdfView";
     }
 }
