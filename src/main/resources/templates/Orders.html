@@ -81,7 +81,9 @@
                     <div class="user-list" style="border: 1px solid #f5f5f5;">
                         <div th:each="order, iterStat : ${orders}"
                              th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
-                            <div class="column column-1-6" style="font-size: 13px; margin-left: 1px;  text-align: center;" th:text="${order.id}">Order Number</div>
+                            <div class="column column-1-6" style="font-size: 13px; margin-left: 1px; text-align: center;">
+                                <a th:href="@{'/ti/orders/' + ${order.id}}" style="text-decoration: underline;" th:text="${order.id}">Order Number</a>
+                            </div>
                             <div class="column column-1-6" style="font-size: 13px; margin-left: 1px;  text-align: center;" th:text="${order.clientCar.owner.username}">Order Owner</div>
                             <div class="column column-1-6" style="font-size: 13px; margin-left: 1px;  text-align: center;" th:text="${order.clientCar.licensePlate}">Vehicle License Plate</div>
                             <div class="column column-1-6" style="font-size: 13px; margin-left: 1px;  text-align: center;" th:text="${order.status.replace('_', ' ')}">Order Status</div>

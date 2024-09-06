@@ -122,7 +122,7 @@
                                 </tr>
                                 <tr style="background-color: #FFFFFF;">
                                     <td style="padding: 10px; border: 1px solid #F5F5F5;"><strong>Status:</strong></td>
-                                    <td style="padding: 10px; border: 1px solid #F5F5F5;" th:text="${order.status}">IN_PROGRESS</td>
+                                    <td style="padding: 10px; border: 1px solid #F5F5F5;" th:text="${#strings.replace(order.status, '_', ' ')}">IN PROGRESS</td>
                                     <td style="padding: 10px; border: 1px solid #F5F5F5;"><strong>Order Date:</strong></td>
                                     <td style="padding: 10px; border: 1px solid #F5F5F5;" th:text="${order.orderDate}">2024-09-06</td>
                                 </tr>
@@ -134,8 +134,8 @@
                             <table class="margin-top-40" style="margin-bottom: 1px !important;">
                                 <thead>
                                 <tr>
-                                    <th>Service Name</th>
-                                    <th style="text-align: left">Price (BGN)</th>
+                                    <th style="font-size: 15px">Service Name</th>
+                                    <th style="text-align: left; font-size: 15px">Price (BGN)</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -146,12 +146,16 @@
                                 </tbody>
                             </table>
 
-                            <div class="margin-top-20" style="text-align: center; padding: 1px; border: 1px solid #F5F5F5; background-color: #f9f9f9; max-width: 300px; margin: 1px auto;">
-                                <p style="font-size: 15px; font-weight: bold;">
-                                    <span style="font-weight: normal;">Total:</span>
-                                    <span th:utext="'<span style=&quot;font-weight: bold;&quot;>' + ${#numbers.formatDecimal(totalPrice, 2, 2)} + ' BGN</span>'">0.00 BGN</span>
-                                </p>
-                            </div>
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-family: inherit;">
+                                <tr style="background-color: #F5F5F5;">
+                                    <td style="padding: 10px 27px; text-align: right; font-weight: bold; color: #777; width: 50%; font-family: inherit;">
+                                        Total:
+                                    </td>
+                                    <td style="padding: 10px 27px; text-align: left; font-weight: bold; background-color: white; color: #777; width: 50%; font-family: inherit;">
+                                        <span th:utext="'<span>' + ${#numbers.formatDecimal(totalPrice, 2, 2)} + ' BGN</span>'">0.00 BGN</span>
+                                    </td>
+                                </tr>
+                            </table>
 
                             <div class="row margin-top-20">
                                 <div class="column column-1-2">
