@@ -43,32 +43,30 @@
                 <div class="column column-1-1">
                     <form action="#" th:action="@{/ti/orders}" method="get" class="filter-form" style="margin-bottom: 20px; display: flex; justify-content: center;">
                         <div class="filter-container" style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
-                            <input type="text" id="orderId" name="orderId" th:value="${orderId}" placeholder="Order ID" class="filter-input"
-                                   style="width: 150px;"/>
+                            <input type="text" id="orderId" name="orderId" th:value="${orderId}" placeholder="Search By Order ID..." class="filter-input"
+                                   style="width: 180px;"/>
 
-                            <input type="text" id="ownerUsername" name="ownerUsername" th:value="${ownerUsername}" placeholder="Owner Username"
-                                   class="filter-input" style="width: 150px;"/>
+                            <input type="text" id="ownerUsername" name="ownerUsername" th:value="${ownerUsername}" placeholder="Search By Username..."
+                                   class="filter-input" style="width: 180px;"/>
 
-                            <input type="text" id="licensePlate" name="licensePlate" th:value="${licensePlate}" placeholder="License Plate"
-                                   class="filter-input" style="width: 150px;"/>
+                            <input type="text" id="licensePlate" name="licensePlate" th:value="${licensePlate}" placeholder="Search By License plate..."
+                                   class="filter-input" style="width: 180px;"/>
 
-                            <select id="status" name="status" class="filter-input filter-select" style="width: 177px; height: 38px;">
+                            <select id="status" name="status" class="filter-input filter-select" style="width: 160px; height: 38px;">
                                 <option value="">All</option>
                                 <option value="NOT_STARTED" th:selected="${status == 'NOT_STARTED'}">Not Started</option>
                                 <option value="IN_PROGRESS" th:selected="${status == 'IN_PROGRESS'}">In Progress</option>
                                 <option value="READY_FOR_PICKUP" th:selected="${status == 'READY_FOR_PICKUP'}">Ready For Pickup</option>
                             </select>
 
-                            <input type="text" id="visitedBefore" name="visitedBefore" placeholder="Visited Before" class="filter-input" style="width: 150px;" />
-                            <input type="text" id="visitedAfter" name="visitedAfter" placeholder="Visited After" class="filter-input" style="width: 150px;" />
+                            <input type="text" id="visitedBefore" name="visitedBefore" placeholder="Search By Visited Before..." class="filter-input" style="width: 180px;" />
+                            <input type="text" id="visitedAfter" name="visitedAfter" placeholder="Search By Visited After..." class="filter-input" style="width: 180px;" />
 
                             <button type="submit" class="modern-button" style="height: 38px; width: 38px;">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
                     </form>
-                    <h2 class="box-header" style="margin-bottom: 25px; font-size: 25px">ACTIVE ORDERS</h2>
-
                     <div class="user-list">
                         <div class="row vehicle-item gray">
                             <div class="column column-1-6" style="font-weight: bold; font-size: 14px; text-align: center;">Order Number</div>
