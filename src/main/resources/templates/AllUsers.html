@@ -11,22 +11,46 @@
                 <div class="column column-1-1">
                     <h2 class="box-header" style="margin-bottom: 25px;">USERS</h2>
 
-                    <!-- Стилове за placeholder и текст -->
                     <style>
                         .filter-input::placeholder,
                         .filter-select option[value=""][disabled] {
-                            color: gray; /* Цвят на placeholder-а */
+                            color: gray;
                         }
 
                         .filter-select {
-                            color: #6c757d; /* Сив цвят за текста */
+                            color: #6c757d;
+                        }
+
+                        .ui-datepicker {
+                            font-size: 0.9em;
+                            width: auto;
+                        }
+
+                        .ui-datepicker-header {
+                            padding: 0.4em 0;
+                        }
+
+                        .ui-datepicker-calendar {
+                            margin: 0;
+                            border-spacing: 0;
+                        }
+
+                        .ui-datepicker th {
+                            padding: 0 0.4em;
+                        }
+
+                        .ui-datepicker td {
+                            padding: 0.2em;
+                        }
+
+                        .ui-datepicker .ui-datepicker-prev,
+                        .ui-datepicker .ui-datepicker-next {
+                            top: 1px;
                         }
                     </style>
 
-                    <!-- Форма за филтриране и сортиране -->
                     <form method="get" action="#" class="filter-form">
                         <div class="filter-container">
-                            <!-- Полета за филтриране -->
                             <input type="text" name="username" placeholder="Filter by Username" th:value="${username}"
                                    class="filter-input">
                             <input type="text" name="email" placeholder="Filter by Email" th:value="${email}"
@@ -35,7 +59,6 @@
                                    th:value="${phoneNumber}" class="filter-input">
                             <select name="vehicleBrand" class="filter-input filter-select"
                                     style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
-                                <!-- Добавяме опция "All" за да позволим филтриране по всичко -->
                                 <option value="" th:selected="${vehicleBrand == null}">All Brands</option>
                                 <option th:each="brand : ${allVehicleBrands}"
                                         th:value="${brand.name}"
@@ -44,25 +67,16 @@
                                 </option>
                             </select>
 
-                            <!-- Полета за филтриране по дати с placeholder -->
-                            <input type="date" id="visitDateFrom" onfocus="(this.type='date')"
-                                   onblur="(this.type='text')" name="visitDateFrom" placeholder="Visit Date From"
-                                   th:value="${visitDateFrom}" class="filter-input">
-                            <input type="date" id="visitDateTo" onfocus="(this.type='date')"
-                                   onblur="(this.type='text')" name="visitDateTo" placeholder="Visit Date To"
-                                   th:value="${visitDateTo}" class="filter-input">
+                            <input type="text" id="visitDateFrom" name="visitDateFrom" placeholder="Visited After" class="filter-input" style="width: 150px;" />
+                            <input type="text" id="visitDateTo" name="visitDateTo" placeholder="Visited Before" class="filter-input" style="width: 150px;" />
 
-                            <!-- Полета за сортиране -->
                             <select name="sortBy" class="filter-select"
                                     style="width: 177px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
-                                <!-- Добавяме опция "All" за сортиране по всички критерии -->
                                 <option value="" th:selected="${sortBy == null}">Sort By</option>
                                 <option value="username" th:selected="${sortBy == 'username'}">Username</option>
                                 <option value="email" th:selected="${sortBy == 'email'}">Email</option>
-                                <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Phone Number
-                                </option>
-                                <option value="vehicleBrand" th:selected="${sortBy == 'vehicleBrand'}">Vehicle Brand
-                                </option>
+                                <option value="phoneNumber" th:selected="${sortBy == 'phoneNumber'}">Phone Number</option>
+                                <option value="vehicleBrand" th:selected="${sortBy == 'vehicleBrand'}">Vehicle Brand</option>
                             </select>
                             <select name="sortDirection" class="filter-select"
                                     style="width: 179px; height: 38px; margin-top: 13px; margin-bottom: 13px;">
@@ -70,7 +84,6 @@
                                 <option value="desc" th:selected="${sortDirection == 'desc'}">Descending</option>
                             </select>
 
-                            <!-- Стилизиране на бутоните -->
                             <button type="submit" class="modern-button"
                                     style="height: 38px; width: 38px; margin-top: 13px; margin-bottom: 13px;">
                                 <i class="fa fa-search"></i>
@@ -78,7 +91,6 @@
                         </div>
                     </form>
 
-                    <!-- Списък на потребители -->
                     <div class="user-list">
                         <div class="row vehicle-item gray">
                             <div class="column column-1-6"
@@ -100,8 +112,9 @@
                         <div class="user-list" style="text-align: center">
                             <div th:each="user, iterStat : ${users}"
                                  th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
-                                <div class="column column-1-6" style="text-align: center" >
-                                    <a href="#" th:href="@{/ti/users/__${user.id}__/details}" th:text="${user.username}" > </a>
+                                <div class="column column-1-6" style="text-align: center">
+                                    <a href="#" th:href="@{/ti/users/__${user.id}__/details}"
+                                       th:text="${user.username}"> </a>
                                 </div>
                                 <div class="column column-1-6" th:text="${user.email}">Email</div>
                                 <div class="column column-1-6" style="text-align: center" th:text="${user.phoneNumber}">
@@ -111,20 +124,15 @@
                                 <!-- Марка на колата, която потребителят притежава -->
                                 <div class="column column-1-6" style="text-align: center">
                                     <ul>
-                                        <li th:each="car : ${user.clientCars}" th:text="${car.vehicle.brand.name}">Car
-                                            Brand
-                                        </li>
+                                        <li th:each="car : ${user.clientCars}" th:text="${car.vehicle.brand.name}">Car Brand</li>
                                     </ul>
                                 </div>
 
-                                <!-- Дати за посещения в сервиз -->
                                 <div class="column column-1-6" style="text-align: center">
                                     <ul>
                                         <li th:each="car : ${user.clientCars}">
                                             <ul>
-                                                <li th:each="service : ${car.carServices}"
-                                                    th:text="${service.serviceDate}">Service Date
-                                                </li>
+                                                <li th:each="service : ${car.carServices}" th:text="${service.serviceDate}">Service Date</li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -133,7 +141,6 @@
                         </div>
                     </div>
 
-                    <!-- Пагинация -->
                     <div class="pagination">
                         <ul>
                             <li th:if="${currentPage > 0}">
@@ -157,9 +164,11 @@
 </div>
 <a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
 <div class="background-overlay"></div>
-<!--js-->
+
 <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
-<!--slider revolution-->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+
 <script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
 <script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
@@ -178,5 +187,12 @@
 <script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
+<script>
+    $(function () {
+        $("#visitDateFrom, #visitDateTo").datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+    });
+</script>
 </body>
 </html>

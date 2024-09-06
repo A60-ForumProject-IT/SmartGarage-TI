@@ -53,7 +53,6 @@ public class UserMvcController {
 
     @ModelAttribute("allVehicleBrands")
     public List<Brand> populateAllVehicleBrands() {
-        // Получаване на списъка с всички брандове на коли от VehicleService
         return brandService.findAllBrands();
     }
 
@@ -62,7 +61,6 @@ public class UserMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
-    // Проверява дали потребителят има роля "Employee"
     @ModelAttribute("isEmployee")
     public boolean isEmployee(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
@@ -138,7 +136,7 @@ public class UserMvcController {
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (AuthenticationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            return "redirect:/ti/auth/login";
         }
     }
 
@@ -194,7 +192,7 @@ public class UserMvcController {
             userToEdit.setEmail(userEditInfoDto.getEmail());
 
             userService.updateUser(currentUser, userToEdit);
-            return "redirect:/ti/users/" + id + "/details"; // Пренасочване след успешна промяна
+            return "redirect:/ti/users/" + id + "/details";
         } catch (UnauthorizedOperationException | EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -225,7 +223,7 @@ public class UserMvcController {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
             User userToChangePassword = userService.getUserById(id, currentUser);
 
-            model.addAttribute("user", userToChangePassword); // Добавяне на user към модела
+            model.addAttribute("user", userToChangePassword);
             model.addAttribute("changePasswordDto", new ChangePasswordDto());
             return "change-password";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
@@ -246,7 +244,6 @@ public class UserMvcController {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
             User userToChangePassword = userService.getUserById(id, currentUser);
 
-            // Добави 'user' обекта в модела, за да бъде достъпен в Thymeleaf шаблона
             model.addAttribute("user", userToChangePassword);
 
             if (bindingResult.hasErrors()) {
@@ -291,7 +288,7 @@ public class UserMvcController {
             @ModelAttribute("forgottenPasswordDto") ForgottenPasswordDto forgottenPasswordDto,
             Model model, RedirectAttributes redirectAttributes) {
         try {
-            userService.resetPassword(forgottenPasswordDto); // Сървис метод, който изпраща нова парола
+            userService.resetPassword(forgottenPasswordDto);
             model.addAttribute("successMessage", "A new password has been sent to your email.");
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "No account found with that email.");
