@@ -59,11 +59,8 @@
                                 <option value="READY_FOR_PICKUP" th:selected="${status == 'READY_FOR_PICKUP'}">Ready For Pickup</option>
                             </select>
 
-                            <input type="date" id="visitedBefore" name="visitedBefore" th:value="${visitedBefore}" placeholder="Visited Before"
-                                   class="filter-input" style="width: 150px;"/>
-
-                            <input type="date" id="visitedAfter" name="visitedAfter" th:value="${visitedAfter}" placeholder="Visited After"
-                                   class="filter-input" style="width: 150px;"/>
+                            <input type="text" id="visitedBefore" name="visitedBefore" placeholder="Visited Before" class="filter-input" style="width: 150px;" />
+                            <input type="text" id="visitedAfter" name="visitedAfter" placeholder="Visited After" class="filter-input" style="width: 150px;" />
 
                             <button type="submit" class="modern-button" style="height: 38px; width: 38px;">
                                 <i class="fa fa-search"></i>
@@ -259,6 +256,15 @@
     function confirmDelete() {
         return confirm("Are you sure you want to delete this service?");
     }
+</script>
+
+<script>
+    // Инициализирай datepicker на текстовите полета
+    $(function() {
+        $("#visitedBefore, #visitedAfter").datepicker({
+            dateFormat: 'yy-mm-dd' // Формат за датата
+        });
+    });
 </script>
 
 </body>
