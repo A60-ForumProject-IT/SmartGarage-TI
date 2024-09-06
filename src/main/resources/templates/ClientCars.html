@@ -153,7 +153,17 @@
 
                         <div class="custom-car-list-column" th:text="${clientCar.owner.username}">Owner Username</div>
 
-                        <div class="custom-car-list-column" th:text="${clientCar.vehicle.brand.name}">Brand</div>
+                        <div class="custom-car-list-column">
+                            <img th:src="@{'/images/audi-logo.png'}" th:if="${clientCar.vehicle.brand.name == 'Audi'}" alt="Audi logo"
+                                 class="brand-logo" style="width: 25px; height: auto; margin-right: 8px;">
+                            <img th:src="@{'/images/vw-logo.jpg'}" th:if="${clientCar.vehicle.brand.name == 'Volkswagen'}" alt="Volkswagen logo"
+                                 class="brand-logo" style="width: 25px; height: auto; margin-right: 8px;">
+                            <img th:src="@{'/images/porsche-logo.jpg'}" th:if="${clientCar.vehicle.brand.name == 'Porsche'}" alt="Porsche logo"
+                                 class="brand-logo" style="width: 25px; height: auto; margin-right: 8px;">
+
+                            <!-- Текст за името на марката -->
+                            <span th:text="${clientCar.vehicle.brand.name}"></span>
+                        </div>
 
                         <div class="custom-car-list-column" th:text="${clientCar.vehicle.model.name}">Make</div>
 
