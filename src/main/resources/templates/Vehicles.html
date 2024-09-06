@@ -58,7 +58,18 @@
                         <div class="vehicle-list">
                             <div th:each="vehicle, iterStat : ${vehicles}"
                                  th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
-                                <div class="column column-1-4" th:text="${vehicle.brand.name}">Brand</div>
+                                <div class="column column-1-4 brand-column"
+                                     style="display: flex; align-items: center; justify-content: center;">
+                                    <img th:src="@{'/images/audi-logo.png'}" th:if="${vehicle.brand.name == 'Audi'}" alt="Audi logo"
+                                         class="brand-logo" style="width: 25px; height: auto; margin-right: 8px;">
+                                    <img th:src="@{'/images/vw-logo.jpg'}" th:if="${vehicle.brand.name == 'Volkswagen'}" alt="Volkswagen logo"
+                                         class="brand-logo" style="width: 25px; height: auto; margin-right: 8px;">
+                                    <img th:src="@{'/images/porsche-logo.jpg'}" th:if="${vehicle.brand.name == 'Porsche'}" alt="Porsche logo"
+                                         class="brand-logo" style="width: 25px; height: auto; margin-right: 8px;">
+
+                                    <!-- Текст за името на марката -->
+                                    <span th:text="${vehicle.brand.name}"></span>
+                                </div>
                                 <div class="column column-1-4" th:text="${vehicle.model.name}">Model</div>
                                 <div class="column column-1-4" th:text="${vehicle.engineType.name}">Engine Type</div>
                                 <div class="column column-1-4" th:text="${vehicle.year.year}">Year</div>

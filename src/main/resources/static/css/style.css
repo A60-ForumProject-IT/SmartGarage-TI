@@ -4552,3 +4552,14 @@ body.lock-position {
     text-align: left;
     justify-content: flex-start;
 }
+
+.brand-column {
+    display: flex;
+    align-items: center;
+}
+
+.brand-logo {
+    width: 35px;
+    height: auto;
+    margin-right: 8px;
+}
