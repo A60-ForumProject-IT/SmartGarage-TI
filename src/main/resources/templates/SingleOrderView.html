@@ -117,13 +117,13 @@
                                 <tr style="background-color: #F5F5F5;">
                                     <td style="padding: 10px; border: 1px solid #F5F5F5;"><strong>Owner:</strong></td>
                                     <td style="padding: 10px; border: 1px solid #F5F5F5;" th:text="${owner.firstName} + ' ' + ${owner.lastName}">John Doe</td>
-                                    <td style="padding: 10px; border: 1px solid #F5F5F5;"><strong>License Plate:</strong></td>
+                                    <td style="padding: 10px; border: 1px solid #F5F5F5; text-align: right"><strong>License Plate:</strong></td>
                                     <td style="padding: 10px; border: 1px solid #F5F5F5;" th:text="${clientCar.licensePlate}">AB1234CD</td>
                                 </tr>
                                 <tr style="background-color: #FFFFFF;">
                                     <td style="padding: 10px; border: 1px solid #F5F5F5;"><strong>Status:</strong></td>
                                     <td style="padding: 10px; border: 1px solid #F5F5F5;" th:text="${#strings.replace(order.status, '_', ' ')}">IN PROGRESS</td>
-                                    <td style="padding: 10px; border: 1px solid #F5F5F5;"><strong>Order Date:</strong></td>
+                                    <td style="padding: 10px; border: 1px solid #F5F5F5; text-align: right"><strong>Order Date:</strong></td>
                                     <td style="padding: 10px; border: 1px solid #F5F5F5;" th:text="${order.orderDate}">2024-09-06</td>
                                 </tr>
                             </table>
