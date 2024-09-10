@@ -43,17 +43,5 @@
 <script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        // Fade-in animation on page load
-        $('h2, h1').css({ opacity: 0 }).transition({ opacity: 1, y: '50px' }, 1000, 'ease');
-
-        // Scroll to top functionality
-        $('.scroll-top').on('click', function() {
-            $('html, body').animate({ scrollTop: 0 }, 800);
-        });
-    });
-</script>
 </body>
 </html>
