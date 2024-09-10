@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{FragmentForm.html::head}"></head>
+<body>
+<div class="site-container">
+    <header th:replace="~{FragmentForm.html::header-icons-info}"></header>
+    <header th:replace="~{FragmentForm.html::header-container}"></header>
+    <div class="theme-page padding-bottom-70">
+        <div class="row login-register-container padding-top-70 padding-bottom-70">
+            <div class="column column-1-3"></div>
+            <div class="column column-1-3">
+                <div class="login-register-box">
+                    <!-- Използваме същата регистрационна форма от LoginView.html -->
+                    <div id="register-form" class="form-content">
+                        <form th:action="@{/ti/users/create}" th:object="${userCreationDto}" method="post"
+                              class="contact-form">
+                            <div class="form-group">
+                                <label for="reg-username">Username</label>
+                                <input type="text" id="reg-username" th:field="*{username}" class="text-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-email">Email</label>
+                                <input type="email" id="reg-email" th:field="*{email}" class="text-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-first-name">First Name</label>
+                                <input type="text" id="reg-first-name" th:field="*{firstName}" class="text-input"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-last-name">Last Name</label>
+                                <input type="text" id="reg-last-name" th:field="*{lastName}" class="text-input"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-phone">Phone Number</label>
+                                <input type="tel" id="reg-phone" th:field="*{phoneNumber}" class="text-input" required>
+                            </div>
+                            <button type="submit" class="more">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="column column-1-3"></div>
+        </div>
+    </div>
+    <footer th:replace="~{FragmentForm.html::footer-and-copyright}"></footer>
+</div>
+</body>
+</html>

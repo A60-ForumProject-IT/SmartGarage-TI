@@ -7,10 +7,7 @@ import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.Brand;
 import com.telerikacademy.web.smartgarageti.models.User;
-import com.telerikacademy.web.smartgarageti.models.dto.ChangePasswordDto;
-import com.telerikacademy.web.smartgarageti.models.dto.ForgottenPasswordDto;
-import com.telerikacademy.web.smartgarageti.models.dto.LoginDto;
-import com.telerikacademy.web.smartgarageti.models.dto.UserEditInfoDto;
+import com.telerikacademy.web.smartgarageti.models.dto.*;
 import com.telerikacademy.web.smartgarageti.services.contracts.AvatarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
@@ -298,4 +295,48 @@ public class UserMvcController {
         redirectAttributes.addFlashAttribute("login", new LoginDto());
         return "redirect:/ti/auth/login";
     }
+
+    @GetMapping("/create")
+    public String showCreateUserForm(Model model, HttpSession session) {
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            PermissionHelper.isEmployee(currentUser, "Only employees can create new users.");
+
+            model.addAttribute("userCreationDto", new UserCreationDto());
+            return "UserRegistrationOnly";
+
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "redirect:/ti/users";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
+
+
+    @PostMapping("/create")
+    public String createUser(@Valid @ModelAttribute("userCreationDto") UserCreationDto userCreationDto,
+                             BindingResult bindingResult,
+                             Model model,
+                             HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("userCreationDto", userCreationDto);
+            return "UserRegistrationOnly";
+        }
+
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+
+            userService.createCustomerProfile(currentUser, userCreationDto);
+            model.addAttribute("successMessage", "User created successfully.");
+            return "redirect:/ti/users";
+
+        } catch (UnauthorizedOperationException | EntityNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "UserRegistrationOnly";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
+
 }
