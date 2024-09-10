@@ -93,13 +93,15 @@
                     </div>
                     <div class="row margin-top-30">
                         <div class="column column-1-2">
-                            <p>We will contact you within one business day.</p>
+                            <p>You will receive a reply from us between 7-10 working days.</p>
                         </div>
                         <div class="column column-1-2 align-right">
+                            <!-- Използвай бутон за изпращане на формата -->
                             <button type="submit" class="more submit-contact-form" title="SEND MESSAGE"><span>SEND MESSAGE</span></button>
                         </div>
                     </div>
                 </form>
+
 
                 <!-- Показване на съобщения за грешка или успех -->
                 <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
@@ -124,26 +126,6 @@
 </div>
 <a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
 <div class="background-overlay"></div>
-<!-- JavaScript libraries -->
-<script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
-<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
-<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery-ui-1.12.1.custom.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.isotope.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.easing.1.4.1.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.touchSwipe.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.transit.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.hint.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.costCalculator.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.prettyPhoto.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.qtip.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.blockUI.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
-<script type="text/javascript" th:src="@{/js/main.js}"></script>
-<script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
 <script type="text/javascript" th:src="@{'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZbvntbc4pL_sGoiAAUTv7EhTgNJLl3Z8'}"></script>
 <script>
     function initMap() {

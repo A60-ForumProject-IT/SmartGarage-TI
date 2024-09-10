@@ -97,14 +97,15 @@ public class HomeMvcController {
     }
 
     @PostMapping("/contact")
-    public ModelAndView handleContactForm(
+    public String handleContactForm(
             @Valid @ModelAttribute("contactRequest") ContactRequestDto contactRequestDto,
             BindingResult bindingResult,
             Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", "There are errors in the form. Please correct them.");
-            return new ModelAndView("contact_2");
+            System.out.println("Validation errors: " + bindingResult.getAllErrors());
+            return "contact_2";
         }
 
         String subject = "New Contact Request";
@@ -115,12 +116,10 @@ public class HomeMvcController {
 
         try {
             emailService.sendEmail(defaultFromEmail, subject, text, contactRequestDto.getEmail());
-            return new ModelAndView("redirect:/ti/contact/success");
         } catch (Exception e) {
             model.addAttribute("errorMessage", "There was a problem sending your message. Please try again.");
         }
-
-        return new ModelAndView("contact_2");
+        return "redirect:/ti/contact/success";
     }
 
 
