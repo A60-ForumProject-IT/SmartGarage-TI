@@ -105,6 +105,17 @@ public class CarServiceLogServiceImpl implements CarServiceLogService {
         carServiceRepository.delete(carServiceLog);
     }
 
+    @Override
+    public List<CarServiceLog> findOrderServicesByOrderId(int orderId, User user, User owner) {
+        PermissionHelper.isEmployeeOrSameUser(user, owner, "You are not employee or owner and can't see these details!");
+        return carServiceRepository.findAllByOrderId(orderId);
+    }
+
+    @Override
+    public List<CarServiceLog> findOrderServicesByOrderIdWithoutAuth(int orderId) {
+        return carServiceRepository.findAllByOrderId(orderId);
+    }
+
     private Order createNewOrder(int clientCarId) {
         Order newOrder = new Order();
         newOrder.setClientCar(clientCarService.getClientCarById(clientCarId));

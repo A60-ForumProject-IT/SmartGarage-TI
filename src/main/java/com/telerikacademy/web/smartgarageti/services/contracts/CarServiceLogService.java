@@ -22,4 +22,8 @@ public interface CarServiceLogService {
     List<CarServiceLog> findNotStartedOrdersByClientCarId(int clientCarId, User user);
 
     void deleteServiceFromOrder(int clientServiceLogId, int clientCarId, User user);
+
+    List<CarServiceLog> findOrderServicesByOrderId(int orderId, User user, User owner);
+
+    List<CarServiceLog> findOrderServicesByOrderIdWithoutAuth(int orderId);
 }

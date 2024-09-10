@@ -161,7 +161,7 @@ public class OrderMvcController {
 
         User owner = userService.getUserById(clientCar.getOwner().getId());
 
-        List<CarServiceLog> orderServices = carServiceLogService.findCarServicesByClientCarId(clientCar.getId(), loggedInUser, owner);
+        List<CarServiceLog> orderServices = carServiceLogService.findOrderServicesByOrderId(order.getId(), loggedInUser, owner);
 
         BigDecimal totalPrice = orderServices.stream()
                 .map(serviceLog -> BigDecimal.valueOf(serviceLog.getCalculatedPrice()))
@@ -186,7 +186,11 @@ public class OrderMvcController {
 
             Order order = orderService.getOrderById(orderId, user);
 
-            byte[] pdfBytes = generateStyledInvoice(order, currency);
+            User owner = order.getClientCar().getOwner();
+
+            List<CarServiceLog> orderServices = carServiceLogService.findOrderServicesByOrderId(order.getId(), user, owner);
+
+            byte[] pdfBytes = generateStyledInvoice(order, orderServices, currency);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
@@ -203,7 +207,7 @@ public class OrderMvcController {
         }
     }
 
-    public byte[] generateStyledInvoice(Order order, String currency) {
+    public byte[] generateStyledInvoice(Order order, List<CarServiceLog> orderServices, String currency) {
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             PdfWriter writer = new PdfWriter(out);
@@ -407,7 +411,7 @@ public class OrderMvcController {
 
             DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-            for (CarServiceLog serviceLog : order.getClientCar().getCarServices()) {
+            for (CarServiceLog serviceLog : orderServices) {
                 double servicePrice = serviceLog.getCalculatedPrice();
                 if (!"BGN".equalsIgnoreCase(currency)) {
                     servicePrice = currencyConversionService.convertCurrency(servicePrice, "BGN", currency);

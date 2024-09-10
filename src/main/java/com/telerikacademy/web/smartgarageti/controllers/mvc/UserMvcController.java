@@ -2,14 +2,17 @@ package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
 import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.helpers.PermissionHelper;
 import com.telerikacademy.web.smartgarageti.models.Brand;
+import com.telerikacademy.web.smartgarageti.models.Order;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.models.dto.*;
 import com.telerikacademy.web.smartgarageti.services.contracts.AvatarService;
 import com.telerikacademy.web.smartgarageti.services.contracts.BrandService;
+import com.telerikacademy.web.smartgarageti.services.contracts.OrderService;
 import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -39,13 +42,15 @@ public class UserMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final BrandService brandService;
     private final AvatarService avatarService;
+    private final OrderService orderService;
 
     @Autowired
-    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, BrandService brandService, AvatarService avatarService) {
+    public UserMvcController(UserService userService, AuthenticationHelper authenticationHelper, BrandService brandService, AvatarService avatarService, OrderService orderService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.brandService = brandService;
         this.avatarService = avatarService;
+        this.orderService = orderService;
     }
 
     @ModelAttribute("allVehicleBrands")
@@ -296,7 +301,7 @@ public class UserMvcController {
         return "redirect:/ti/auth/login";
     }
 
-    @GetMapping("/create-customer")
+    @GetMapping("/customer")
     public String showCreateUserForm(Model model, HttpSession session) {
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
@@ -314,7 +319,7 @@ public class UserMvcController {
     }
 
 
-    @PostMapping("/create-customer")
+    @PostMapping("/customer")
     public String createUser(@Valid @ModelAttribute("userCreationDto") UserCreationDto userCreationDto,
                              BindingResult bindingResult,
                              Model model,
@@ -339,7 +344,7 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/create-mechanic")
+    @GetMapping("/mechanic")
     public String showCreateMechanicForm(Model model, HttpSession session) {
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
@@ -356,7 +361,7 @@ public class UserMvcController {
         }
     }
 
-    @PostMapping("/create-mechanic")
+    @PostMapping("/mechanic")
     public String createMechanic(@Valid @ModelAttribute("userCreationDto") UserCreationDto userCreationDto,
                              BindingResult bindingResult,
                              Model model,
@@ -378,6 +383,27 @@ public class UserMvcController {
             return "MechanicRegistrationOnly";
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
+        }
+    }
+
+    @GetMapping("/{userId}/orders")
+    public String showUserOrdersPage(Model model, HttpSession session, @PathVariable("userId") int userId) {
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            User orderOwner = userService.getUserById(userId);
+            List<Order> allOwnerOrders = orderService.getOrdersByUserId(orderOwner, currentUser);
+
+            model.addAttribute("user", currentUser);
+            model.addAttribute("ownerId", userId);
+            model.addAttribute("orders", allOwnerOrders);
+            return "UserOrdersPage";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        } catch (EntityNotFoundException e) {
+            return "redirect:/ti";
+        } catch (NoResultsFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
         }
     }
 }

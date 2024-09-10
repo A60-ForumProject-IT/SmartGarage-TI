@@ -103,6 +103,13 @@
                                 My Details
                             </a>
                         </li>
+
+                        <li>
+                            <a href="UserDetails.html" th:if="${isAuthenticated}"
+                               th:href="@{/ti/users/{id}/orders(id=${user.id})}">
+                                My Orders
+                            </a>
+                        </li>
                         <li>
 
                             <a href="services.html" th:href="@{/ti/services}" title="Services">
