@@ -10,7 +10,7 @@
             <div class="row margin-top-70">
                 <div class="column column-1-1">
                     <h2 style="color: #1E69B8">OOOOPS!</h2>
-                    <h1 style="color: red">404</h1>
+                    <h1 style="color: red">403</h1>
                     <p class="description align-center" th:text="${errorMessage}" style="color: #1E69B8; font-weight: bold">We're sorry but something went wrong. Return to the <a
                             href="home.html" title="GO TO HOME">HOME</a>.</p>
 
@@ -43,17 +43,5 @@
 <script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        // Fade-in animation on page load
-        $('h2, h1').css({ opacity: 0 }).transition({ opacity: 1, y: '50px' }, 1000, 'ease');
-
-        // Scroll to top functionality
-        $('.scroll-top').on('click', function() {
-            $('html, body').animate({ scrollTop: 0 }, 800);
-        });
-    });
-</script>
 </body>
 </html>

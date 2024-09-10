@@ -19,6 +19,8 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
 import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
+import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
@@ -102,6 +104,12 @@ public class OrderMvcController {
     ) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
+
+            Boolean isEmployee = (Boolean) session.getAttribute("isEmployee");
+            if (isEmployee == null || !isEmployee) {
+                model.addAttribute("errorMessage", "You are not employee and can't see this page!");
+                return "403AccessDenied";
+            }
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
         }
@@ -139,13 +147,16 @@ public class OrderMvcController {
     public String updateOrderStatus(
             @RequestParam("orderId") int orderId,
             @RequestParam("newStatus") String newStatus,
-            HttpSession session
+            HttpSession session, Model model
     ) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
             orderService.updateOrderStatus(orderId, newStatus, user);
         } catch (AuthenticationException e) {
             return "redirect:/ti/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "403AccessDenied";
         }
 
         return "redirect:/ti/orders";
@@ -153,26 +164,35 @@ public class OrderMvcController {
 
     @GetMapping("/{orderId}")
     public String getOrderDetails(@PathVariable int orderId, Model model, HttpSession session) {
-        User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            Order order = orderService.getOrderById(orderId, loggedInUser);
 
-        Order order = orderService.getOrderById(orderId, loggedInUser);
+            ClientCar clientCar = clientCarService.getClientCarById(order.getClientCar().getId());
 
-        ClientCar clientCar = clientCarService.getClientCarById(order.getClientCar().getId());
+            User owner = userService.getUserById(clientCar.getOwner().getId());
 
-        User owner = userService.getUserById(clientCar.getOwner().getId());
+            List<CarServiceLog> orderServices = carServiceLogService.findOrderServicesByOrderId(order.getId(), loggedInUser, owner);
 
-        List<CarServiceLog> orderServices = carServiceLogService.findOrderServicesByOrderId(order.getId(), loggedInUser, owner);
+            BigDecimal totalPrice = orderServices.stream()
+                    .map(serviceLog -> BigDecimal.valueOf(serviceLog.getCalculatedPrice()))
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal totalPrice = orderServices.stream()
-                .map(serviceLog -> BigDecimal.valueOf(serviceLog.getCalculatedPrice()))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        model.addAttribute("orderId", orderId);
-        model.addAttribute("owner", owner);
-        model.addAttribute("clientCar", clientCar);
-        model.addAttribute("order", order);
-        model.addAttribute("orderServices", orderServices);
-        model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("orderId", orderId);
+            model.addAttribute("owner", owner);
+            model.addAttribute("clientCar", clientCar);
+            model.addAttribute("order", order);
+            model.addAttribute("orderServices", orderServices);
+            model.addAttribute("totalPrice", totalPrice);
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "403AccessDenied";
+        } catch (EntityNotFoundException | NoResultsFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
+        }
 
         return "SingleOrderView";
     }
