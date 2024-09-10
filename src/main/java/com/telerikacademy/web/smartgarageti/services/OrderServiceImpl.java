@@ -7,6 +7,7 @@ import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
 import com.telerikacademy.web.smartgarageti.models.Order;
 import com.telerikacademy.web.smartgarageti.models.User;
 import com.telerikacademy.web.smartgarageti.repositories.contracts.OrderRepository;
+import com.telerikacademy.web.smartgarageti.services.contracts.CarServiceLogService;
 import com.telerikacademy.web.smartgarageti.services.contracts.CurrencyConversionService;
 import com.telerikacademy.web.smartgarageti.services.contracts.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final CurrencyConversionService currencyConversionService;
+    private final CarServiceLogService carServiceLogService;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, CurrencyConversionService currencyConversionService) {
+    public OrderServiceImpl(OrderRepository orderRepository, CurrencyConversionService currencyConversionService, CarServiceLogService carServiceLogService) {
         this.orderRepository = orderRepository;
         this.currencyConversionService = currencyConversionService;
+        this.carServiceLogService = carServiceLogService;
     }
 
     @Override
@@ -81,7 +84,9 @@ public class OrderServiceImpl implements OrderService {
     public double calculateOrderTotalInCurrency(Order order, String currency) {
         double totalBGN = 0.0;
 
-        for (CarServiceLog serviceLog : order.getClientCar().getCarServices()) {
+        List<CarServiceLog> carServiceLogs = carServiceLogService.findOrderServicesByOrderIdWithoutAuth(order.getId());
+
+        for (CarServiceLog serviceLog : carServiceLogs) {
             totalBGN += serviceLog.getCalculatedPrice();
         }
 
