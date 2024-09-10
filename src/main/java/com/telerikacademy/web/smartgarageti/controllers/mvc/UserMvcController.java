@@ -370,7 +370,6 @@ public class UserMvcController {
             model.addAttribute("userCreationDto", userCreationDto);
             return "MechanicRegistrationOnly";
         }
-
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
 
@@ -385,6 +384,48 @@ public class UserMvcController {
             return "redirect:/ti/auth/login";
         }
     }
+
+    @GetMapping("/employee")
+    public String showCreateEmployeeForm(Model model, HttpSession session) {
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            PermissionHelper.isEmployee(currentUser, "Only employees can create new users or mechanics.");
+
+            model.addAttribute("userCreationDto", new UserCreationDto());
+            return "EmployeeRegistrationOnly";
+
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "redirect:/ti/users";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
+
+    @PostMapping("/employee")
+    public String createEmployee(@Valid @ModelAttribute("userCreationDto") UserCreationDto userCreationDto,
+                                 BindingResult bindingResult,
+                                 Model model,
+                                 HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("userCreationDto", userCreationDto);
+            return "EmployeeRegistrationOnly";
+        }
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+
+            userService.createEmployeeProfile(currentUser, userCreationDto);
+            model.addAttribute("successMessage", "User created successfully.");
+            return "redirect:/ti/users";
+
+        } catch (UnauthorizedOperationException | EntityNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "EmployeeRegistrationOnly";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
+
 
     @GetMapping("/{userId}/orders")
     public String showUserOrdersPage(Model model, HttpSession session, @PathVariable("userId") int userId) {

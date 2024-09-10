@@ -99,6 +99,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto createEmployeeProfile(User employee, UserCreationDto userCreationDto) {
+        PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
+        return employeeRegistration(userCreationDto);
+    }
+
+    @Override
     public void resetPassword(ForgottenPasswordDto forgottenPasswordDto) {
         User user = userRepository.findByEmail(forgottenPasswordDto.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException("User", "email", forgottenPasswordDto.getEmail()));
@@ -208,6 +214,25 @@ public class UserServiceImpl implements UserService {
 
         return MapperHelper.toUserDto(mechanic);
     }
+
+    private UserDto employeeRegistration(UserCreationDto userCreationDto) {
+        Role role = roleService.getRoleById(2);
+        String randomPassword = PasswordGenerator.generateRandomPassword();
+        User employee = MapperHelper.toEmployeeEntity(userCreationDto, randomPassword, role);
+        Avatar defaultAvatar = avatarService.initializeDefaultAvatar();
+        employee.setAvatar(defaultAvatar);
+        userRepository.save(employee);
+        emailService.sendEmail(
+                employee.getEmail(),
+                "Welcome to Smart Garage",
+                "As a new member of our team, your role here will be to manage the garage. " +"<br>"
+                        +"Your username is: " + employee.getUsername() + "<br>"
+                        +"Your password is: " + randomPassword
+        );
+
+        return MapperHelper.toUserDto(employee);
+    }
+
 
     @Override
     public List<String> findUsernamesByTerm(String term) {

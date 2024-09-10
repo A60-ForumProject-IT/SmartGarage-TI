@@ -84,6 +84,18 @@ public class MapperHelper {
         return mechanic;
     }
 
+    public static User toEmployeeEntity(UserCreationDto userCreationDto, String randomPassword, Role role) {
+        User employee = new User();
+        employee.setUsername(userCreationDto.getUsername());
+        employee.setEmail(userCreationDto.getEmail());
+        employee.setPhoneNumber(userCreationDto.getPhoneNumber());
+        employee.setFirstName(userCreationDto.getFirstName());
+        employee.setLastName(userCreationDto.getLastName());
+        employee.setPassword(randomPassword);
+        employee.setRole(role);
+        return employee;
+    }
+
     public ClientCar createClientCarFromDto(ClientCarDto clientCarDto, User userToAddCar, User loggedInUser) {
         Vehicle vehicle = vehicleService.getVehicleByDetails(clientCarDto.getBrandName(),
                         clientCarDto.getModelName(),
