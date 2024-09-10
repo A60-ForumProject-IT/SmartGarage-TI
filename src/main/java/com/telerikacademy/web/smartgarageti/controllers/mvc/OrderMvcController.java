@@ -1,27 +1,36 @@
 package com.telerikacademy.web.smartgarageti.controllers.mvc;
 
+import java.io.ByteArrayOutputStream;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.properties.TextAlignment;
 import com.telerikacademy.web.smartgarageti.exceptions.AuthenticationException;
-import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
+import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
 import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
 import com.telerikacademy.web.smartgarageti.models.ClientCar;
 import com.telerikacademy.web.smartgarageti.models.Order;
 import com.telerikacademy.web.smartgarageti.models.User;
-import com.telerikacademy.web.smartgarageti.services.contracts.CarServiceLogService;
-import com.telerikacademy.web.smartgarageti.services.contracts.ClientCarService;
-import com.telerikacademy.web.smartgarageti.services.contracts.OrderService;
-import com.telerikacademy.web.smartgarageti.services.contracts.UserService;
+import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,6 +42,7 @@ public class OrderMvcController {
     private final ClientCarService clientCarService;
     private final UserService userService;
     private final CarServiceLogService carServiceLogService;
+    private final CurrencyConversionService currencyConversionService;
 
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
@@ -57,12 +67,13 @@ public class OrderMvcController {
     }
 
     @Autowired
-    public OrderMvcController(OrderService orderService, AuthenticationHelper authenticationHelper, ClientCarService clientCarService, UserService userService, CarServiceLogService carServiceLogService) {
+    public OrderMvcController(OrderService orderService, AuthenticationHelper authenticationHelper, ClientCarService clientCarService, UserService userService, CarServiceLogService carServiceLogService, CurrencyConversionService currencyConversionService) {
         this.orderService = orderService;
         this.authenticationHelper = authenticationHelper;
         this.clientCarService = clientCarService;
         this.userService = userService;
         this.carServiceLogService = carServiceLogService;
+        this.currencyConversionService = currencyConversionService;
     }
 
     @GetMapping
@@ -156,26 +167,51 @@ public class OrderMvcController {
     }
 
     @GetMapping("/{orderId}/download-pdf")
-    public String downloadOrderPdf(@PathVariable int orderId, @RequestParam("currency") String currency,
-                                   Model model, HttpSession session) {
-
+    public ResponseEntity<byte[]> downloadOrderPdf(@PathVariable int orderId,
+                                                   @RequestParam(defaultValue = "BGN") String currency,
+                                                   HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
             Order order = orderService.getOrderById(orderId, user);
+            String clientFirstName = order.getClientCar().getOwner().getFirstName();
+            String clientLastName = order.getClientCar().getOwner().getLastName();
+            double totalPrice = orderService.calculateOrderTotalInCurrency(order, currency);
 
-            double totalInCurrency = orderService.calculateOrderTotalInCurrency(order, currency);
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            String formattedTotalPrice = decimalFormat.format(totalPrice);
 
-            model.addAttribute("order", order);
-            model.addAttribute("totalPrice", totalInCurrency);
-            model.addAttribute("currency", currency);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            PdfWriter writer = new PdfWriter(out);
+            PdfDocument pdfDocument = new PdfDocument(writer);
+            Document document = new Document(pdfDocument);
+
+            document.add(new Paragraph("Order Summary").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Order ID: " + orderId));
+            document.add(new Paragraph("Client Name: " + clientFirstName + " " + clientLastName));
+
+            for (CarServiceLog serviceLog : order.getClientCar().getCarServices()) {
+                double servicePrice = serviceLog.getCalculatedPrice();
+                if (!"BGN".equalsIgnoreCase(currency)) {
+                    servicePrice = currencyConversionService.convertCurrency(servicePrice, "BGN", currency);
+                }
+                String formattedServicePrice = decimalFormat.format(servicePrice);
+                document.add(new Paragraph("Service: " + serviceLog.getService().getName() + ", Price: " + formattedServicePrice + " " + currency));
+            }
+
+            document.add(new Paragraph("Total: " + formattedTotalPrice + " " + currency));
+            document.close();
+
+            byte[] pdfBytes = out.toByteArray();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "order_" + orderId + ".pdf");
+
+            return ResponseEntity.ok().headers(headers).body(pdfBytes);
+
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e) {
-            return "redirect:/ti/auth/login";
-        } catch (UnauthorizedOperationException e) {
-            model.addAttribute("error", e.getMessage());
-            return "404";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
-
-        // TODO: Implement PDF generation and return file as response
-        return "OrderPdfView";
     }
 }

@@ -160,14 +160,10 @@
                             <div class="row margin-top-20">
                                 <div class="column column-1-2">
                                     <label for="currency">Currency:</label>
-                                    <input type="text" id="currency" name="currency"
-                                           placeholder="Enter currency code (e.g. EUR)">
+                                    <input type="text" id="currency" name="currency" placeholder="Enter currency code (e.g. EUR)">
                                 </div>
                                 <div class="column column-1-2">
-                                    <button class="more simple"
-                                            th:onclick="'downloadPdf(' + ${orderId} + ', \'' + ${currency} + '\')'">
-                                        DOWNLOAD PDF
-                                    </button>
+                                    <a href="#" id="downloadPdfButton" class="more simple">DOWNLOAD PDF</a>
                                 </div>
                             </div>
                         </div>
@@ -243,5 +239,15 @@
 <script type="text/javascript" th:src="@{/js/jquery.imagesloaded-packed.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" th:src="@{/js/odometer.min.js}"></script>
+<script type="text/javascript">
+    document.getElementById('downloadPdfButton').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const orderId = [[${orderId}]];
+        const currency = document.getElementById('currency').value || 'BGN';
+
+        window.location.href = `/ti/orders/${orderId}/download-pdf?currency=${currency}`;
+    });
+</script>
 </body>
 </html>
