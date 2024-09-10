@@ -103,6 +103,12 @@ public class ClientCarsMvcController {
 
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
+
+            Boolean isEmployee = (Boolean) session.getAttribute("isEmployee");
+            if (isEmployee == null || !isEmployee) {
+                model.addAttribute("errorMessage", "You are not employee and can't see this page!");
+                return "403AccessDenied";
+            }
         } catch (AuthenticationException e) {
             return "redirect: /ti/auth/login";
         }
@@ -189,6 +195,9 @@ public class ClientCarsMvcController {
             return "404";
         } catch (AuthenticationException e) {
             return "redirect: /ti/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "403AccessDenied";
         }
     }
 
@@ -225,7 +234,7 @@ public class ClientCarsMvcController {
             return "ClientCars";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "404";
+            return "403AccessDenied";
         } catch (AuthenticationException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "redirect: /ti/auth/login";
@@ -245,16 +254,12 @@ public class ClientCarsMvcController {
             ClientCar clientCar = clientCarService.getClientCarById(clientCarId);
             clientCarService.deleteClientCar(clientCarId, user);
             return "redirect:/ti/client-cars";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "404";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             return "404";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "404";
+            return "403AccessDenied";
         }
     }
 
@@ -272,14 +277,13 @@ public class ClientCarsMvcController {
             model.addAttribute("repairServices", allRepairServices);
 
         } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
+            return "404";
         } catch (UnauthorizedOperationException e) {
-            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
+            return "403AccessDenied";
         } catch (AuthenticationException e) {
-            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());//d
+            return "redirect: /ti/auth/login";
         }
 
         return "AddServiceToClientCar";
@@ -347,7 +351,7 @@ public class ClientCarsMvcController {
             return "404";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "404";
+            return "403AccessDenied";
         } catch (AuthenticationException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "redirect: /ti/auth/login";

@@ -445,6 +445,9 @@ public class UserMvcController {
         } catch (NoResultsFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "404";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "403AccessDenied";
         }
     }
 }
