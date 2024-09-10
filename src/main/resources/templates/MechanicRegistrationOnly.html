@@ -12,7 +12,7 @@
                 <div class="login-register-box">
                     <!-- Използваме същата регистрационна форма от LoginView.html -->
                     <div id="register-form" class="form-content">
-                        <form th:action="@{/ti/users/create-customer}" th:object="${userCreationDto}" method="post"
+                        <form th:action="@{/ti/users/create-mechanic}" th:object="${userCreationDto}" method="post"
                               class="contact-form">
                             <div class="form-group">
                                 <label for="reg-username">Username</label>
@@ -47,4 +47,4 @@
     <footer th:replace="~{FragmentForm.html::footer-and-copyright}"></footer>
 </div>
 </body>
-</html>
+</html>>

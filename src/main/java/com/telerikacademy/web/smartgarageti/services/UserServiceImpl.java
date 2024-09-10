@@ -93,6 +93,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto createMechanicProfile(User employee, UserCreationDto userCreationDto) {
+        PermissionHelper.isEmployee(employee, INVALID_PERMISSION);
+        return mechanicRegistration(userCreationDto);
+    }
+
+    @Override
     public void resetPassword(ForgottenPasswordDto forgottenPasswordDto) {
         User user = userRepository.findByEmail(forgottenPasswordDto.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException("User", "email", forgottenPasswordDto.getEmail()));
@@ -178,10 +184,29 @@ public class UserServiceImpl implements UserService {
         emailService.sendEmail(
                 user.getEmail(),
                 "Welcome to Smart Garage",
-                "Your username is: " + user.getUsername() + " Your password is: " + randomPassword
+                "Your username is: " + user.getUsername() + "<br>"  +
+                        "Your password is: " + randomPassword
         );
 
         return MapperHelper.toUserDto(user);
+    }
+
+    private UserDto mechanicRegistration(UserCreationDto userCreationDto) {
+        Role role = roleService.getRoleById(3);
+        String randomPassword = PasswordGenerator.generateRandomPassword();
+        User mechanic = MapperHelper.toMechanicEntity(userCreationDto, randomPassword, role);
+        Avatar defaultAvatar = avatarService.initializeDefaultAvatar();
+        mechanic.setAvatar(defaultAvatar);
+        userRepository.save(mechanic);
+        emailService.sendEmail(
+                mechanic.getEmail(),
+                "Welcome to Smart Garage",
+                "As a new member of our team, your role here will be to repair cars. " +"<br>"
+                        +"Your username is: " + mechanic.getUsername() + "<br>"
+                        +"Your password is: " + randomPassword
+        );
+
+        return MapperHelper.toUserDto(mechanic);
     }
 
     @Override

@@ -296,11 +296,11 @@ public class UserMvcController {
         return "redirect:/ti/auth/login";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/create-customer")
     public String showCreateUserForm(Model model, HttpSession session) {
         try {
             User currentUser = authenticationHelper.tryGetUserFromSession(session);
-            PermissionHelper.isEmployee(currentUser, "Only employees can create new users.");
+            PermissionHelper.isEmployee(currentUser, "Only employees can create new users or mechanics.");
 
             model.addAttribute("userCreationDto", new UserCreationDto());
             return "UserRegistrationOnly";
@@ -314,7 +314,7 @@ public class UserMvcController {
     }
 
 
-    @PostMapping("/create")
+    @PostMapping("/create-customer")
     public String createUser(@Valid @ModelAttribute("userCreationDto") UserCreationDto userCreationDto,
                              BindingResult bindingResult,
                              Model model,
@@ -339,4 +339,45 @@ public class UserMvcController {
         }
     }
 
+    @GetMapping("/create-mechanic")
+    public String showCreateMechanicForm(Model model, HttpSession session) {
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+            PermissionHelper.isEmployee(currentUser, "Only employees can create new users or mechanics.");
+
+            model.addAttribute("userCreationDto", new UserCreationDto());
+            return "MechanicRegistrationOnly";
+
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "redirect:/ti/users";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
+
+    @PostMapping("/create-mechanic")
+    public String createMechanic(@Valid @ModelAttribute("userCreationDto") UserCreationDto userCreationDto,
+                             BindingResult bindingResult,
+                             Model model,
+                             HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("userCreationDto", userCreationDto);
+            return "MechanicRegistrationOnly";
+        }
+
+        try {
+            User currentUser = authenticationHelper.tryGetUserFromSession(session);
+
+            userService.createMechanicProfile(currentUser, userCreationDto);
+            model.addAttribute("successMessage", "User created successfully.");
+            return "redirect:/ti/users";
+
+        } catch (UnauthorizedOperationException | EntityNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "MechanicRegistrationOnly";
+        } catch (AuthenticationException e) {
+            return "redirect:/ti/auth/login";
+        }
+    }
 }
