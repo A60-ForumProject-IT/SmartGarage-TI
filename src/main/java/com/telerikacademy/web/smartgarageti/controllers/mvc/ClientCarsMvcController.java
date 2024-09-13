@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.telerikacademy.web.smartgarageti.controllers.mvc.OrderMvcController.EMPLOYEE;
+
 @Controller
 @RequestMapping("/ti/client-cars")
 public class ClientCarsMvcController {
@@ -104,8 +106,7 @@ public class ClientCarsMvcController {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
 
-            Boolean isEmployee = (Boolean) session.getAttribute("isEmployee");
-            if (isEmployee == null || !isEmployee) {
+            if (user.getRole().getId() != EMPLOYEE) {
                 model.addAttribute("errorMessage", "You are not employee and can't see this page!");
                 return "403AccessDenied";
             }

@@ -22,10 +22,7 @@ import com.telerikacademy.web.smartgarageti.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.NoResultsFoundException;
 import com.telerikacademy.web.smartgarageti.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.smartgarageti.helpers.AuthenticationHelper;
-import com.telerikacademy.web.smartgarageti.models.CarServiceLog;
-import com.telerikacademy.web.smartgarageti.models.ClientCar;
-import com.telerikacademy.web.smartgarageti.models.Order;
-import com.telerikacademy.web.smartgarageti.models.User;
+import com.telerikacademy.web.smartgarageti.models.*;
 import com.telerikacademy.web.smartgarageti.services.contracts.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +47,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/ti/orders")
 public class OrderMvcController {
+
+    public static final int EMPLOYEE = 2;
     private final OrderService orderService;
     private final AuthenticationHelper authenticationHelper;
     private final ClientCarService clientCarService;
@@ -80,7 +79,9 @@ public class OrderMvcController {
     }
 
     @Autowired
-    public OrderMvcController(OrderService orderService, AuthenticationHelper authenticationHelper, ClientCarService clientCarService, UserService userService, CarServiceLogService carServiceLogService, CurrencyConversionService currencyConversionService) {
+    public OrderMvcController(OrderService orderService, AuthenticationHelper authenticationHelper,
+                              ClientCarService clientCarService, UserService userService,
+                              CarServiceLogService carServiceLogService, CurrencyConversionService currencyConversionService) {
         this.orderService = orderService;
         this.authenticationHelper = authenticationHelper;
         this.clientCarService = clientCarService;
@@ -104,9 +105,8 @@ public class OrderMvcController {
     ) {
         try {
             User user = authenticationHelper.tryGetUserFromSession(session);
-
-            Boolean isEmployee = (Boolean) session.getAttribute("isEmployee");
-            if (isEmployee == null || !isEmployee) {
+            
+            if (user.getRole().getId() != EMPLOYEE) {
                 model.addAttribute("errorMessage", "You are not employee and can't see this page!");
                 return "403AccessDenied";
             }
