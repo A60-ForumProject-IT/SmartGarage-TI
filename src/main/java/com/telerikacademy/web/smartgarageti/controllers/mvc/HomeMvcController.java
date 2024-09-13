@@ -140,17 +140,17 @@ public class HomeMvcController {
 
         String subject = "New Appointment Request";
         StringBuilder text = new StringBuilder();
-        text.append("Name: ").append(name).append("\n")
-                .append("Email: ").append(email).append("\n")
-                .append("Phone: ").append(phone).append("\n")
-                .append("Vehicle Year: ").append(vehicleYear).append("\n")
-                .append("Vehicle Make: ").append(vehicleMake).append("\n")
-                .append("Vehicle Mileage: ").append(vehicleMileage).append("\n")
-                .append("Appointment Date: ").append(appointmentDate).append("\n")
-                .append("Preferred Time Frame: ").append(timeFrame).append("\n");
+        text.append("Name: ").append(name).append("<br>")
+                .append("Email: ").append(email).append("<br>")
+                .append("Phone: ").append(phone).append("<br>")
+                .append("Vehicle Year: ").append(vehicleYear).append("<br>")
+                .append("Vehicle Make: ").append(vehicleMake).append("<br>")
+                .append("Vehicle Mileage: ").append(vehicleMileage).append("<br>")
+                .append("Appointment Date: ").append(appointmentDate).append("<br>")
+                .append("Preferred Time Frame: ").append(timeFrame).append("<br>");
 
         if (services != null) {
-            text.append("Services: ").append(String.join(", ", services)).append("\n");
+            text.append("Services: ").append(String.join(", ", services)).append("<br>");
         }
 
         text.append("Additional Message: ").append(message);
