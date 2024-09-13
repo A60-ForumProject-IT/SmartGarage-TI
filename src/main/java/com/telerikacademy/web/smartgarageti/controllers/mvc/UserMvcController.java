@@ -187,7 +187,6 @@ public class UserMvcController {
             User userToEdit = userService.getUserById(id, currentUser);
 
             model.addAttribute("user", userService.getUserById(id));
-            // Преобразуване от DTO към User
             userToEdit.setFirstName(userEditInfoDto.getFirstName());
             userToEdit.setLastName(userEditInfoDto.getLastName());
             userToEdit.setPhoneNumber(userEditInfoDto.getPhoneNumber());

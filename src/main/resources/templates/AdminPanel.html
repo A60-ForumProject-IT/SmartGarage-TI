@@ -38,21 +38,57 @@
                 <ul class="services-list clearfix padding-top-70">
                     <li>
                         <a href="service_engine_diagnostics.html" th:href="@{/ti/users}" title="All Users">
-                            <img src="../static/images/samples/390x260/image_01.jpg" th:src="@{/images/samples/390x260/resized_personas.jpg}" alt="">
+                            <img src="../static/images/samples/390x260/image_01.jpg"
+                                 th:src="@{/images/samples/390x260/resized_personas.jpg}" alt="">
                         </a>
-                        <h4 class="box-header"><a href="service_engine_diagnostics.html" title="Engine Diagnostics">ALL USERS<span class="template-arrow-menu"></span></a></h4>
+                        <h4 class="box-header"><a th:href="@{/ti/users}" title="Engine Diagnostics">ALL
+                            USERS<span class="template-arrow-menu"></span></a></h4>
                     </li>
                     <li>
                         <a href="service_lube_oil_filters.html" th:href="@{/ti/client-cars}" title="Client Cars">
-                            <img src="../static/images/samples/390x260/image_02.jpg" th:src="@{/images/samples/390x260/resized_client_cars.jpg}" alt="">
+                            <img src="../static/images/samples/390x260/image_02.jpg"
+                                 th:src="@{/images/samples/390x260/resized_client_cars.jpg}" alt="">
                         </a>
-                        <h4 class="box-header"><a href="service_lube_oil_filters.html" title="Lube, Oil and Filters">CLIENT CARS<span class="template-arrow-menu"></span></a></h4>
+                        <h4 class="box-header"><a th:href="@{/ti/client-cars}" title="Lube, Oil and Filters">CLIENT
+                            CARS<span class="template-arrow-menu"></span></a></h4>
                     </li>
                     <li>
                         <a href="service_belts_hoses.html" th:href="@{/ti/orders}" title="Orders">
-                            <img src="../static/images/samples/390x260/image_03.jpg" th:src="@{/images/samples/390x260/resized_orders.jpg}" alt="">
+                            <img src="../static/images/samples/390x260/image_03.jpg"
+                                 th:src="@{/images/samples/390x260/resized_orders.jpg}" alt="">
                         </a>
-                        <h4 class="box-header"><a href="service_belts_hoses.html" title="Belts and Hoses">ORDERS<span class="template-arrow-menu"></span></a></h4>
+                        <h4 class="box-header"><a th:href="@{ti/orders}" title="Belts and Hoses">ORDERS<span
+                                class="template-arrow-menu"></span></a></h4>
+                    </li>
+                    <li>
+                        <a th:href="@{/ti/users/employee}" title="Create Employee">
+                            <img src="../static/images/samples/390x260/team_02.png"
+                                 th:src="@{/images/samples/390x260/team_02.png}" alt="">
+                        </a>
+                        <h4 class="box-header">
+                            <a th:href="@{/ti/users/employee}" title="Create Employee">CREATE EMPLOYEE<span
+                                    class="template-arrow-menu"></span></a>
+                        </h4>
+                    </li>
+                    <li>
+                        <a th:href="@{/ti/users/mechanic}" title="Create Mechanic">
+                            <img src="../static/images/samples/390x260/image_09.jpg"
+                                 th:src="@{/images/samples/390x260/image_09.jpg}" alt="">
+                        </a>
+                        <h4 class="box-header">
+                            <a th:href="@{/ti/users/mechanic}" title="Create Mechanic">CREATE MECHANIC<span
+                                    class="template-arrow-menu"></span></a>
+                        </h4>
+                    </li>
+                    <li>
+                        <a th:href="@{/ti/users/customer}" title="Create Customer">
+                            <img src="../static/images/samples/390x260/image_11.jpg"
+                                 th:src="@{/images/samples/390x260/image_11.jpg}" alt="">
+                        </a>
+                        <h4 class="box-header">
+                            <a th:href="@{/ti/users/customer}" title="Create Customer">CREATE CUSTOMER<span
+                                    class="template-arrow-menu"></span></a>
+                        </h4>
                     </li>
                 </ul>
             </div>
