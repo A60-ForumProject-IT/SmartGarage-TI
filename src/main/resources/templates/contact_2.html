@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-    <form th:replace="~{FragmentForm.html :: head}"></form>
+<form th:replace="~{FragmentForm.html :: head}"></form>
 <body>
 <div class="site-container">
     <form th:replace="~{FragmentForm.html :: header-icons-info}"></form>
@@ -11,22 +11,22 @@
             <div class="row full-width padding-top-bottom-50 vertical-align-cell">
                 <div class="row">
                     <div class="page-header-left">
-                        <h1>CONTACT US</h1>
+                        <h1>JOB CENTER</h1>
                     </div>
                     <div class="page-header-right">
                         <div class="bread-crumb-container">
                             <label>YOU ARE HERE:</label>
                             <ul class="bread-crumb">
                                 <li>
-                                    <a title="HOME" th:href="@{/ti}">
-                                        HOME
-                                    </a>
+                                    JOB CENTER
                                 </li>
                                 <li class="separator">
                                     &#47;
                                 </li>
                                 <li>
-                                    CONTACT US
+                                    <a title="HOME" th:href="@{/ti}">
+                                        HOME
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -77,9 +77,7 @@
                         </ul>
                     </div>
                 </div>
-                <h3 class="box-header page-margin-top">DROP US A LINE</h3>
-
-                <!-- Оригинална форма за контакт -->
+                <h3 class="box-header page-margin-top">APPLY FOR JOB!</h3>
                 <form class="contact-form page-margin-top" id="contact-form" method="post" th:action="@{/ti/contact}" th:object="${contactRequest}">
                     <div class="row">
                         <fieldset class="column column-1-2">
@@ -96,14 +94,10 @@
                             <p>You will receive a reply from us between 7-10 working days.</p>
                         </div>
                         <div class="column column-1-2 align-right">
-                            <!-- Използвай бутон за изпращане на формата -->
                             <button type="submit" class="more submit-contact-form" title="SEND MESSAGE"><span>SEND MESSAGE</span></button>
                         </div>
                     </div>
                 </form>
-
-
-                <!-- Показване на съобщения за грешка или успех -->
                 <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 
             </div>
