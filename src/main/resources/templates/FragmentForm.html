@@ -99,14 +99,14 @@
 
                         <li>
                             <a href="UserDetails.html" th:if="${isAuthenticated}"
-                               th:href="@{/ti/users/{id}/details(id=${user.id})}">
+                               th:href="@{/ti/users/{id}/details(id=${loggedInUser.id})}">
                                 My Details
                             </a>
                         </li>
 
                         <li>
                             <a href="UserDetails.html" th:if="${isAuthenticated}"
-                               th:href="@{/ti/users/{id}/orders(id=${user.id})}">
+                               th:href="@{/ti/users/{id}/orders(id=${loggedInUser.id})}">
                                 My Orders
                             </a>
                         </li>

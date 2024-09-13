@@ -59,7 +59,7 @@ public class RepairServiceMvcController {
         return false;
     }
 
-    @ModelAttribute("user")
+    @ModelAttribute("loggedInUser")
     public User populateUser(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
             return authenticationHelper.tryGetUserFromSession(session);

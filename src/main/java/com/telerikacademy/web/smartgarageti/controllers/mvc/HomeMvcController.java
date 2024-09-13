@@ -57,7 +57,7 @@ public class HomeMvcController {
         return null;
     }
 
-    @ModelAttribute("user")
+    @ModelAttribute("loggedInUser")
     public User populateUser(HttpSession session) {
         if (session.getAttribute("currentUser") != null) {
             return authenticationHelper.tryGetUserFromSession(session);
