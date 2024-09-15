@@ -122,8 +122,6 @@ public class HomeMvcController {
         return "redirect:/ti/contact/success";
     }
 
-
-
     @PostMapping("/appointment")
     public String handleAppointmentForm(
             @RequestParam("name") String name,
@@ -137,6 +135,8 @@ public class HomeMvcController {
             @RequestParam(value = "services", required = false) String[] services,
             @RequestParam("message_appointment") String message,
             Model model) {
+
+        System.out.println("Appointment form submitted");
 
         String subject = "New Appointment Request";
         StringBuilder text = new StringBuilder();
@@ -158,6 +158,7 @@ public class HomeMvcController {
         try {
             emailService.sendEmail(defaultFromEmail, subject, text.toString());
             model.addAttribute("successMessage", "Appointment request sent successfully!");
+            return "redirect:/ti/success-appointment";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to send appointment request.");
         }
@@ -168,6 +169,11 @@ public class HomeMvcController {
     @GetMapping("/admin-panel")
     public String showAdminPanel() {
         return "AdminPanel";
+    }
+
+    @GetMapping("/success-appointment")
+    public String showSuccessAppointmentPage() {
+        return "SuccessAppointment";
     }
 }
 

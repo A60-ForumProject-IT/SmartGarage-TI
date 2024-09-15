@@ -42,9 +42,9 @@
                                 <input type="hidden" name="vehicle-make-label" value="VEHICLE MAKE">
                                 <select name="vehicle-make" id="vehicle-make" class="cost-dropdown">
                                     <option value="" selected="selected">Choose...</option>
-                                    <option value="General Motors">Volkswagen</option>
-                                    <option value="Land Rover">Porsche</option>
-                                    <option value="Lexus">Audi</option>
+                                    <option value="Volkswagen">Volkswagen</option>
+                                    <option value="Porsche">Porsche</option>
+                                    <option value="Audi">Audi</option>
                                 </select>
                                 <input type="hidden" class="vehicle-make" name="vehicle-make-name" value="">
                             </div>
@@ -67,7 +67,7 @@
                                 <div class="datepicker-container">
                                     <span class="ui-icon template-arrow-dropdown"></span>
                                     <input id="appointment-date" class="cost-slider-datepicker big"
-                                           name="appointment-date" value="" placeholder="Preffered Date of Appointment">
+                                           name="appointment-date" value="" placeholder="Preferred Date of Appointment">
                                 </div>
                             </div>
                             <div class="cost-calculator-box page-margin-top clearfix">
@@ -166,7 +166,7 @@
                                    placeholder="Your Email *">
                             <input class="text-input" name="phone" type="text" value="Your Phone"
                                    placeholder="Your Phone">
-                            <textarea class="margin-top-20" name="message_appointment"
+                            <textarea class="margin-top-20 text-input" name="message_appointment"
                                       placeholder="Additional Questions or Comments">Additional Questions or Comments</textarea>
                             <input type="hidden" name="action" value="contact_form"/>
                             <input th:action="@{/ti/appointment}" type="hidden" name="form_type" value="appointment">
@@ -185,11 +185,8 @@
 </div>
 <a href="#top" class="scroll-top animated-element template-arrow-up" title="Scroll to top"></a>
 <div class="background-overlay"></div>
-<!--js-->
 <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
-<!--slider revolution-->
-<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.tools.min.js}"></script>
-<script type="text/javascript" th:src="@{/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
+
 <script type="text/javascript" th:src="@{/js/jquery.ba-bbq.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery-ui-1.12.1.custom.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.ui.touch-punch.min.js}"></script>
@@ -223,6 +220,51 @@
     }
 
     google.maps.event.addDomListener(window, 'load', initMap);
+</script>
+
+<script>
+    $(document).ready(function() {
+        var formSubmitted = false;
+
+        $("#contact-form").on("submit", function(event) {
+            event.preventDefault();
+
+            if (formSubmitted) {
+                return;
+            }
+
+            formSubmitted = true;
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr("action"),
+                data: $(this).serialize(),
+                success: function(response) {
+                    console.log("Email sent successfully, redirecting...");
+                    window.location.href = "/ti/success-appointment";
+                },
+                error: function() {
+                    console.log("Error occurred while sending the email.");
+                    alert("There was an error processing your request. Please try again.");
+                    formSubmitted = false;
+                }
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        $(".text-input").on("focus", function() {
+            if ($(this).val() === $(this).attr("placeholder")) {
+                $(this).val("");
+            }
+        });
+
+        $(".text-input").on("blur", function() {
+            if ($(this).val() === "") {
+                $(this).val($(this).attr("placeholder"));
+            }
+        });
+    });
 </script>
 </body>
 </html>

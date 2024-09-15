@@ -443,7 +443,7 @@ public class UserMvcController {
             return "redirect:/ti";
         } catch (NoResultsFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "404";
+            return "EmptyUserOrdersList";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "403AccessDenied";

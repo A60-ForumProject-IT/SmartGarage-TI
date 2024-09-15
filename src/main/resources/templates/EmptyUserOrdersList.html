@@ -35,43 +35,8 @@
         </div>
         <div class="custom-form-container margin-top-70" style="margin-top: 35px !important;">
             <div class="custom-form-header">
-                <h2 class="box-header" style="text-align: center; margin-bottom: 35px; font-weight: bold;">ORDER
-                    MANAGEMENT</h2>
-            </div>
-
-            <div class="row page-margin-top" style="width: 90%; max-width: 1400px; margin: 0 auto; padding: 0 15px;">
-                <div class="column column-1-1">
-                    <div class="user-list">
-                        <div class="row vehicle-item gray">
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 14px; text-align: center;">Order Number</div>
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 14px; text-align: center;">Order Owner</div>
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 14px; text-align: center;">Vehicle License Plate</div>
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 14px; text-align: center;">Order Status</div>
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 14px; text-align: center;">Order Date</div>
-                            <div class="column column-1-6" style="font-weight: bold; font-size: 14px; text-align: center; width: 300px;">Details</div>
-                        </div>
-                    </div>
-
-                    <div class="user-list" style="border: 1px solid #f5f5f5;">
-                        <div th:each="order, iterStat : ${orders}"
-                             th:class="${iterStat.index % 2 == 0} ? 'vehicle-item white' : 'vehicle-item gray'">
-                            <div class="column column-1-6" style="font-size: 13px; margin-left: 1px; text-align: center;" th:text="${order.id}">
-<!--                                <a th:href="@{'/ti/orders/' + ${order.id}}" style="text-decoration: underline;" th:text="${order.id}">Order Number</a>-->
-                            </div>
-                            <div class="column column-1-6" style="font-size: 13px; margin-left: 1px;  text-align: center;" th:text="${order.clientCar.owner.username}">Order Owner</div>
-                            <div class="column column-1-6" style="font-size: 13px; margin-left: 1px;  text-align: center;" th:text="${order.clientCar.licensePlate}">Vehicle License Plate</div>
-                            <div class="column column-1-6" style="font-size: 13px; margin-left: 1px;  text-align: center;" th:text="${order.status.replace('_', ' ')}">Order Status</div>
-                            <div class="column column-1-6" style="font-size: 13px; margin-left: 1px;  text-align: center;" th:text="${order.orderDate}">Order Date</div>
-                            <div class="column column-1-6" style="font-size: 13px; margin-left: 1px; text-align: center; display: flex; align-items: center; justify-content: center; width: 300px;">
-                                <form th:action="@{'/ti/orders/' + ${order.id}}" method="get" style="display: flex; gap: 10px;">
-                                    <input type="hidden" name="orderId" th:value="${order.id}"/>
-                                    <button type="submit" class="more simple" style="font-size: 13px; padding: 2px 10px;">View Details</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                <h2 class="box-header" style="text-align: center; margin-bottom: 35px; font-weight: bold;">
+                    YOU DON'T HAVE ANY ORDERS AT THE MOMENT.</h2>
             </div>
 
         </div>
