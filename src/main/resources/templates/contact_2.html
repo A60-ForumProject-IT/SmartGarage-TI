@@ -77,16 +77,16 @@
                         </ul>
                     </div>
                 </div>
-                <h3 class="box-header page-margin-top">APPLY FOR JOB!</h3>
+                <h3 class="box-header page-margin-top">APPLY FOR MECHANIC</h3>
                 <form class="contact-form page-margin-top" id="contact-form" method="post" th:action="@{/ti/contact}" th:object="${contactRequest}">
                     <div class="row">
                         <fieldset class="column column-1-2">
                             <input class="text-input" name="name" type="text" placeholder="Your Name *" th:field="*{name}" required>
                             <input class="text-input" name="email" type="email" placeholder="Your Email *" th:field="*{email}" required>
-                            <input class="text-input" name="phone" type="text" placeholder="Your Phone" th:field="*{phone}">
+                            <input class="text-input" name="phone" type="text" placeholder="Your Phone" th:field="*{phone}" required>
                         </fieldset>
                         <fieldset class="column column-1-2">
-                            <textarea name="message" placeholder="Message *" th:field="*{message}" required></textarea>
+                            <textarea name="message" placeholder="Motivational Letter *" th:field="*{message}" required></textarea>
                         </fieldset>
                     </div>
                     <div class="row margin-top-30">
