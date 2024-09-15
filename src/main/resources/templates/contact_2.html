@@ -78,23 +78,28 @@
                     </div>
                 </div>
                 <h3 class="box-header page-margin-top">APPLY FOR MECHANIC</h3>
-                <form class="contact-form page-margin-top" id="contact-form" method="post" th:action="@{/ti/contact}" th:object="${contactRequest}">
+                <form class="contact-form page-margin-top" id="contact-form" method="post" th:action="@{/ti/contact}" th:object="${contactRequest}" enctype="multipart/form-data" onsubmit="return validateFile()">
                     <div class="row">
                         <fieldset class="column column-1-2">
                             <input class="text-input" name="name" type="text" placeholder="Your Name *" th:field="*{name}" required>
                             <input class="text-input" name="email" type="email" placeholder="Your Email *" th:field="*{email}" required>
-                            <input class="text-input" name="phone" type="text" placeholder="Your Phone" th:field="*{phone}" required>
+                            <input class="text-input" name="phone" type="text" placeholder="Your Phone *" th:field="*{phone}" required>
+                            <label for="pdfFile" class="file-upload-button more" style="cursor: pointer; margin-top: 20px; width: 27.5em; padding-top: 7px; padding-bottom: 7px">
+                                <span>UPLOAD CV</span>
+                            </label>
+                            <input id="pdfFile" name="pdfFile" type="file" accept="application/pdf" onchange="showFileName()" style="display: none;">
+                            <p id="file-name"></p>
                         </fieldset>
                         <fieldset class="column column-1-2">
-                            <textarea name="message" placeholder="Motivational Letter *" th:field="*{message}" required></textarea>
+                            <textarea name="message" placeholder="Motivational Letter *" th:field="*{message}" style="border-radius: 4px" required></textarea>
+                            <div class="column column-1-2 align-right" style="margin-left: 0px">
+                                <button type="submit" class="more submit-contact-form" title="SEND MESSAGE" style="margin-top: 19px; width: 28em"><span>SEND MESSAGE</span></button>
+                            </div>
                         </fieldset>
                     </div>
-                    <div class="row margin-top-30">
+                    <div class="row margin-top-30" style="margin-top: 1px !important;">
                         <div class="column column-1-2">
                             <p>You will receive a reply from us between 7-10 working days.</p>
-                        </div>
-                        <div class="column column-1-2 align-right">
-                            <button type="submit" class="more submit-contact-form" title="SEND MESSAGE"><span>SEND MESSAGE</span></button>
                         </div>
                     </div>
                 </form>
@@ -136,6 +141,35 @@
     }
 
     google.maps.event.addDomListener(window, 'load', initMap);
+</script>
+<script>
+    function showFileName() {
+        const input = document.querySelector('input[type="file"]');
+        const fileName = input.files[0] ? input.files[0].name : '';
+        document.getElementById('file-name').innerText = `Selected file: ${fileName}`;
+    }
+</script>
+
+<script>
+    function showFileName() {
+        const input = document.getElementById('pdfFile');
+        const fileName = input.files[0] ? input.files[0].name : '';
+        document.getElementById('file-name').innerText = `Selected file: ${fileName}`;
+    }
+
+    function validateFile() {
+        const input = document.getElementById('pdfFile');
+        if (!input.files.length) {
+            alert('Please upload a PDF file.');
+            return false;
+        }
+        const file = input.files[0];
+        if (file.type !== 'application/pdf') {
+            alert('The selected file must be a PDF.');
+            return false;
+        }
+        return true;
+    }
 </script>
 </body>
 </html>

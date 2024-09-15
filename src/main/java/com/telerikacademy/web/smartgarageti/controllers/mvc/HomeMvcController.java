@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
@@ -100,6 +101,7 @@ public class HomeMvcController {
     public String handleContactForm(
             @Valid @ModelAttribute("contactRequest") ContactRequestDto contactRequestDto,
             BindingResult bindingResult,
+            @RequestParam("pdfFile") MultipartFile pdfFile,
             Model model) {
 
         if (bindingResult.hasErrors()) {
@@ -115,9 +117,20 @@ public class HomeMvcController {
                 "Message: " + contactRequestDto.getMessage();
 
         try {
-            emailService.sendEmail(defaultFromEmail, subject, text, contactRequestDto.getEmail());
+            if (pdfFile != null && !pdfFile.isEmpty()) {
+                emailService.sendEmailWithAttachment(
+                        defaultFromEmail,
+                        subject,
+                        text,
+                        contactRequestDto.getEmail(),
+                        pdfFile);
+            } else {
+                emailService.sendEmail(defaultFromEmail, subject, text, contactRequestDto.getEmail());
+            }
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "There was a problem sending your message. Please try again.");
+            model.addAttribute("errorMessage", "Upload a CV!");
+            e.printStackTrace();
+            return "contact_2";
         }
         return "redirect:/ti/contact/success";
     }

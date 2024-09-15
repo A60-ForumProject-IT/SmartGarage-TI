@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Properties;
 
@@ -48,6 +49,26 @@ public class EmailService {
             helper.setSubject(subject);
             helper.setText(text, true);
             helper.setReplyTo(from);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Failed to send email", e);
+        }
+    }
+
+    public void sendEmailWithAttachment(String to, String subject, String text, String from, MultipartFile pdfFile) {
+        JavaMailSender mailSender = createMailSender(defaultFromEmail, defaultSmtpPassword);
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(text, true);
+            helper.setReplyTo(from);
+
+            helper.addAttachment(pdfFile.getOriginalFilename(), pdfFile);
 
             mailSender.send(message);
         } catch (MessagingException e) {
