@@ -6,6 +6,7 @@ import com.telerikacademy.web.smartgarageti.models.dto.ContactRequestDto;
 import com.telerikacademy.web.smartgarageti.services.EmailService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/ti")
+@Slf4j
 public class HomeMvcController {
     @Value("${spring.mail.username}")
     private String defaultFromEmail;
@@ -149,8 +151,6 @@ public class HomeMvcController {
             @RequestParam("message_appointment") String message,
             Model model) {
 
-        System.out.println("Appointment form submitted");
-
         String subject = "New Appointment Request";
         StringBuilder text = new StringBuilder();
         text.append("Name: ").append(name).append("<br>")
@@ -163,6 +163,7 @@ public class HomeMvcController {
                 .append("Preferred Time Frame: ").append(timeFrame).append("<br>");
 
         if (services != null) {
+            log.info("Test");
             text.append("Services: ").append(String.join(", ", services)).append("<br>");
         }
 

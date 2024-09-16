@@ -18,6 +18,6 @@ public class AppointmentRequest {
     private String vehicleMileage;
     private String appointmentDate;
     private String timeFrame;
-    private String services;
+    private String[] services;
     private String message;
 }
