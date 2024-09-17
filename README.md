@@ -67,8 +67,8 @@ To successfully run the application, follow these steps:
     ```properties
     spring.mail.host=smtp.gmail.com
     spring.mail.port=587
-    spring.mail.username=ikaragyozov19@gmail.com
-    spring.mail.password=xpve hqtn hfcc llwg
+    spring.mail.username=smartgarageti@gmail.com
+    spring.mail.password=auhe fedl wavv hath
     spring.mail.properties.mail.smtp.auth=true
     spring.mail.properties.mail.smtp.starttls.enable=true
     spring.mail.properties.mail.smtp.ssl.trust=smtp.gmail.com
