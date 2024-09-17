@@ -112,7 +112,7 @@ public class HomeMvcController {
             return "contact_2";
         }
 
-        String subject = "New Contact Request";
+        String subject = "New Job Application Request";
         String text = "Name: " + contactRequestDto.getName() + "<br>" +
                 "Email: " + contactRequestDto.getEmail() + "<br>" +
                 "Phone: " + contactRequestDto.getPhone() + "<br>" +
