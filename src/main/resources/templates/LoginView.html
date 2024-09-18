@@ -9,7 +9,7 @@
         <div class="vertical-align-table column-1-1">
             <div class="header clearfix">
                 <div class="logo vertical-align-cell">
-                    <h1><a href="home.html" title="CarService">SMART GARAGE TI</a></h1>
+                    <h1><a href="home.html" th:href="@{/ti}" title="CarService">SMART GARAGE TI</a></h1>
                 </div>
                 <a href="#" class="mobile-menu-switch vertical-align-cell">
                     <span class="line"></span>
@@ -25,7 +25,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="services.html" title="Services">
+                                <a href="services.html" th:href="@{/ti/services}" title="Services">
                                     Services
                                 </a>
 
@@ -58,16 +58,16 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="galleries.html" title="Gallery">Gallery</a>
+                                <a href="galleries.html" th:href="@{/ti/gallery}" title="Gallery">Gallery</a>
                             </li>
 
                             <li>
-                                <a href="appointment.html" title="Appointment">
-                                    Appointment
+                                <a href="appointment.html" th:href="@{/ti/vehicles}" title="Appointment">
+                                    Vehicles
                                 </a>
                             </li>
                             <li class="left-flyout">
-                                <a href="contact_2.html" title="Contact">Contact</a>
+                                <a href="contact_2.html" th:href="@{/ti/contact}" title="Contact">Contact</a>
                             </li>
                         </ul>
                     </nav>
@@ -119,12 +119,12 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="appointment.html" title="Appointment">
+                                    <a href="appointment.html" th:href="@{/ti/appointment}" title="Appointment">
                                         Appointment
                                     </a>
                                 </li>
                                 <li class="left-flyout">
-                                    <a href="contact_2.html" title="Contact">
+                                    <a href="contact_2.html" th:href="@{/ti/contact}" title="Contact">
                                         Contact
                                     </a>
                                 </li>
